@@ -1,6 +1,8 @@
+from urllib import request
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth import authenticate, login, logout
 from location.coordinate import coordinate_dict
 import itertools
 import requests
@@ -25,12 +27,12 @@ def weather():
     # print(f"Location: {data['location']['name']}")
     # print(f"Temperature: {data['current']['temp_c']}°C")
     # print(f"Condition: {data['current']['condition']['text']}")
-    location = data['location']['name']
+    location_name = data['location']['name']
     celsius_degree = data['current']['temp_c']
     fahrenheit_degree = data['current']['temp_f']
     condition = data['current']['condition']['text'].lower()
 
-    return location, celsius_degree, fahrenheit_degree, condition
+    return location_name, celsius_degree, fahrenheit_degree, condition
 
 class Graph:
     def __init__(self, num_vertices):
@@ -72,3 +74,38 @@ def distance(origins, destinations):
     distance = result["rows"][0]["elements"][0]["distance"]["value"]
     duration = result["rows"][0]["elements"][0]["duration"]["value"]
     return distance, duration
+
+def overall(request):
+    location, celsius_degree, fahrenheit_degree, condition = weather()
+    return render(request, "location/layout.html", {
+        "location": location,
+        "celsius_degree":celsius_degree,
+        "fahrenheit_degree": fahrenheit_degree,
+        "condition": condition.lower()
+    })
+
+# def index(request):
+#     if not request.user.is_authenticated:
+#         return HttpResponseRedirect(reverse("login"))
+#     return render(request, "location/user.html")
+
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "users/login.html", {
+                "message": "Invalid credentials."
+            })
+    else:
+        return render(request, "users/login.html")
+
+def logout_view(request):
+    logout(request)
+    return render(request, "location/login.html", {
+        "message": "Logged out."
+    })
