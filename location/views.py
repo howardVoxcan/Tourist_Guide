@@ -77,7 +77,7 @@ def distance(origins, destinations):
 
 def overall(request):
     location, celsius_degree, fahrenheit_degree, condition = weather()
-    return render(request, "location/layout.html", {
+    return render(request, "layout/layout.html", {
         "location": location,
         "celsius_degree":celsius_degree,
         "fahrenheit_degree": fahrenheit_degree,
