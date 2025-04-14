@@ -1,15 +1,146 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en-US" lang="vi">
     <head>
-        <title>Location</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <title>TouristGuide</title>
     </head>
+
     <body>
-        <h1> Hello {{ location }}'s Tourist </h1>
-        <h2> Today the weather is around {{ celsius_degree }}    or {{ fahrenheit_degree }} </h2>
+        <header>
+            <div class="header-container">
+                <div class="logo">
+                    <a href="https://github.com/C-HaoNguyen">TouristGuide</a>
+                </div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Tìm điểm đến, khách sạn, nhà hàng...">
+                    <button><i class="fas fa-search search-icon"></i></button>
+                </div>
+                <div class="nav-buttons">
+                    <button class="nav-button secondary">Đăng Nhập</button>
+                    <button class="nav-button primary">Đăng Ký</button>
+                </div>
+            </div>
+
+            <!--Nav chính-->
+            <ul class="nav-tabs">
+                <li><a href="#"><i class="fas fa-hotel"></i>Khách sạn</a></li>
+                <li><a href="#"><i class="fas fa-utensils"></i>Nhà hàng</a></li>
+                <li><a href="#"><i class="fas fa-map-marked-alt"></i>Khu nghỉ dưỡng</a></li>
+                <li><a href="#"><i class="fas fa-car"></i> Rental Cars</a></li>
+                <li><a href="#"><i class="fas fa-ship"></i> Cruises</a></li>
+                <li><a href="#"><i class="fas fa-car-side"></i> Road Trips</a></li>
+            </ul>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Hello {{ location }}'s Tourist, Tiết Kiệm Chi Phí Cho Chuyến Đi Của Bạn</h1>
+                <p>Khám phá và trải nghiệm văn hóa, ẩm thực tại Việt Nam...</p>
+                <div class="search-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-button active">Hotels</button>
+                        <button class="tab-button">Things to Do</button>
+                        <button class="tab-button">Restaurants</button>
+                    </div>
+                    <div class="tab-content">
+                        <div class="search-field">
+                            <input type="text" placeholder="Điểm bắt đầu">
+                        </div>
+                        <div class="search-field">
+                            <input type="text" placeholder="Điểm đến">
+                        </div>
+                    </div>
+                    <button class="search-button">Search</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Destinations -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2> Today the weather is around {{ celsius_degree }}    or {{ fahrenheit_degree }} </h2>
+                <h2>Điểm đến nổi tiếng</h2>
+                <p>Travelers' favorite places to visit around the world</p>
+            </div>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-image" style="background-image: url('img/dinh-doc-lap.jpg');"></div>
+                    <div class="card-content">
+                        <h3>Dinh Độc Lập</h3>
+                        <p>The City of Light draws millions of visitors every year with its unforgettable ambiance.</p>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.5 (10,582 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background-image: url('/api/placeholder/300/200');"></div>
+                    <div class="card-content">
+                        <h3>Nhà thờ Đức Bà</h3>
+                        <p>A heady mix of haunting ruins, awe-inspiring art and vibrant street life.</p>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>4.8 (8,945 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background-image: url('/api/placeholder/300/200');"></div>
+                    <div class="card-content">
+                        <h3>Bánh mì Huỳnh Hoa</h3>
+                        <p>Enchanting beaches, scenic rice terraces and volcanic hillsides.</p>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>4.1 (12,765 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background-image: url('/api/placeholder/300/200');"></div>
+                    <div class="card-content">
+                        <h3>New York City, USA</h3>
+                        <p>The city that never sleeps, home to iconic landmarks and endless entertainment.</p>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.6 (15,320 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
         <h3> About the condition, it's {{ condition }}</h3>
         
         {% block body %}
         {% endblock %}
+
+        <footer>
+            <p>&copy; 2025 TripAdvisor Clone. Mọi quyền được bảo lưu.</p>
+        </footer>
+
+        <script src="script.js"></script>
     </body>
 </html>
