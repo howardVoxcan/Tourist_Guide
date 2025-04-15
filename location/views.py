@@ -84,6 +84,8 @@ def overall(request):
         "condition": condition.lower()
     })
 
+def selection(request):
+    pass
 # def index(request):
 #     if not request.user.is_authenticated:
 #         return HttpResponseRedirect(reverse("login"))
