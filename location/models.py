@@ -11,4 +11,4 @@ class Location(models.Model):
     description = models.TextField(default="")
 
     def __str__(self):
-        return f"{self.location} in {self.city}, here are some descriptions of this location:\n {self.description}"
+        return f"{self.location} in {self.city}"
