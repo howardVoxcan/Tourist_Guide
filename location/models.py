@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Location(models.Model):
-    id = models.CharField(primary_key = True)
+    id = models.CharField(max_length = 10,primary_key = True)
     location = models.CharField(max_length = 64)
     city = models.CharField(max_length = 30)
     type = models.CharField(max_length = 10)
