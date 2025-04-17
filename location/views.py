@@ -85,16 +85,18 @@ def overall_homepage(request):
         "condition": condition.lower()
     })
 
-# def location_display(request, location_code):
-#     look_up = Location.objects.get(code = location_code)
-#     if look_up:
-#         return render(request, "display_location/display.html",{
-#             "location": look_up.location,
-#             "city": look_up.city,
-#             "rating": look_up.rating,
-#             "image": look_up.image_path,
-#             "description": look_up.description
-#         })
+def location_display(request, location_code):
+    look_up = Location.objects.get(code = location_code)
+    if look_up:
+        return render(request, "display_location/display.html",{
+            "location": look_up.location,
+            "city": look_up.city,
+            "rating": look_up.rating,
+            "image": look_up.image_path,
+            "description": look_up.description
+        })
+    else:
+        pass
 
 def selection(request):
     pass
