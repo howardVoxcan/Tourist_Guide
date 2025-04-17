@@ -1,4 +1,5 @@
 from urllib import request
+from location.models import Location
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -75,14 +76,25 @@ def distance(origins, destinations):
     duration = result["rows"][0]["elements"][0]["duration"]["value"]
     return distance, duration
 
-def overall(request):
+def overall_homepage(request):
     location, celsius_degree, fahrenheit_degree, condition = weather()
-    return render(request, "layout/layout.html", {
+    return render(request, "homepage/homepage.html", {
         "location": location,
         "celsius_degree":celsius_degree,
         "fahrenheit_degree": fahrenheit_degree,
         "condition": condition.lower()
     })
+
+def location_display(request, location_code):
+    look_up = Location.objects.get(code = location_code)
+    if look_up:
+        return render(request, "display_location/display.html",{
+            "location": look_up.location,
+            "city": look_up.city,
+            "rating": look_up.rating,
+            "image": look_up.image_path,
+            "description": look_up.description
+        })
 
 def selection(request):
     pass
