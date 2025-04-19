@@ -87,15 +87,9 @@ def overall_homepage(request):
 
 def location_display(request, location_code):
     look_up = Location.objects.get(code=location_code)
-    
-    print("location:", look_up.location)
-    print("city:", look_up.city)
-    print("rating:", look_up.rating)
-    print("image:", look_up.image_path)
-    print("description:", look_up.description)
 
     return render(request, "display_location/display.html", {
-        "location": look_up.location,
+        "location_name": look_up.location,
         "city": look_up.city,
         "rating": look_up.rating,
         "image": look_up.image_path,
