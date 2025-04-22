@@ -91,7 +91,11 @@ def location_display(request, location_code):
     return render(request, "display_location/display.html", {
         "location_name": look_up.location,
         "city": look_up.city,
+        "type": look_up.type,
+        "open_hours": look_up.open_hours,
         "rating": look_up.rating,
+        "ticket_info": look_up.ticket_info,
+        "address": look_up.address,
         "image": look_up.image_path,
         "description": look_up.description
     })
