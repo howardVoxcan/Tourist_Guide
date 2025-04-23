@@ -1,0 +1,15 @@
+{% extends 'layout/layout.html' %}
+{% block title %} My selected locations {% endblock %}
+
+{% block body %}    
+<h2>SELECTED LOCATIONS</h2>
+<ul>
+  {% for location in locations %}
+    <li>
+      <strong>{{ location.location }}</strong> - {{ location.city }}
+    </li>
+  {% empty %}
+    <p>There's no location selected yet. 😢😢</p>
+  {% endfor %}
+</ul>
+{% endblock %}

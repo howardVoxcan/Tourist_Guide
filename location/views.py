@@ -1,13 +1,12 @@
 from urllib import request
-from location.models import Location
+from location.models import Location, Location_List
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from location.coordinate import coordinate_dict
-import itertools
-import requests
-import geocoder
+from django.contrib.auth.models import User
+import itertools, requests, geocoder
 
 # Create your views here.
 def weather():
@@ -136,4 +135,11 @@ def location_display(request, location_code):
         "address": look_up.address,
         "image": look_up.image_path,
         "description": look_up.description
+    })
+
+def selected_locations(request):
+    trip_list = Location_List.objects.filter(user=request.user, name='My Trip').first()
+    locations = trip_list.location_set.all() if trip_list else []
+    return render(request, 'my_trip/my_trip.html', {
+        'locations': locations
     })

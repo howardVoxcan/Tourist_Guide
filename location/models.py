@@ -1,10 +1,16 @@
 from django.db import models
-
-from location import coordinate
+from django.contrib.auth.models import User
 
 # Create your models here.
+class Location_List(models.Model):
+    user = models.ForeignKey(User, on_delete = models.CASCADE,related_name = "location_list")
+    name = models.CharField(max_length = 50, default = "")
+
+    def __str__(self):
+        return self.name
 
 class Location(models.Model):
+    loc = models.ForeignKey(Location_List, on_delete = models.CASCADE, null = True, blank = True)
     code = models.CharField(max_length=10, unique=False)
     location = models.CharField(max_length = 64)
     city = models.CharField(max_length = 30)   
