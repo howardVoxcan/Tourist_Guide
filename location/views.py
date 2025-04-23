@@ -35,6 +35,8 @@ def weather():
 
     return location_name, celsius_degree, fahrenheit_degree, condition
 
+import itertools
+
 class Graph:
     def __init__(self, num_vertices):
         self.num_vertices = num_vertices
@@ -43,14 +45,52 @@ class Graph:
     def add_edge(self, u, v, weight):
         self.edges[u][v] = weight
 
-    def find_hamiltonian_cycle(self):
+    def find_hamiltonian_cycle(self, fixed_position=None, fixed_edge=None):
         vertices = list(range(self.num_vertices))
         min_path = None
         min_cost = float("inf")
 
-        # Tạo tất cả hoán vị bắt đầu từ đỉnh 0
+        if fixed_position is None:
+            fixed_position = [False] * (self.num_vertices + 1)  # +1 cho điểm quay về
+        if fixed_edge is None:
+            fixed_edge = []
+
+        fixed_position_map = {}  # map: index -> node cố định ở vị trí đó
+        for i, fixed in enumerate(fixed_position):
+            if fixed:
+                fixed_position_map[i] = None  # sẽ được gán ở phần sinh perm
+
+        fixed_edge_set = set(fixed_edge)
+
+        # Duyệt tất cả hoán vị các đỉnh chưa cố định
         for perm in itertools.permutations(vertices[1:]):  
+            # Xây dựng path đầy đủ từ perm, chèn các điểm cố định vào đúng chỗ
             path = [0] + list(perm) + [0]
+
+            valid = True
+
+            # Áp dụng fixed_position: kiểm tra đúng điểm ghim vào đúng vị trí chưa
+            for idx, val in fixed_position_map.items():
+                if idx < len(path):
+                    if fixed_position[idx] and val is not None and path[idx] != val:
+                        valid = False
+                        break
+                    fixed_position_map[idx] = path[idx]
+
+            # Áp dụng fixed_edge: kiểm tra các đoạn bắt buộc có mặt
+            for u, v in fixed_edge_set:
+                found = False
+                for i in range(len(path) - 1):
+                    if path[i] == u and path[i+1] == v:
+                        found = True
+                        break
+                if not found:
+                    valid = False
+                    break
+
+            if not valid:
+                continue
+
             cost = sum(self.edges[path[i]][path[i+1]] for i in range(len(path) - 1))
 
             if cost < min_cost:
@@ -98,32 +138,4 @@ def location_display(request, location_code):
         "address": look_up.address,
         "image": look_up.image_path,
         "description": look_up.description
-    })
-
-def selection(request):
-    pass
-# def index(request):
-#     if not request.user.is_authenticated:
-#         return HttpResponseRedirect(reverse("login"))
-#     return render(request, "location/user.html")
-
-def login_view(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            return render(request, "users/login.html", {
-                "message": "Invalid credentials."
-            })
-    else:
-        return render(request, "users/login.html")
-
-def logout_view(request):
-    logout(request)
-    return render(request, "location/login.html", {
-        "message": "Logged out."
     })
