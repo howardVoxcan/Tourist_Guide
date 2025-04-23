@@ -1,5 +1,7 @@
 from django.db import models
 
+from location import coordinate
+
 # Create your models here.
 
 class Location(models.Model):
@@ -13,15 +15,7 @@ class Location(models.Model):
     address = models.CharField(max_length = 32, default = "")
     image_path = models.CharField(max_length=255, default='static/img/dinh-doc-lap.jpg')
     description = models.TextField(default="")
+    coordinate = models.CharField(max_length = 40, default = "")
 
     def __str__(self):
-        return f"{self.location} in {self.city}"
-    
-class User(models.Model):
-    name = models.CharField(max_length=50, default="")
-    gender = models.CharField(max_length=10, default="", blank=True)
-    email = models.EmailField(max_length=100, blank=True)
-    loclist = models.ManyToManyField(Location, blank=True, related_name="users", default = None)
-
-    def __str__(self):
-        return self.name
+        return f"{self.code} {self.location} in {self.city}"
