@@ -126,6 +126,7 @@ def location_display(request, location_code):
     look_up = Location.objects.get(code=location_code)
 
     return render(request, "display_location/display.html", {
+        "code": look_up.code,
         "location_name": look_up.location,
         "city": look_up.city,
         "type": look_up.type,
@@ -133,8 +134,9 @@ def location_display(request, location_code):
         "rating": look_up.rating,
         "ticket_info": look_up.ticket_info,
         "address": look_up.address,
-        "image": look_up.image_path,
-        "description": look_up.description
+        "image_path": look_up.image_path,
+        "description": look_up.description,
+        "coordinate": look_up.coordinate
     })
 
 def selected_locations(request):

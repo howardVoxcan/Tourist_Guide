@@ -1,4 +1,5 @@
 {% extends "layout/layout.html" %}
+{% load static %}   {# THÊM DÒNG NÀY #}
 
 {% block title %} {{location_name}} {% endblock %}
 
@@ -7,7 +8,9 @@
         <li>Location: {{ location_name }}</li>
         <li>City: {{ city }}</li>
         <li>Rating: {{ rating }}</li>
-        <li>Image Path: {{ image }}</li>
+        <img src="/{{ image_path }}" alt="{{ location.name }}">
+        <li>Address: {{ address }}</li>
+        <li>Price: {{ ticket_info }}</li>
         <li>Description: {{ description }}</li>
     </ul>
 {% endblock %}
