@@ -1,0 +1,17 @@
+{% extends "authenticate_layout/authenticate_layout.html" %}
+{% block title %} Create a new account {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="register/static/css/register.css">
+{% endblock %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+    <div>
+        <form method="POST" class="form-group">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type = "submit" class="btn btn-success"> Register </button>
+        </form>
+    </div>
+{% endblock %}
