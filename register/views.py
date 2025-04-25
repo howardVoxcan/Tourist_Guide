@@ -10,6 +10,6 @@ def register(response):
     else: 
         form = RegisterForm()
 
-    return render(response, "register/register.html",{
+    return render(response, "signup/signup.html",{
         "form": form
     })

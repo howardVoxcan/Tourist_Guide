@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from location.coordinate import coordinate_dict
 from django.contrib.auth.models import User
 import itertools, requests, geocoder
@@ -114,12 +115,25 @@ def distance(origins, destinations):
     return distance, duration
 
 def overall_homepage(request):
+    authentication = request.user.is_authenticated
+
+    all_of_locations = Location.objects.all()
+
+    if authentication:
+        trip_list = Location_List.objects.filter(user=request.user, name='My Trip').first()
+        locations = trip_list.location_set.all() if trip_list else []
+    else:
+        locations = []
+
     location, celsius_degree, fahrenheit_degree, condition = weather()
+
     return render(request, "homepage/homepage.html", {
         "location": location,
-        "celsius_degree":celsius_degree,
+        "celsius_degree": celsius_degree,
         "fahrenheit_degree": fahrenheit_degree,
-        "condition": condition.lower()
+        "condition": condition.lower(),
+        "locations": locations,
+        "all_of_locations": all_of_locations, 
     })
 
 def location_display(request, location_code):
@@ -139,6 +153,7 @@ def location_display(request, location_code):
         "coordinate": look_up.coordinate
     })
 
+@login_required
 def selected_locations(request):
     trip_list = Location_List.objects.filter(user=request.user, name='My Trip').first()
     locations = trip_list.location_set.all() if trip_list else []
