@@ -1,6 +1,12 @@
 {% extends 'layout/layout.html' %}
 
+{% load static %}
+
 {% block title %} Home {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+{% endblock %}
 
 {% block body %} 
     <!-- Hero Section -->
@@ -9,33 +15,30 @@
         <div class="hero-content">
             <h1>Hello {{ location }}'s Tourist, Tiết Kiệm Chi Phí Cho Chuyến Đi Của Bạn</h1>
             <p>Khám phá và trải nghiệm văn hóa, ẩm thực tại Việt Nam...</p>
-            <div class="search-tabs">
-                <div class="tab-buttons">
-                    <button class="tab-button active">Hotels</button>
-                    <button class="tab-button">Things to Do</button>
-                    <button class="tab-button">Restaurants</button>
-                </div>
-                <div class="tab-content">
-                    <div class="search-field">
-                        <input type="text" placeholder="Điểm bắt đầu">
-                    </div>
-                    <div class="search-field">
-                        <input type="text" placeholder="Điểm đến">
-                    </div>
-                </div>
-                <button class="search-button">Search</button>
-            </div>
         </div>
     </section>
 
-    {% for loc in all_of_locations %}
-    <div class="location-card">
-        <h3>{{ loc.location }}</h3>
-        <p>Thành phố: {{ loc.city }}</p>
-        <p>Loại: {{ loc.type }}</p>
-        <p>Đánh giá: {{ loc.rating }}</p>
+    <div class="card-grid">
+        {% for loc in all_of_locations %}
+        <div class="card">
+            <div class="card-image" style="background-image: url('{{loc.image_path}}');"></div>
+            <div class="card-content">
+                <h3>{{ loc.location }}</h3>
+                <p>Thành phố: {{ loc.city }}</p>
+                <p>{{ loc.description }}</p>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>Đánh giá: {{ loc.rating }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+    
 
     <!-- Popular Destinations -->
     <section class="content-section">
