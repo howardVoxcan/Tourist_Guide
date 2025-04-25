@@ -21,6 +21,7 @@ class Location(models.Model):
     address = models.CharField(max_length = 32, default = "")
     image_path = models.CharField(max_length=255, default='static/img/dinh-doc-lap.jpg')
     description = models.TextField(default="")
+    long_description = models.TextField(default="")
     coordinate = models.CharField(max_length = 40, default = "")
 
     def __str__(self):

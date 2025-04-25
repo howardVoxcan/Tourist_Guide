@@ -126,7 +126,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "location" / "static",  # Đường dẫn tới thư mục static của location
+    BASE_DIR / "register" / "static",  # Đường dẫn tới thư mục static của register
 ]
 
 # Default primary key field type

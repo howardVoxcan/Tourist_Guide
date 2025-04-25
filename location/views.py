@@ -150,6 +150,7 @@ def location_display(request, location_code):
         "address": look_up.address,
         "image_path": look_up.image_path,
         "description": look_up.description,
+        "long_description": look_up.long_description,
         "coordinate": look_up.coordinate
     })
 

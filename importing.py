@@ -25,6 +25,7 @@ with open('location_db.csv', newline='', encoding='utf-8') as csvfile:
             'image_path': row['image_path'].strip(),
             'open_hours': row['open_hour'].strip(),
             'coordinate': row['coordinate'].strip(),
+            'long_description': row['Long Description'].strip()
         }
 
         obj, created = Location.objects.update_or_create(
