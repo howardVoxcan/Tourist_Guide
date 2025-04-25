@@ -28,6 +28,15 @@
         </div>
     </section>
 
+    {% for loc in all_of_locations %}
+    <div class="location-card">
+        <h3>{{ loc.location }}</h3>
+        <p>Thành phố: {{ loc.city }}</p>
+        <p>Loại: {{ loc.type }}</p>
+        <p>Đánh giá: {{ loc.rating }}</p>
+    </div>
+    {% endfor %}
+
     <!-- Popular Destinations -->
     <section class="content-section">
         <div class="section-header">

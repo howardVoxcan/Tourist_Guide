@@ -19,7 +19,7 @@ def weather():
     # print("City:", data["city"])
     # print("Country:", data["country"])
 
-    api_key = "cef48da67bcd47dd8d165800250804"
+    api_key = "5f170779de5e4c22b5542528252504"
     url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={location}"
 
     response = requests.get(url)
