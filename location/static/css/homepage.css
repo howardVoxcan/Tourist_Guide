@@ -84,6 +84,13 @@
 
 .card-content {
     padding: 15px;
+    flex-direction: column;
+    justify-content: space-between;
+    /* quan trọng */
+    flex-grow: 1;
+    height: 100%;
+    padding: 16px;
+    position: relative;
 }
 
 .card h3 {
@@ -100,11 +107,11 @@
 .card .rating {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    margin-top: auto;
 }
 
 .rating i {
-    color: #00aa6c;
+    color: #fbb002;
     margin-right: 3px;
 }
 

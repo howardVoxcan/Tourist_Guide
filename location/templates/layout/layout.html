@@ -16,8 +16,11 @@
         <header>
             <div class="header-container">
                 <div class="logo">
-                    <a href="https://github.com/howardVoxcan/Tourist_Guide">TouristGuide</a>
+                    <picture>
+                        <img src="{% static 'img/logo-tourist-guide.svg' %}" alt="">
+                    </picture>
                 </div>
+
                 <div class="search-bar">
                     <input type="text" placeholder="Tìm điểm đến, khách sạn, nhà hàng...">
                     <button><i class="fas fa-search search-icon"></i></button>
@@ -26,20 +29,13 @@
                     <button class="nav-button secondary">Đăng Nhập</button>
                     <button class="nav-button primary">Đăng Ký</button>
                 </div>
-                <div class="cart-container">
-                    <i class="fas fa-shopping-cart cart-icon"></i>
-                    <div class="cart-count">3</div> <!-- Hiển thị số lượng sản phẩm -->
-                </div>
             </div>
 
             <!--Nav chính-->
             <ul class="nav-tabs">
-                <li><a href="#"><i class="fas fa-hotel"></i>Khách sạn</a></li>
+                <li><a href="#"><i class="fas fa-hotel"></i>Homepage</a></li>
                 <li><a href="#"><i class="fas fa-utensils"></i>Nhà hàng</a></li>
-                <li><a href="#"><i class="fas fa-map-marked-alt"></i>Khu nghỉ dưỡng</a></li>
-                <li><a href="#"><i class="fas fa-car"></i> Rental Cars</a></li>
-                <li><a href="#"><i class="fas fa-ship"></i> Cruises</a></li>
-                <li><a href="#"><i class="fas fa-car-side"></i> Road Trips</a></li>
+                <li><a href="#"><i class="fas fa-heart"></i>Favourite</a></li>
             </ul>
         </header>  
         
@@ -48,7 +44,7 @@
         {% endblock %}
 
         <footer>
-            <p>&copy; 2025 TripAdvisor Clone. Mọi quyền được bảo lưu.</p>
+            <p>&copy; 2025 Tourist Guide. Mọi quyền được bảo lưu.</p>
         </footer>
 
         <script src="script.js"></script>

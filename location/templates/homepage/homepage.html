@@ -18,96 +18,27 @@
         </div>
     </section>
 
-    <div class="card-grid">
-        {% for loc in all_of_locations %}
-        <div class="card">
-            <div class="card-image" style="background-image: url('{{loc.image_path}}');"></div>
-            <div class="card-content">
-                <h3>{{ loc.location }}</h3>
-                <p>Thành phố: {{ loc.city }}</p>
-                <p>{{ loc.description }}</p>
-                <div class="rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                    <span>Đánh giá: {{ loc.rating }}</span>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    
 
-    <!-- Popular Destinations -->
     <section class="content-section">
-        <div class="section-header">
-            <h2> Today the weather is around {{ celsius_degree }}    or {{ fahrenheit_degree }} </h2>
-            <h2>Điểm đến nổi tiếng</h2>
-            <p>Travelers' favorite places to visit around the world</p>
-        </div>
         <div class="card-grid">
+            {% for loc in all_of_locations|slice:":6" %}
             <div class="card">
-                <div class="card-image" style="background-image: url('img/dinh-doc-lap.jpg');"></div>
+                <div class="card-image" style="background-image: url('{{loc.image_path}}');"></div>
                 <div class="card-content">
-                    <h3>Dinh Độc Lập</h3>
-                    <p>The City of Light draws millions of visitors every year with its unforgettable ambiance.</p>
+                    <h3>{{ loc.location }}</h3>
+                    <p>Thành phố: {{ loc.city }}</p>
+                    <p>{{ loc.description }}</p>
                     <div class="rating">
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star-half-alt"></i>
-                        <span>4.5 (10,582 reviews)</span>
+                        <span>Đánh giá: {{ loc.rating }}</span>
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-image" style="background-image: url('/api/placeholder/300/200');"></div>
-                <div class="card-content">
-                    <h3>Nhà thờ Đức Bà</h3>
-                    <p>A heady mix of haunting ruins, awe-inspiring art and vibrant street life.</p>
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <span>4.8 (8,945 reviews)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-image" style="background-image: url('/api/placeholder/300/200');"></div>
-                <div class="card-content">
-                    <h3>Bánh mì Huỳnh Hoa</h3>
-                    <p>Enchanting beaches, scenic rice terraces and volcanic hillsides.</p>
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                        <span>4.1 (12,765 reviews)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-image" style="background-image: url('/api/placeholder/300/200');"></div>
-                <div class="card-content">
-                    <h3>New York City, USA</h3>
-                    <p>The city that never sleeps, home to iconic landmarks and endless entertainment.</p>
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                        <span>4.6 (15,320 reviews)</span>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </section>
 

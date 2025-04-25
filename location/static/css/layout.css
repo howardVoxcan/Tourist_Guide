@@ -46,21 +46,19 @@ header {
     flex-wrap: nowrap;
 }
 
-.logo a {
-    color: #00aa6c;
-    font-size: 24px;
-    font-weight: bold;
-    display: flex;
-    align-items: left;
-    flex-shrink: 0;
-    white-space: nowrap;
-    margin-right: 10px;
-    cursor: pointer;
+picture {
+    display: block;
 }
 
-.logo i {
-    margin-right: 8px;
-    font-size: 28px;
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 48px; /* có thể điều chỉnh theo ảnh của bạn */
+    width: auto;
+    object-fit: contain;
 }
 
 .search-bar {
