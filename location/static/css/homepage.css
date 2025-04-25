@@ -86,7 +86,7 @@
     padding: 15px;
     flex-direction: column;
     justify-content: space-between;
-    /* quan trọng */
+    display: flex;
     flex-grow: 1;
     height: 100%;
     padding: 16px;
@@ -106,7 +106,7 @@
 
 .card .rating {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     margin-top: auto;
 }
 
