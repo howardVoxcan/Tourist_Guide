@@ -28,12 +28,8 @@
                     <h3>{{ loc.location }}</h3>
                     <p>Thành phố: {{ loc.city }}</p>
                     <p>{{ loc.description }}</p>
+                    {{ loc.star_html|safe }}
                     <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
                         <span>Đánh giá: {{ loc.rating }}</span>
                     </div>
                 </div>

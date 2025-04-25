@@ -125,6 +125,24 @@ def overall_homepage(request):
     else:
         locations = []
 
+    # Build danh sách location + HTML rating
+    processed_locations = []
+    for loc in all_of_locations:
+        full_stars = int(loc.rating)
+        has_half = (loc.rating - full_stars) >= 0.5
+        star_html = '<i class="fas fa-star"></i>' * full_stars
+        if has_half:
+            star_html += '<i class="fas fa-star-half-alt"></i>'
+
+        processed_locations.append({
+            'location': loc.location,
+            'city': loc.city,
+            'description': loc.description,
+            'image_path': loc.image_path,
+            'rating': loc.rating,
+            'star_html': star_html,
+        })
+
     location, celsius_degree, fahrenheit_degree, condition = weather()
 
     return render(request, "homepage/homepage.html", {
@@ -133,8 +151,9 @@ def overall_homepage(request):
         "fahrenheit_degree": fahrenheit_degree,
         "condition": condition.lower(),
         "locations": locations,
-        "all_of_locations": all_of_locations, 
+        "all_of_locations": processed_locations,  # Đã xử lý sao
     })
+
 
 def location_display(request, location_code):
     look_up = Location.objects.get(code=location_code)
@@ -146,6 +165,7 @@ def location_display(request, location_code):
         "type": look_up.type,
         "open_hours": look_up.open_hours,
         "rating": look_up.rating,
+        "rating_half": look_up.rating,
         "ticket_info": look_up.ticket_info,
         "address": look_up.address,
         "image_path": look_up.image_path,
