@@ -175,9 +175,15 @@ def location_display(request, location_code):
     })
 
 @login_required
-def selected_locations(request):
+def my_trip(request):
     trip_list = Location_List.objects.filter(user=request.user, name='My Trip').first()
     locations = trip_list.location_set.all() if trip_list else []
     return render(request, 'my_trip/my_trip.html', {
         'locations': locations
+    })
+
+@login_required
+def favourite(request):
+    return render(request, "favourite/favourite.html",{
+        
     })
