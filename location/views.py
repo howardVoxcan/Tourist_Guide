@@ -1,7 +1,7 @@
 from urllib import request
 from location.models import Location, Location_List
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -119,11 +119,11 @@ def overall_homepage(request):
 
     all_of_locations = Location.objects.all()
 
-    if authentication:
-        trip_list = Location_List.objects.filter(user=request.user, name='My Trip').first()
-        locations = trip_list.location_set.all() if trip_list else []
-    else:
-        locations = []
+    # if authentication:
+    #     trip_list = Location_List.objects.filter(user=request.user, name='My Trip').first()
+    #     locations = trip_list.location_set.all() if trip_list else []
+    # else:
+    #     locations = []
 
     # Build danh sách location + HTML rating
     processed_locations = []
@@ -136,6 +136,7 @@ def overall_homepage(request):
 
         processed_locations.append({
             'location': loc.location,
+            'is_authenticated': authentication,
             'city': loc.city,
             'description': loc.description,
             'image_path': loc.image_path,
@@ -150,12 +151,12 @@ def overall_homepage(request):
         "celsius_degree": celsius_degree,
         "fahrenheit_degree": fahrenheit_degree,
         "condition": condition.lower(),
-        "locations": locations,
+        # "locations": locations,
         "all_of_locations": processed_locations,  # Đã xử lý sao
     })
 
 def location_display(request, location_code):
-    look_up = Location.objects.get(code=location_code)
+    look_up = Location.objects.get(code = location_code)
 
     return render(request, "display_location/display.html", {
         "code": look_up.code,
@@ -173,13 +174,15 @@ def location_display(request, location_code):
         "coordinate": look_up.coordinate
     })
 
-@login_required
 def my_trip(request):
-    trip_list = Location_List.objects.filter(user=request.user, name='My Trip').first()
-    locations = trip_list.location_set.all() if trip_list else []
-    return render(request, 'my_trip/my_trip.html', {
-        'locations': locations
-    })
+    if User.is_authenticated:
+        trip_list = Location_List.objects.filter(user=request.user, name='My Trip').first()
+        locations = trip_list.location_set.all() if trip_list else []
+        return render(request, 'my_trip/my_trip.html', {
+            'locations': locations
+        })
+    else:
+        return redirect('/login')
 
 @login_required
 def favourite(request):

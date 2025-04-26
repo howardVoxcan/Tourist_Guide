@@ -27,11 +27,16 @@
                     <input type="text" placeholder="Tìm điểm đến, khách sạn, nhà hàng...">
                     <button class="search-icon"><i class="fas fa-search search-icon"></i></button>
                 </div>
-                
-                <div class="nav-buttons">
-                    <button class="nav-button secondary">Đăng Nhập</button>
-                    <button class="nav-button primary">Đăng Ký</button>
-                </div>
+                {% if not user.is_authenticated %}
+                    <div class="nav-buttons">
+                        <button class="nav-button secondary">Đăng Nhập</button>
+                        <button class="nav-button primary">Đăng Ký</button>
+                    </div>
+                {% else %}
+                    <!-- logo người dùng ở đây, kiểu như facebook mặc định, xong có thêm cái username -->
+                     {{user.username}}
+                {% endif %}
+
             </div>
 
             <!--Nav chính-->
