@@ -154,7 +154,6 @@ def overall_homepage(request):
         "all_of_locations": processed_locations,  # Đã xử lý sao
     })
 
-
 def location_display(request, location_code):
     look_up = Location.objects.get(code=location_code)
 
@@ -185,5 +184,5 @@ def my_trip(request):
 @login_required
 def favourite(request):
     return render(request, "favourite/favourite.html",{
-        
+
     })
