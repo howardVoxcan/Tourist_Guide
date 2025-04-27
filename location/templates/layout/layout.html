@@ -14,6 +14,14 @@
 
     <body>
         <header>
+            <div>
+                {% if user.is_authenticated %}
+                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit">Đăng xuất</button>
+                    </form>
+                {% endif %}
+            </div>
             <div class="header-container">
                 <div class="logo">
                     <a href="https://github.com/howardVoxcan/Tourist_Guide">
