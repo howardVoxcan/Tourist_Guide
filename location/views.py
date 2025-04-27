@@ -136,7 +136,6 @@ def overall_homepage(request):
 
         processed_locations.append({
             'location': loc.location,
-            'is_authenticated': authentication,
             'city': loc.city,
             'description': loc.description,
             'image_path': loc.image_path,

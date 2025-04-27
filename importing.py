@@ -16,7 +16,6 @@ with open('location_db.csv', newline='', encoding='utf-8') as csvfile:
 
         data = {
             'location': row['LOCATION'].strip(),
-            'city': row['CITY'].strip(),
             'type': row['TYPE'].strip(),
             'rating': float(row['RATING (MAX = 5)']) if row['RATING (MAX = 5)'] else 5.0,
             'address': row['Address'].strip(),
