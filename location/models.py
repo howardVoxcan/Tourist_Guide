@@ -25,3 +25,22 @@ class Location(models.Model):
 
     def __str__(self):
         return f"{self.code} {self.location} : {self.description} "
+
+class TripList(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="trip_lists")
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+class TripPath(models.Model):
+    trip_list = models.ForeignKey(TripList, on_delete=models.CASCADE, related_name="trip_paths")
+    path_name = models.CharField(max_length=255, default = "")
+    locations_ordered = models.JSONField()
+    total_distance = models.FloatField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.path_name
