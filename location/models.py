@@ -28,10 +28,7 @@ class Location(models.Model):
 
 class TripList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="trip_lists")
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
+    name = models.CharField(max_length=255, default = "My trip list")
     def __str__(self):
         return self.name
 
