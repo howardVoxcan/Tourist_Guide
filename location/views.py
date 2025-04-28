@@ -135,6 +135,7 @@ def overall_homepage(request):
             star_html += '<i class="fas fa-star-half-alt"></i>'
 
         processed_locations.append({
+            'code': loc.code,
             'location': loc.location,
             'description': loc.description,
             'image_path': loc.image_path,
@@ -159,7 +160,6 @@ def location_display(request, location_code):
     return render(request, "display_location/display.html", {
         "code": look_up.code,
         "location_name": look_up.location,
-        "city": look_up.city,
         "type": look_up.type,
         "open_hours": look_up.open_hours,
         "rating": look_up.rating,

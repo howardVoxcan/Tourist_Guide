@@ -37,8 +37,8 @@
                 </div>
                 {% if not user.is_authenticated %}
                     <div class="nav-buttons">
-                        <button class="nav-button secondary">Đăng Nhập</button>
-                        <button class="nav-button primary">Đăng Ký</button>
+                        <button class="nav-button secondary"><a href="{% url 'login' %}">Đăng Nhập</a></button>
+                        <button class="nav-button primary"><a href="{% url 'register'%}">Đăng Ký</a></button>
                     </div>
                 {% else %}
                     <!-- logo người dùng ở đây, kiểu như facebook mặc định, xong có thêm cái username -->
