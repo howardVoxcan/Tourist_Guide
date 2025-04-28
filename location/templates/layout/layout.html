@@ -3,73 +3,76 @@
 <!DOCTYPE html>
 
 <html lang="en-US" lang="vi">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="{% static 'css/layout.css' %}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <title> {% block title %} Django's Tourist {% endblock %}</title>
-        <style>
-            /* Bỏ gạch chân và chỉnh màu chữ cho link */
-            .card a, .card a:visited, .card a:hover, .card a:active {
-                text-decoration: none; /* bỏ gạch chân */
-                color: inherit; /* màu chữ giữ nguyên như cha (ví dụ màu đen hay trắng gì đó) */
-            }
-            </style>
-        {% block css %}{% endblock %}
-    </head>
 
-    <body>
-        <header>
-            <div>
-                {% if user.is_authenticated %}
-                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit">Đăng xuất</button>
-                    </form>
-                {% endif %}
-            </div>
-            <div class="header-container">
-                <div class="logo">
-                    <a href="https://github.com/howardVoxcan/Tourist_Guide">
-                        <picture>
-                            <img src="{% static 'img/logo-tourist-guide.svg' %}" alt="">
-                        </picture>
-                    </a>
-                </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title> {% block title %} Django's Tourist {% endblock %}</title>
+    <style>
+        .card a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
 
-                <div class="search-bar">
-                    <input type="text" placeholder="Search for locations">
-                    <button class="search-icon"><i class="fas fa-search search-icon"></i></button>
-                </div>
-                {% if not user.is_authenticated %}
-                    <div class="nav-buttons">
-                        <button class="nav-button secondary"><a href="{% url 'login' %}">Log in</a></button>
-                        <button class="nav-button primary"><a href="{% url 'register'%}">Register</a></button>
-                    </div>
-                {% else %}
-                    <!-- logo người dùng ở đây, kiểu như facebook mặc định, xong có thêm cái username -->
-                     {{user.username}}
-                {% endif %}
+    </style>
+    {% block css %}{% endblock %}
+</head>
 
+<body>
+    <header>
+        <div>
+            {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit">Đăng xuất</button>
+            </form>
+            {% endif %}
+        </div>
+        <div class="header-container">
+            <div class="logo">
+                <a href="https://github.com/howardVoxcan/Tourist_Guide">
+                    <picture>
+                        <img src="{% static 'img/logo-tourist-guide.svg' %}" alt="">
+                    </picture>
+                </a>
             </div>
 
-            <!--Nav chính-->
-            <ul class="nav-tabs">
-                <li><a href="{% url 'homepage' %}"><i class="fas fa-hotel"></i>Home</a></li>
-                <li><a href="{% url 'locations' %}"><i class="fas fa-utensils"></i>Location</a></li>
-                <li><a href="{% url 'favourite' %}"><i class="fas fa-heart"></i>Favourite</a></li>
-                <li><a href="{% url 'my_trip' %}"><i class="fas fa-heart"></i>My Trip</a></li>
-            </ul>
-        </header>         
-        
-        {% block body %}
-        {% endblock %}
+            <div class="search-bar">
+                <input type="text" placeholder="Tìm điểm đến, khách sạn, nhà hàng...">
+                <button class="search-icon"><i class="fas fa-search search-icon"></i></button>
+            </div>
+            {% if not user.is_authenticated %}
+            <div class="nav-buttons">
+                <a href="{% url 'login' %}"><button class="nav-button secondary">Đăng Nhập</button></a>
+                <a href="{% url 'register'%}"><button class="nav-button primary">Đăng Ký</button></a>
+            </div>
+            {% else %}
+            <!-- logo người dùng ở đây, kiểu như facebook mặc định, xong có thêm cái username -->
+            {{user.username}}
+            {% endif %}
 
-        <footer>
-            <p>&copy; 2025 Tourist Guide. </p>
-        </footer>
+        </div>
 
-        <script src="script.js"></script>
-    </body>
+        <!--Nav chính-->
+        <ul class="nav-tabs">
+            <li><a href="{% url 'homepage' %}"><i class="fas fa-hotel"></i>Home</a></li>
+            <li><a href="{% url 'locations' %}"><i class="fas fa-utensils"></i>Location</a></li>
+            <li><a href="{% url 'favourite' %}"><i class="fas fa-heart"></i>Favourite</a></li>
+            <li><a href="{% url 'my_trip' %}"><i class="fas fa-heart"></i>My Trip</a></li>
+        </ul>
+    </header>
+
+    {% block body %}
+    {% endblock %}
+
+    <footer>
+        <p>&copy; 2025 Tourist Guide. Mọi quyền được bảo lưu.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
 </html>

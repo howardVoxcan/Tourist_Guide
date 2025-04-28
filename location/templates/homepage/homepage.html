@@ -22,18 +22,21 @@
     <section class="content-section">
         <div class="card-grid">
             {% for loc in all_of_locations|slice:":6" %}
-            <div class="card"><a href = "{% url 'display_location' loc.code %}">
-                <div class="card-image" style="background-image: url('{% static loc.image_path %}');"></div>
-                <div class="card-content">
-                    <h3>{{ loc.location }}</h3>
-                    <p>{{ loc.description }}</p>
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        {{ loc.star_html|safe }}
-                        <span>Rating: {{ loc.rating }}</span>
+            <div class="card">
+                <a href = "{% url 'display_location' loc.code %}">
+                    <div class="card-image" style="background-image: url('{% static loc.image_path %}');"></div>
+                    <div class="card-content">
+                        <h3>{{ loc.location }}</h3>
+                        <p>Thành phố: {{ loc.city }}</p>
+                        <p>{{ loc.description }}</p>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            {{ loc.star_html|safe }}
+                            <span>Đánh giá: {{ loc.rating }}</span>
+                        </div>
                     </div>
-                </div>
-            </a></div>
+                </a>
+            </div>
             {% endfor %}
         </div>
     </section>    

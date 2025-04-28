@@ -27,8 +27,7 @@ body {
 }
 
 .left-side {
-    flex: 1;
-    width: 100%;                    /* Làm cho phần này chiếm 50% chiều rộng của container */
+    flex: 1; /* Làm cho phần này chiếm 50% chiều rộng của container */
     background-color: #eeffdd;  /* Màu nền */
     display: flex;
     flex-direction: column;
