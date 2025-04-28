@@ -112,6 +112,7 @@ def distance(origins, destinations):
 
 def overall_homepage(request):
     all_of_locations = Location.objects.all()
+    all_of_locations = all_of_locations[:6] 
     # Build danh sách location + HTML rating
     processed_locations = []
     for loc in all_of_locations:
