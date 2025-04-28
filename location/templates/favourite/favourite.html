@@ -5,4 +5,23 @@
 {% block title %}Favourite{% endblock %}
 
 {% block body %}
+{% if locations %}
+    <div class="locations-container">
+        {% for loc in locations %}
+            <div class="location-card">
+                <h3>{{ loc.location }}</h3>
+                
+                {% if loc.image_path %}
+                    <img src="{{ loc.image_path }}" alt="{{ loc.location }}" width="200px">
+                {% endif %}
+                
+                <p><strong>Mô tả:</strong> {{ loc.description }}</p>
+                <p><strong>Đánh giá:</strong> {{ loc.rating }}/5</p>
+                <p><strong>Địa chỉ:</strong> {{ loc.address }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Chưa có địa điểm nào trong danh sách.</p>
+{% endif %}
 {% endblock %}

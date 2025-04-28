@@ -182,8 +182,11 @@ def my_trip(request):
     else:
         return redirect('/login')
 
-@login_required
 def favourite(request):
-    return render(request, "favourite/favourite.html",{
+    location_list = Location_List.objects.filter(user = request.user).first()
+    
+    locations = location_list.location_set.all() if location_list else []
 
+    return render(request, "favourite/favourite.html",{
+        'locations': locations
     })
