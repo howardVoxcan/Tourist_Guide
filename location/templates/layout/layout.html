@@ -39,13 +39,13 @@
                 </div>
 
                 <div class="search-bar">
-                    <input type="text" placeholder="Tìm điểm đến, khách sạn, nhà hàng...">
+                    <input type="text" placeholder="Search for locations">
                     <button class="search-icon"><i class="fas fa-search search-icon"></i></button>
                 </div>
                 {% if not user.is_authenticated %}
                     <div class="nav-buttons">
-                        <button class="nav-button secondary"><a href="{% url 'login' %}">Đăng Nhập</a></button>
-                        <button class="nav-button primary"><a href="{% url 'register'%}">Đăng Ký</a></button>
+                        <button class="nav-button secondary"><a href="{% url 'login' %}">Log in</a></button>
+                        <button class="nav-button primary"><a href="{% url 'register'%}">Register</a></button>
                     </div>
                 {% else %}
                     <!-- logo người dùng ở đây, kiểu như facebook mặc định, xong có thêm cái username -->
@@ -67,7 +67,7 @@
         {% endblock %}
 
         <footer>
-            <p>&copy; 2025 Tourist Guide. Mọi quyền được bảo lưu.</p>
+            <p>&copy; 2025 Tourist Guide. </p>
         </footer>
 
         <script src="script.js"></script>
