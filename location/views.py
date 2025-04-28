@@ -135,6 +135,11 @@ def overall_homepage(request):
 
 def locations(request):
     all_of_locations = Location.objects.all()
+
+    location_list = Location_List.objects.filter(user=request.user).first()
+    
+    # Kiểm tra nếu location_list là None, trả về list rỗng
+    locations = location_list.location_set.all() if location_list else []
     
     processed_locations = []
     for loc in all_of_locations:
@@ -143,6 +148,12 @@ def locations(request):
         star_html = '<i class="fas fa-star"></i>' * full_stars
         if has_half:
             star_html += '<i class="fas fa-star-half-alt"></i>'
+        
+        # Kiểm tra xem location có trong location_list không
+        if location_list and loc in location_list.location_set.all():
+            favourite_symbol = '<i class="fa-regular fa-heart"></i>'
+        else:
+            favourite_symbol = '<i class="fa-solid fa-heart"></i>'
 
         processed_locations.append({
             'code': loc.code,
@@ -151,11 +162,13 @@ def locations(request):
             'image_path': loc.image_path,
             'rating': loc.rating,
             'star_html': star_html,
+            'favourite_symbol': favourite_symbol,
         })
 
-    return render(request, "locations/locations.html",{
+    return render(request, "locations/locations.html", {
         'locations': processed_locations
     })
+
 
 def location_display(request, location_code):
     look_up = Location.objects.get(code = location_code)
@@ -177,15 +190,29 @@ def location_display(request, location_code):
 
 def favourite(request):
     if request.method == "POST":
-        selected = request.POST.getlist('selected_locations')
-    
-    location_list = Location_List.objects.filter(user = request.user).first()
-    
-    locations = location_list.location_set.all() if location_list else []
+        selected = Location.objects.get(code=request.POST['code'])
 
-    return render(request, "favourite/favourite.html",{
-        'locations': locations
-    })
+        user = request.user  
+
+        location_list = user.location_list.first()  
+        if not location_list:
+            location_list = Location_List.objects.create(user=user, name="Favourite Locations")
+
+        if selected in location_list.location_set.all():
+            location_list.location_set.remove(selected)
+        else:
+            location_list.location_set.add(selected)
+
+        return redirect('favourite')
+
+    else:    
+        location_list = Location_List.objects.filter(user = request.user).first()
+        
+        locations = location_list.location_set.all() if location_list else []
+
+        return render(request, "favourite/favourite.html",{
+            'locations': locations
+        })
 
 def my_trip(request):
     if request.method == "POST":
@@ -250,7 +277,6 @@ def my_trip(request):
                 total_distance=total_distance
             )
 
-        # Sau khi tạo xong thì luôn redirect về /my_trip/
         return redirect('my_trip')
 
     else:        
