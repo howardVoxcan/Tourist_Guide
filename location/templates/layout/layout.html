@@ -9,6 +9,13 @@
         <link rel="stylesheet" href="{% static 'css/layout.css' %}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <title> {% block title %} Django's Tourist {% endblock %}</title>
+        <style>
+            /* Bỏ gạch chân và chỉnh màu chữ cho link */
+            .card a, .card a:visited, .card a:hover, .card a:active {
+                text-decoration: none; /* bỏ gạch chân */
+                color: inherit; /* màu chữ giữ nguyên như cha (ví dụ màu đen hay trắng gì đó) */
+            }
+            </style>
         {% block css %}{% endblock %}
     </head>
 
