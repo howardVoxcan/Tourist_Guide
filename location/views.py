@@ -190,3 +190,6 @@ def favourite(request):
     return render(request, "favourite/favourite.html",{
         'locations': locations
     })
+
+def locations(request):
+    pass

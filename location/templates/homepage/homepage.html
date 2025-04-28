@@ -22,7 +22,7 @@
     <section class="content-section">
         <div class="card-grid">
             {% for loc in all_of_locations|slice:":6" %}
-            <div class="card"><a href = '{% url 'display_location' loc.code %}'>
+            <div class="card"><a href = "{% url 'display_location' loc.code %}">
                 <div class="card-image" style="background-image: url('{% static loc.image_path %}');"></div>
                 <div class="card-content">
                     <h3>{{ loc.location }}</h3>

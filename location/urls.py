@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.overall_homepage, name='homepage'),
     path('my_trip/', views.my_trip, name = 'my_trip'),
     path('favourite/',views.favourite, name = 'favourite'),
+    path('locations', views.locations, name = 'locations'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
     path('<str:location_code>',views.location_display, name='display_location'),
 ]

@@ -49,12 +49,12 @@
 
             <!--Nav chính-->
             <ul class="nav-tabs">
-                <li><a href="#"><i class="fas fa-hotel"></i>Homepage</a></li>
-                <li><a href="#"><i class="fas fa-utensils"></i>Nhà hàng</a></li>
-                <li><a href="#"><i class="fas fa-heart"></i>Favourite</a></li>
+                <li><a href="{% url 'homepage' %}"><i class="fas fa-hotel"></i>Home</a></li>
+                <li><a href="{% url 'locations' %}"><i class="fas fa-utensils"></i>Location</a></li>
+                <li><a href="{% url 'favourite' %}"><i class="fas fa-heart"></i>Favourite</a></li>
+                <li><a href="{% url 'my_trip' %}"><i class="fas fa-heart"></i>My Trip</a></li>
             </ul>
-        </header>  
-        
+        </header>         
         
         {% block body %}
         {% endblock %}
