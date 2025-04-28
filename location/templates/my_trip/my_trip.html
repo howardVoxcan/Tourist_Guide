@@ -1,15 +1,39 @@
-{% extends 'layout/layout.html' %}
-{% block title %} My selected locations {% endblock %}
+{% extends "layout/layout.html" %}
+{% load static %}
 
-{% block body %}    
-<h2>SELECTED LOCATIONS</h2>
-<ul>
-  {% for location in locations %}
-    <li>
-      <strong>{{ location.location }}</strong> - {{ location.city }}
-    </li>
-  {% empty %}
-    <p>There's no location selected yet. 😢😢</p>
-  {% endfor %}
-</ul>
+{% block body %}
+
+<h1>My Trip Lists</h1>
+
+{% if trip_lists %}
+    {% for trip_list in trip_lists %}
+        <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; border-radius: 5px;">
+            <h2>{{ trip_list.name }}</h2>
+
+            {% if trip_list.trip_paths.all %}
+                <ul>
+                    {% for trip_path in trip_list.trip_paths.all %}
+                        <li style="margin-bottom: 10px;">
+                            <strong>{{ trip_path.path_name }}</strong><br>
+                            Tổng quãng đường: {{ trip_path.total_distance|floatformat:2 }} mét<br>
+
+                            Các địa điểm:
+                            <ul>
+                                {% for loc_id in trip_path.locations_ordered %}
+                                    <li>ID địa điểm: {{ loc_id }}</li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Chưa có lộ trình nào.</p>
+            {% endif %}
+
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Bạn chưa có Trip List nào.</p>
+{% endif %}
+
 {% endblock %}

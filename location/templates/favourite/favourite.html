@@ -6,21 +6,32 @@
 
 {% block body %}
 {% if locations %}
-    <div class="locations-container">
-        {% for loc in locations %}
-            <div class="location-card">
-                <h3>{{ loc.location }}</h3>
-                
-                {% if loc.image_path %}
-                    <img src="{{ loc.image_path }}" alt="{{ loc.location }}" width="200px">
-                {% endif %}
-                
-                <p><strong>Mô tả:</strong> {{ loc.description }}</p>
-                <p><strong>Đánh giá:</strong> {{ loc.rating }}/5</p>
-                <p><strong>Địa chỉ:</strong> {{ loc.address }}</p>
-            </div>
-        {% endfor %}
+<form method="POST" action="{% url 'my_trip' %}">
+    {% csrf_token %}
+    <h3>Chọn địa điểm:</h3>
+    {% for location in locations %}
+    <div>
+        <input type="checkbox" name="locations" value="{{ location.id }}">
+        <label>{{ location.location }} ({{ location.coordinate }})</label><br>
+
+        <label>Ghim vào vị trí (tùy chọn):</label>
+        <input type="number" name="pinned_order_{{ location.id }}" min="1" placeholder="Vị trí (1,2,3...)">
+
+        <!-- Chọn địa điểm phải đứng sau địa điểm khác -->
+        <label>Phải đi sau địa điểm ID:</label>
+        <input type="number" name="precedence_after_{{ location.id }}" placeholder="ID của địa điểm phải đi sau (optional)">
     </div>
+    <br>
+    {% endfor %}
+
+    <h3>Tên chuyến đi:</h3>
+    <input type="text" name="path_name" placeholder="Nhập tên chuyến đi" required>
+
+    <input type="hidden" name="trip_list_id" value="{{ trip_list.id }}">
+
+    <button type="submit">Tạo lịch trình</button>
+</form>
+
 {% else %}
     <p>Chưa có địa điểm nào trong danh sách.</p>
 {% endif %}
