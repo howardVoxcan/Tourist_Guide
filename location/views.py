@@ -35,10 +35,6 @@ def weather():
 
     return location_name, celsius_degree, fahrenheit_degree, condition
 
-import itertools
-
-import itertools
-
 class Graph:
     def __init__(self, num_vertices):
         self.num_vertices = num_vertices
@@ -115,16 +111,7 @@ def distance(origins, destinations):
     return distance, duration
 
 def overall_homepage(request):
-    authentication = request.user.is_authenticated
-
     all_of_locations = Location.objects.all()
-
-    # if authentication:
-    #     trip_list = Location_List.objects.filter(user=request.user, name='My Trip').first()
-    #     locations = trip_list.location_set.all() if trip_list else []
-    # else:
-    #     locations = []
-
     # Build danh sách location + HTML rating
     processed_locations = []
     for loc in all_of_locations:
@@ -192,4 +179,25 @@ def favourite(request):
     })
 
 def locations(request):
-    pass
+    all_of_locations = Location.objects.all()
+    
+    processed_locations = []
+    for loc in all_of_locations:
+        full_stars = int(loc.rating)
+        has_half = (loc.rating - full_stars) >= 0.5
+        star_html = '<i class="fas fa-star"></i>' * full_stars
+        if has_half:
+            star_html += '<i class="fas fa-star-half-alt"></i>'
+
+        processed_locations.append({
+            'code': loc.code,
+            'location': loc.location,
+            'description': loc.description,
+            'image_path': loc.image_path,
+            'rating': loc.rating,
+            'star_html': star_html,
+        })
+
+    return render(request, "locations/locations.html",{
+        'locations': processed_locations
+    })

@@ -1,6 +1,31 @@
-{% extends "location/layout.html" %}
+{% extends "layout/layout.html" %}
+
+{% load static %}
+
+{% block title%} Locations {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+{% endblock %}
 
 {% block body %}
-<h1>Welcome to Our Location Page</h1>
-<p>Here you will find all the information you need about our locations.</p>
+<section class="content-section">
+    <div class="card-grid">
+        {% for loc in locations %}
+        <div class="card"><a href = "{% url 'display_location' loc.code %}">
+            <div class="card-image" style="background-image: url('{% static loc.image_path %}');"></div>
+            <div class="card-content">
+                <h3>{{ loc.location }}</h3>
+                <p>Thành phố: {{ loc.city }}</p>
+                <p>{{ loc.description }}</p>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    {{ loc.star_html|safe }}
+                    <span>Đánh giá: {{ loc.rating }}</span>
+                </div>
+            </div>
+        </a></div>
+        {% endfor %}
+    </div>
+</section>    
 {% endblock %}
