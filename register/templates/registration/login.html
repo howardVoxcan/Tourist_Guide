@@ -1,13 +1,16 @@
 {% extends "authenticate_layout/authenticate_layout.html" %}
 
+{% load static %}
 {% block title %}Login{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="register/static/css/signin.css">
+<link rel="stylesheet" href="{% static 'css/signin.css' %}">
 {% endblock %}
 
 {% load crispy_forms_tags %}
 {% block content %}
+
+<div class="right-side">
     <form method="POST" class="form-group">
         {% csrf_token %}
         {{ form|crispy }}

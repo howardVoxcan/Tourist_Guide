@@ -1,0 +1,59 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f7fb;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('/api/placeholder/1920/1080');
+    background-size: cover;
+    background-position: center;
+}
+
+.container {
+    display: flex;
+    width: 900px;
+    height: 600px;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.left-side {
+    flex: 1;
+    width: 100%;                    /* Làm cho phần này chiếm 50% chiều rộng của container */
+    background-color: #eeffdd;  /* Màu nền */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 40px;
+    position: relative;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.left-side img {
+    max-width: 80%;
+    margin: 30px 0;
+}
+
+.app-description {
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-top: 20px;
+}
