@@ -1,38 +1,58 @@
 {% extends 'layout/layout.html' %}
-
 {% load static %}
-
 {% block title %}Favourite{% endblock %}
 
 {% block body %}
-{% if locations %}
-<form method="POST" action="{% url 'my_trip' %}">
-    {% csrf_token %}
-    <h3>Chọn địa điểm:</h3>
-    {% for location in locations %}
-    <div>
-        <input type="checkbox" name="locations" value="{{ location.id }}">
-        <label>{{ location.location }} ({{ location.coordinate }})</label><br>
+  {% if locations %}
+    <form method="POST" action="{% url 'my_trip' %}">
+      {% csrf_token %}
+      <h3>Chọn địa điểm:</h3>
+      {% for location in locations %}
+        <div class="location-block">
+          <input type="checkbox" name="locations" value="{{ location.id }}">
+          <label>{{ location.location }} ({{ location.coordinate }})</label><br>
 
-        <label>Ghim vào vị trí (tùy chọn):</label>
-        <input type="number" name="pinned_order_{{ location.id }}" min="1" placeholder="Vị trí (1,2,3...)">
+          <!-- Check để chọn điểm bắt đầu và kết thúc -->
+          <label>
+            <input type="radio" name="start_point" value="{{ location.id }}" required onchange="disableInputs('{{ location.id }}')"> Chọn làm điểm bắt đầu
+          </label><br>
+          
+          <label>
+            <input type="radio" name="end_point" value="{{ location.id }}" required onchange="disableInputs('{{ location.id }}')"> Chọn làm điểm kết thúc
+          </label><br>
 
-        <!-- Chọn địa điểm phải đứng sau địa điểm khác -->
-        <label>Phải đi sau địa điểm ID:</label>
-        <input type="number" name="precedence_after_{{ location.id }}" placeholder="ID của địa điểm phải đi sau (optional)">
-    </div>
-    <br>
-    {% endfor %}
+          <div id="extra-inputs-{{ location.id }}">
+            <label>Ghim vào vị trí:</label>
+            <input type="number" name="pinned_order_{{ location.id }}" min="1" placeholder="Vị trí (1,2,3...)"><br>
 
-    <h3>Tên chuyến đi:</h3>
-    <input type="text" name="path_name" placeholder="Nhập tên chuyến đi" required>
+            <label>Phải đi sau địa điểm ID:</label>
+            <input type="number" name="precedence_after_{{ location.id }}" placeholder="ID của địa điểm phải đi sau (optional)">
+          </div>
 
-    <input type="hidden" name="trip_list_id" value="{{ trip_list.id }}">
+          <hr>
+        </div>
+      {% endfor %}
 
-    <button type="submit">Tạo lịch trình</button>
-</form>
+      <h3>Tên chuyến đi:</h3>
+      <input type="text" name="path_name" placeholder="Nhập tên chuyến đi" required>
 
-{% else %}
+      <input type="hidden" name="trip_list_id" value="{{ trip_list.id }}">
+
+      <button type="submit">Tạo lịch trình</button>
+    </form>
+
+    <script>
+      function disableInputs(locationId) {
+        const allInputs = document.querySelectorAll('[id^="extra-inputs-"]');
+        allInputs.forEach(div => div.style.display = 'block');
+
+        const targetDiv = document.getElementById(`extra-inputs-${locationId}`);
+        if (targetDiv) {
+          targetDiv.style.display = 'none';
+        }
+      }
+    </script>
+  {% else %}
     <p>Chưa có địa điểm nào trong danh sách.</p>
-{% endif %}
+  {% endif %}
 {% endblock %}

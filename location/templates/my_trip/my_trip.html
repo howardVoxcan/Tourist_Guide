@@ -1,48 +1,22 @@
-{% extends "layout/layout.html" %}
+{% extends 'layout/layout.html' %}
 {% load static %}
+{% load custom_filters %}
+{% block title %}My Trip{% endblock %}
 
 {% block body %}
+  <h2>Danh sách các chuyến đi đã tạo</h2>
 
-<h1>My Trip Lists</h1>
-
-<form method="POST" action="{% url 'my_trip' %}">
-    {% csrf_token %}
-    
-    <div>
-        <label for="path_name">Tên lộ trình:</label>
-        <input type="text" id="path_name" name="path_name" required>
-    </div>
-
-    <div>
-        <label for="trip_list_id">Chọn Trip List:</label>
-        <select name="trip_list_id" required>
-            {% for trip_list in trip_lists %}
-                <option value="{{ trip_list.id }}">{{ trip_list.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <h3>Chọn các địa điểm</h3>
-    <div>
-        {% for location in locations %}
-            <div style="margin-bottom: 10px;">
-                <input type="checkbox" id="loc{{ location.id }}" name="locations" value="{{ location.id }}">
-                <label for="loc{{ location.id }}">{{ location.location }}</label><br>
-
-                <!-- Ghim vị trí nếu muốn -->
-                <label>Ghim vị trí (nếu muốn):</label>
-                <input type="number" name="pinned_order_{{ location.id }}" min="1" placeholder="Thứ tự" 
-                       aria-label="Ghim vị trí (tùy chọn)">
-
-                <!-- Ràng buộc đi sau (precedence) -->
-                <label>Đi sau địa điểm ID (tùy chọn):</label>
-                <input type="number" name="precedence_after_{{ location.id }}" placeholder="ID địa điểm trước"
-                       aria-label="Đi sau địa điểm ID (tùy chọn)">
-            </div>
+    {% if trip_paths %}
+        {% for path in trip_paths %}
+            <h3>{{ path.path_name }}</h3>
+            <p>Total distance: {{ path.distance }} km</p>
+            <ul>
+                {% for loc_id in path.locations %}
+                <li>{{ location_map|get_item:loc_id }}</li>
+                {% endfor %}
+            </ul>
         {% endfor %}
-    </div>
-
-    <button type="submit">Tạo Lộ Trình</button>
-</form>
-
+    {% else %}
+        <p>Chưa có lịch trình nào được tạo.</p>
+    {% endif %}
 {% endblock %}

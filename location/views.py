@@ -1,4 +1,7 @@
 from urllib import request
+
+from annotated_types import Len
+from shapely import length
 from location.models import Location, Location_List, TripPath, TripList
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
@@ -8,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from location.coordinate import coordinate_dict
 from django.contrib.auth.models import User
 import itertools, requests, geocoder, json
+from django.contrib import messages
 
 # Create your views here.
 def weather():
@@ -34,24 +38,40 @@ class Graph:
     def add_edge(self, u, v, weight):
         self.edges[u][v] = weight
 
-    def find_hamiltonian_cycle(self, fixed_position=None, precedence_constraints=None):
+    def find_hamiltonian_cycle(self, fixed_position=None, precedence_constraints=None, start=None, end=None):
+        import itertools
         vertices = list(range(self.num_vertices))
         min_path = None
         min_cost = float("inf")
 
         if fixed_position is None:
-            fixed_position = [False] * (self.num_vertices + 1)  # +1 cho điểm quay về
+            fixed_position = [False] * (self.num_vertices + 1)
         if precedence_constraints is None:
             precedence_constraints = []
 
-        fixed_position_map = {}  # map: index -> node cố định ở vị trí đó
+        fixed_position_map = {}
         for i, fixed in enumerate(fixed_position):
             if fixed:
-                fixed_position_map[i] = None  # sẽ được gán ở phần sinh perm
+                fixed_position_map[i] = None
 
-        # Duyệt tất cả hoán vị các đỉnh chưa cố định
-        for perm in itertools.permutations(vertices[1:]):  
-            path = [0] + list(perm) + [0]
+        # Loại bỏ start và end ra khỏi hoán vị (nếu có)
+        inner_vertices = vertices.copy()
+        if start is not None:
+            inner_vertices.remove(start)
+        if end is not None and end in inner_vertices:
+            inner_vertices.remove(end)
+
+        for perm in itertools.permutations(inner_vertices):
+            path = list(perm)
+            if start is not None:
+                path.insert(0, start)
+            else:
+                path.insert(0, 0)
+
+            if end is not None:
+                path.append(end)
+            else:
+                path.append(path[0])  # Quay về điểm xuất phát như TSP
 
             valid = True
 
@@ -63,7 +83,7 @@ class Graph:
                         break
                     fixed_position_map[idx] = path[idx]
 
-            # Kiểm tra precedence_constraints: u phải đứng trước v
+            # Kiểm tra precedence_constraints
             for u, v in precedence_constraints:
                 try:
                     if path.index(u) >= path.index(v):
@@ -216,45 +236,135 @@ def favourite(request):
             'locations': locations
         })
 
-# @login_required
-# def my_trip(request):
-#     if request.method == 'POST':
-#         path_name = request.POST['path_name']
-#         trip_list_id = request.POST['trip_list_id']
-#         locations = request.POST.getlist('locations')
+@login_required
+def my_trip(request):
+    user = request.user
+    trip_list_id = f"{user.username}-favourite"
 
-#         # Kiểm tra nếu trip_list_id là hợp lệ
-#         if not trip_list_id.isdigit():  # Nếu trip_list_id không phải số
-#             return render(request, 'my_trip/my_trip.html', {
-#                 'error': 'Vui lòng chọn một Trip List hợp lệ.',
-#                 'trip_lists': TripList.objects.filter(user=request.user),
-#                 'locations': Location.objects.all()
-#             })
+    # Tạo TripList nếu chưa có
+    trip_list, _ = TripList.objects.get_or_create(id=trip_list_id, defaults={
+        'user': user,
+        'name': f"{user.username}'s Favourite Trip"
+    })
 
-#         trip_list_id = int(trip_list_id)  # Chuyển trip_list_id thành số nguyên
-#         try:
-#             trip_list = TripList.objects.get(id=trip_list_id)
-#         except TripList.DoesNotExist:
-#             return render(request, 'my_trip.html', {
-#                 'error': 'Không tìm thấy Trip List.',
-#                 'trip_lists': TripList.objects.filter(user=request.user),
-#                 'locations': Location.objects.all()
-#             })
+    if request.method == 'POST':
+        path_name = request.POST.get('path_name')
+        if not path_name:
+            return redirect('my_trip')
 
-#         trip_path = TripPath.objects.create(
-#             path_name=path_name,
-#             trip_list=trip_list,
-#         )
+        # Lấy Location_List đầu tiên của user
+        location_list = Location_List.objects.filter(user=user).first()
+        if not location_list:
+            return redirect('favourite')
 
-#         # Tiếp tục xử lý các thông tin khác như locations, pinned, precedence...
+        # Lấy toàn bộ location từ danh sách trên
+        locations = list(location_list.location_set.all())
+        if not locations:
+            return redirect('favourite')
 
-#         return redirect('my_trip/my_trip')
+        # Ánh xạ id <-> index trong danh sách để phục vụ TSP
+        id_to_index = {loc.id: idx for idx, loc in enumerate(locations)}
+        index_to_id = {idx: loc.id for idx, loc in enumerate(locations)}
+        coordinates = [loc.coordinate for loc in locations]
 
-#     # GET method: hiển thị trip lists và locations
-#     trip_lists = TripList.objects.filter(user=request.user)
-#     locations = Location.objects.all()
+        pinned_positions = [None] * len(locations)
+        fixed_position_flags = [False] * len(locations)
+        precedence_constraints = []
 
-#     return render(request, 'my_trip/my_trip.html', {
-#         'trip_lists': trip_lists,
-#         'locations': locations
-#     })
+        # Lấy id của điểm bắt đầu và kết thúc từ form
+        start_id_str = request.POST.get('start_point')
+        end_id_str = request.POST.get('end_point')
+        start_id = int(start_id_str) if start_id_str and start_id_str.isdigit() else None
+        end_id = int(end_id_str) if end_id_str and end_id_str.isdigit() else None
+
+        # Xử lý pinned/precedence (ràng buộc)
+        for loc in locations:
+            loc_id = loc.id
+            loc_id_str = str(loc_id)
+            index = id_to_index[loc_id]
+
+            # Pinned
+            pinned_str = request.POST.get(f'pinned_order_{loc_id_str}')
+            if pinned_str and pinned_str.isdigit():
+                pinned_index = int(pinned_str) - 1
+                if 0 <= pinned_index < len(locations):
+                    pinned_positions[pinned_index] = index
+                    fixed_position_flags[pinned_index] = True
+
+            # Ràng buộc đi sau
+            after_id_str = request.POST.get(f'precedence_after_{loc_id_str}')
+            if after_id_str and after_id_str.isdigit():
+                after_id = int(after_id_str)
+                if after_id in id_to_index:
+                    precedence_constraints.append((id_to_index[after_id], index))
+
+        # Tính khoảng cách
+        distances = []
+        for i in range(len(coordinates)):
+            for j in range(i + 1, len(coordinates)):
+                dist, _ = distance(coordinates[i], coordinates[j])
+                distances.append((i, j, dist))
+                distances.append((j, i, dist))
+
+        # Tạo graph
+        graph = Graph(len(locations))
+        for u, v, w in distances:
+            graph.add_edge(u, v, w)
+
+        start_index = id_to_index.get(start_id) if start_id else None
+        end_index = id_to_index.get(end_id) if end_id else None
+
+        path, cost = graph.find_hamiltonian_cycle(
+            fixed_position=fixed_position_flags,
+            precedence_constraints=precedence_constraints,
+            start=start_index,
+            end=end_index
+        )
+
+        if path is None:
+            messages.error(request, "Không thể tạo lịch trình hợp lệ với các ràng buộc đã chọn.")
+            return redirect('favourite')
+
+        ordered_location_ids = [index_to_id[i] for i in path]
+
+        # Lưu TripPath mới (chuyển list -> JSON string)
+        TripPath.objects.create(
+            trip_list=trip_list,
+            path_name=path_name,
+            locations_ordered=json.dumps(ordered_location_ids),
+            total_distance=cost
+        )
+
+        # Xoá danh sách đã chọn
+        location_list.location_set.clear()
+        return redirect('my_trip')
+
+    # GET: Lấy và hiển thị các TripPath
+    trip_paths = TripPath.objects.filter(trip_list=trip_list).order_by('created_at')
+
+    # Parse từng path → list location ids → map sang tên
+    all_ids = []
+    parsed_trip_paths = []
+
+    for path in trip_paths:
+        try:
+            loc_ids = json.loads(path.locations_ordered)
+        except json.JSONDecodeError:
+            loc_ids = []
+
+        all_ids.extend(loc_ids)
+        parsed_trip_paths.append({
+            'path_name': path.path_name,
+            'locations': loc_ids,
+            'distance': path.total_distance,
+            'created_at': path.created_at
+        })
+
+    # Query tên các địa điểm
+    location_qs = Location.objects.filter(id__in=all_ids)
+    location_map = {loc.id: loc.location for loc in location_qs}
+
+    return render(request, 'my_trip/my_trip.html', {
+        'trip_paths': parsed_trip_paths,
+        'location_map': location_map
+    })

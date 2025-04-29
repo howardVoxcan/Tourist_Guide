@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
+
+from sympy import true 
 
 # Create your models here.
 class Location_List(models.Model):
@@ -27,16 +30,21 @@ class Location(models.Model):
         return f"{self.code} {self.location} : {self.description} "
 
 class TripList(models.Model):
+    id = models.CharField(
+        primary_key=True, max_length=255, editable=False
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="trip_lists")
-    name = models.CharField(max_length=255, default = "My trip list")
+    name = models.CharField(max_length=255, default="My trip list")
+
     def __str__(self):
         return self.name
 
 class TripPath(models.Model):
     trip_list = models.ForeignKey(TripList, on_delete=models.CASCADE, related_name="trip_paths")
     path_name = models.CharField(max_length=255, default = "")
-    locations_ordered = models.JSONField()
+    locations_ordered = models.CharField(max_length = 255)
     total_distance = models.FloatField(null=True, blank=True)
+    total_duration = models.FloatField(null=True, blank = True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
