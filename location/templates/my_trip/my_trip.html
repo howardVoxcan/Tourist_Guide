@@ -5,35 +5,44 @@
 
 <h1>My Trip Lists</h1>
 
-{% if trip_lists %}
-    {% for trip_list in trip_lists %}
-        <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; border-radius: 5px;">
-            <h2>{{ trip_list.name }}</h2>
+<form method="POST" action="{% url 'my_trip' %}">
+    {% csrf_token %}
+    
+    <div>
+        <label for="path_name">Tên lộ trình:</label>
+        <input type="text" id="path_name" name="path_name" required>
+    </div>
 
-            {% if trip_list.trip_paths.all %}
-                <ul>
-                    {% for trip_path in trip_list.trip_paths.all %}
-                        <li style="margin-bottom: 10px;">
-                            <strong>{{ trip_path.path_name }}</strong><br>
-                            Tổng quãng đường: {{ trip_path.total_distance|floatformat:2 }} mét<br>
+    <div>
+        <label for="trip_list_id">Chọn Trip List:</label>
+        <select name="trip_list_id" required>
+            {% for trip_list in trip_lists %}
+                <option value="{{ trip_list.id }}">{{ trip_list.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
-                            Các địa điểm:
-                            <ul>
-                                {% for loc_id in trip_path.locations_ordered %}
-                                    <li>ID địa điểm: {{ loc_id }}</li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>Chưa có lộ trình nào.</p>
-            {% endif %}
+    <h3>Chọn các địa điểm</h3>
+    <div>
+        {% for location in locations %}
+            <div style="margin-bottom: 10px;">
+                <input type="checkbox" id="loc{{ location.id }}" name="locations" value="{{ location.id }}">
+                <label for="loc{{ location.id }}">{{ location.location }}</label><br>
 
-        </div>
-    {% endfor %}
-{% else %}
-    <p>Bạn chưa có Trip List nào.</p>
-{% endif %}
+                <!-- Ghim vị trí nếu muốn -->
+                <label>Ghim vị trí (nếu muốn):</label>
+                <input type="number" name="pinned_order_{{ location.id }}" min="1" placeholder="Thứ tự" 
+                       aria-label="Ghim vị trí (tùy chọn)">
+
+                <!-- Ràng buộc đi sau (precedence) -->
+                <label>Đi sau địa điểm ID (tùy chọn):</label>
+                <input type="number" name="precedence_after_{{ location.id }}" placeholder="ID địa điểm trước"
+                       aria-label="Đi sau địa điểm ID (tùy chọn)">
+            </div>
+        {% endfor %}
+    </div>
+
+    <button type="submit">Tạo Lộ Trình</button>
+</form>
 
 {% endblock %}

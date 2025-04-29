@@ -17,6 +17,15 @@
             <div class="card-content">
                 <h3>{{ loc.location }}</h3>
                 <p>{{ loc.description }}</p>
+                <div>
+                    <form method="post" action="{% url 'favourite' %}" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="value" value="{{ loc.code }}">
+                        <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                            {{ loc.favourite_symbol|safe }}
+                        </button>
+                    </form>
+                </div>
                 <div class="rating">
                     {{ loc.star_html|safe }}
                     <span>Rating: {{ loc.rating }}</span>

@@ -151,9 +151,9 @@ def locations(request):
         
         # Kiểm tra xem location có trong location_list không
         if location_list and loc in location_list.location_set.all():
-            favourite_symbol = '<i class="fa-regular fa-heart"></i>'
-        else:
             favourite_symbol = '<i class="fa-solid fa-heart"></i>'
+        else:
+            favourite_symbol = '<i class="fa-regular fa-heart"></i>'
 
         processed_locations.append({
             'code': loc.code,
@@ -168,7 +168,6 @@ def locations(request):
     return render(request, "locations/locations.html", {
         'locations': processed_locations
     })
-
 
 def location_display(request, location_code):
     look_up = Location.objects.get(code = location_code)
@@ -188,12 +187,16 @@ def location_display(request, location_code):
         "coordinate": look_up.coordinate
     })
 
+@login_required
 def favourite(request):
     if request.method == "POST":
-        selected = Location.objects.get(code=request.POST['code'])
+        code = request.POST.get('value')  # an toàn hơn
+        if not code:
+            return redirect('favourite')  # hoặc báo lỗi hợp lý hơn
+        
+        selected = Location.objects.get(code=code)
 
         user = request.user  
-
         location_list = user.location_list.first()  
         if not location_list:
             location_list = Location_List.objects.create(user=user, name="Favourite Locations")
@@ -206,82 +209,52 @@ def favourite(request):
         return redirect('favourite')
 
     else:    
-        location_list = Location_List.objects.filter(user = request.user).first()
-        
+        location_list = Location_List.objects.filter(user = request.user).first()        
         locations = location_list.location_set.all() if location_list else []
 
         return render(request, "favourite/favourite.html",{
             'locations': locations
         })
 
-def my_trip(request):
-    if request.method == "POST":
-        selected_location_ids = request.POST.getlist("locations")
-        path_name = request.POST.get("path_name")
-        trip_list_id = request.POST.get("trip_list_id")
+# @login_required
+# def my_trip(request):
+#     if request.method == 'POST':
+#         path_name = request.POST['path_name']
+#         trip_list_id = request.POST['trip_list_id']
+#         locations = request.POST.getlist('locations')
 
-        trip_list = get_object_or_404(TripList, id=trip_list_id, user=request.user)
+#         # Kiểm tra nếu trip_list_id là hợp lệ
+#         if not trip_list_id.isdigit():  # Nếu trip_list_id không phải số
+#             return render(request, 'my_trip/my_trip.html', {
+#                 'error': 'Vui lòng chọn một Trip List hợp lệ.',
+#                 'trip_lists': TripList.objects.filter(user=request.user),
+#                 'locations': Location.objects.all()
+#             })
 
-        locations = Location.objects.filter(id__in=selected_location_ids)
-        id_to_index = {loc.id: idx for idx, loc in enumerate(locations)}
-        num_vertices = len(locations)
+#         trip_list_id = int(trip_list_id)  # Chuyển trip_list_id thành số nguyên
+#         try:
+#             trip_list = TripList.objects.get(id=trip_list_id)
+#         except TripList.DoesNotExist:
+#             return render(request, 'my_trip.html', {
+#                 'error': 'Không tìm thấy Trip List.',
+#                 'trip_lists': TripList.objects.filter(user=request.user),
+#                 'locations': Location.objects.all()
+#             })
 
-        graph = Graph(num_vertices)
-        coords = [loc.coordinate for loc in locations]
+#         trip_path = TripPath.objects.create(
+#             path_name=path_name,
+#             trip_list=trip_list,
+#         )
 
-        # Tạo ma trận khoảng cách
-        for i, origin in enumerate(coords):
-            for j, destination in enumerate(coords):
-                if i != j:
-                    dist, _ = distance(origin, destination)
-                    graph.add_edge(i, j, dist)
+#         # Tiếp tục xử lý các thông tin khác như locations, pinned, precedence...
 
-        # --- Xử lý pinned positions ---
-        fixed_position = [False] * (num_vertices + 1)
-        pinned_position_map = {}
+#         return redirect('my_trip/my_trip')
 
-        for loc in locations:
-            loc_id = loc.id
-            pinned_order = request.POST.get(f"pinned_order_{loc_id}")
-            if pinned_order:
-                pinned_index = int(pinned_order)
-                pinned_position_map[pinned_index] = id_to_index[loc_id]
-                fixed_position[pinned_index] = True
+#     # GET method: hiển thị trip lists và locations
+#     trip_lists = TripList.objects.filter(user=request.user)
+#     locations = Location.objects.all()
 
-        # --- Xử lý precedence constraints ---
-        precedence_constraints = []
-        for loc in locations:
-            loc_id = loc.id
-            precedence_after_id = request.POST.get(f"precedence_after_{loc_id}")
-            if precedence_after_id:
-                try:
-                    after_id = int(precedence_after_id)
-                    if after_id in id_to_index:
-                        precedence_constraints.append((id_to_index[after_id], id_to_index[loc_id]))
-                except ValueError:
-                    pass
-
-        # Tìm đường đi tối ưu
-        path, total_distance = graph.find_hamiltonian_cycle(
-            fixed_position=fixed_position,
-            precedence_constraints=precedence_constraints
-        )
-
-        if path:
-            ordered_locations = [locations[idx].id for idx in path[:-1]]  # Bỏ điểm quay về
-
-            TripPath.objects.create(
-                trip_list=trip_list,
-                path_name=path_name,
-                locations_ordered=json.dumps(ordered_locations),
-                total_distance=total_distance
-            )
-
-        return redirect('my_trip')
-
-    else:        
-        trip_lists = TripList.objects.filter(user=request.user).prefetch_related('trip_paths')
-        return render(request, "my_trip/my_trip.html", {
-            "trip_lists": trip_lists
-        })
-
+#     return render(request, 'my_trip/my_trip.html', {
+#         'trip_lists': trip_lists,
+#         'locations': locations
+#     })
