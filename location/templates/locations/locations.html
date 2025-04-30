@@ -12,27 +12,48 @@
 <section class="content-section">
     <div class="card-grid">
         {% for loc in locations %}
-        <div class="card"><a href = "{% url 'display_location' loc.code %}">
-            <div class="card-image" style="background-image: url('{% static loc.image_path %}');"></div>
-            <div class="card-content">
-                <h3>{{ loc.location }}</h3>
-                <p>{{ loc.description }}</p>
-                <div>
-                    <form method="post" action="{% url 'favourite' %}" style="display:inline;">
-                        {% csrf_token %}
-                        <input type="hidden" name="value" value="{{ loc.code }}">
-                        <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
-                            {{ loc.favourite_symbol|safe }}
-                        </button>
-                    </form>
+        <div class="card">
+            <a href = "{% url 'display_location' loc.code %}">
+                <div class="card-image" style="background-image: url('{% static loc.image_path %}');"></div>
+                <div class="card-content">
+                    <h3>{{ loc.location }}</h3>
+                    <p>{{ loc.description }}</p>
+                    <div>
+                        <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="value" value="{{ loc.code }}">
+                            <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                                {{ loc.favourite_symbol|safe }}
+                            </button>
+                        </form>
+                    </div>
+                    <div class="rating">
+                        {{ loc.star_html|safe }}
+                        <span>Rating: {{ loc.rating }}</span>
+                    </div>
                 </div>
-                <div class="rating">
-                    {{ loc.star_html|safe }}
-                    <span>Rating: {{ loc.rating }}</span>
-                </div>
-            </div>
-        </a></div>
+            </a>
+        </div>
         {% endfor %}
     </div>
 </section>    
+
+<!-- JavaScript để lưu và khôi phục scroll -->
+<script>
+  // Lưu vị trí scroll khi submit form
+  document.querySelectorAll('.fav-form').forEach(function(form) {
+    form.addEventListener('submit', function () {
+      sessionStorage.setItem('scrollPos', window.scrollY);
+    });
+  });
+
+  // Sau khi load lại trang (sau redirect), khôi phục vị trí scroll
+  window.addEventListener('load', function () {
+    const scrollPos = sessionStorage.getItem('scrollPos');
+    if (scrollPos !== null) {
+      window.scrollTo(0, parseInt(scrollPos));
+      sessionStorage.removeItem('scrollPos');
+    }
+  });
+</script>
 {% endblock %}

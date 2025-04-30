@@ -127,11 +127,18 @@ def overall_homepage(request):
 
     processed_locations = []
     for loc in all_of_locations:
-        full_stars = int(loc.rating)
-        has_half = (loc.rating - full_stars) >= 0.5
+        rating = (round(loc.rating*2))/2
+        full_stars = int(rating)
+        has_half = (rating - full_stars) >= 0.5
         star_html = '<i class="fas fa-star"></i>' * full_stars
+
         if has_half:
             star_html += '<i class="fas fa-star-half-alt"></i>'
+            empty_stars = 5 - full_stars - 1
+        else:
+            empty_stars = 5 - full_stars
+
+        star_html += '<i class="far fa-star"></i>' * empty_stars
 
         processed_locations.append({
             'code': loc.code,
@@ -154,40 +161,67 @@ def overall_homepage(request):
     })
 
 def locations(request):
-    all_of_locations = Location.objects.all()
-
-    location_list = Location_List.objects.filter(user=request.user).first()
-    
-    # Kiểm tra nếu location_list là None, trả về list rỗng
-    locations = location_list.location_set.all() if location_list else []
-    
-    processed_locations = []
-    for loc in all_of_locations:
-        full_stars = int(loc.rating)
-        has_half = (loc.rating - full_stars) >= 0.5
-        star_html = '<i class="fas fa-star"></i>' * full_stars
-        if has_half:
-            star_html += '<i class="fas fa-star-half-alt"></i>'
+    if request.method == "POST":
+        code = request.POST.get('value')  # an toàn hơn
+        if not code:
+            return redirect('favourite')  # hoặc báo lỗi hợp lý hơn
         
-        # Kiểm tra xem location có trong location_list không
-        if location_list and loc in location_list.location_set.all():
-            favourite_symbol = '<i class="fa-solid fa-heart"></i>'
+        selected = Location.objects.get(code=code)
+
+        user = request.user  
+        location_list = user.location_list.first()  
+        if not location_list:
+            location_list = Location_List.objects.create(user=user, name="Favourite Locations")
+
+        if selected in location_list.location_set.all():
+            location_list.location_set.remove(selected)
         else:
-            favourite_symbol = '<i class="fa-regular fa-heart"></i>'
+            location_list.location_set.add(selected)
 
-        processed_locations.append({
-            'code': loc.code,
-            'location': loc.location,
-            'description': loc.description,
-            'image_path': loc.image_path,
-            'rating': loc.rating,
-            'star_html': star_html,
-            'favourite_symbol': favourite_symbol,
+        return redirect('locations')
+    
+    else: 
+        all_of_locations = Location.objects.all()
+
+        location_list = Location_List.objects.filter(user=request.user).first()
+        
+        # Kiểm tra nếu location_list là None, trả về list rỗng
+        locations = location_list.location_set.all() if location_list else []
+        
+        processed_locations = []
+        for loc in all_of_locations:
+            rating = (round(loc.rating*2))/2
+            full_stars = int(rating)
+            has_half = (rating - full_stars) >= 0.5
+            star_html = '<i class="fas fa-star"></i>' * full_stars
+
+            if has_half:
+                star_html += '<i class="fas fa-star-half-alt"></i>'
+                empty_stars = 5 - full_stars - 1
+            else:
+                empty_stars = 5 - full_stars
+
+            star_html += '<i class="far fa-star"></i>' * empty_stars
+            
+            # Kiểm tra xem location có trong location_list không
+            if location_list and loc in location_list.location_set.all():
+                favourite_symbol = '<i class="fa-solid fa-heart"></i>'
+            else:
+                favourite_symbol = '<i class="fa-regular fa-heart"></i>'
+
+            processed_locations.append({
+                'code': loc.code,
+                'location': loc.location,
+                'description': loc.description,
+                'image_path': loc.image_path,
+                'rating': loc.rating,
+                'star_html': star_html,
+                'favourite_symbol': favourite_symbol,
+            })
+
+        return render(request, "locations/locations.html", {
+            'locations': processed_locations
         })
-
-    return render(request, "locations/locations.html", {
-        'locations': processed_locations
-    })
 
 def location_display(request, location_code):
     look_up = Location.objects.get(code = location_code)
@@ -208,33 +242,13 @@ def location_display(request, location_code):
     })
 
 @login_required
-def favourite(request):
-    if request.method == "POST":
-        code = request.POST.get('value')  # an toàn hơn
-        if not code:
-            return redirect('favourite')  # hoặc báo lỗi hợp lý hơn
-        
-        selected = Location.objects.get(code=code)
+def favourite(request):    
+    location_list = Location_List.objects.filter(user = request.user).first()        
+    locations = location_list.location_set.all() if location_list else []
 
-        user = request.user  
-        location_list = user.location_list.first()  
-        if not location_list:
-            location_list = Location_List.objects.create(user=user, name="Favourite Locations")
-
-        if selected in location_list.location_set.all():
-            location_list.location_set.remove(selected)
-        else:
-            location_list.location_set.add(selected)
-
-        return redirect('favourite')
-
-    else:    
-        location_list = Location_List.objects.filter(user = request.user).first()        
-        locations = location_list.location_set.all() if location_list else []
-
-        return render(request, "favourite/favourite.html",{
-            'locations': locations
-        })
+    return render(request, "favourite/favourite.html",{
+        'locations': locations
+    })
 
 @login_required
 def my_trip(request):
@@ -356,7 +370,7 @@ def my_trip(request):
         parsed_trip_paths.append({
             'path_name': path.path_name,
             'locations': loc_ids,
-            'distance': path.total_distance,
+            'distance': round(path.total_distance / 1000, 1),
             'created_at': path.created_at
         })
 
