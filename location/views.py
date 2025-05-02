@@ -224,7 +224,28 @@ def locations(request):
         })
 
 def location_display(request, location_code):
-    look_up = Location.objects.get(code = location_code)
+    look_up = get_object_or_404(Location, code=location_code)
+
+    # Calculate star HTML once
+    rating = round(look_up.rating * 2) / 2
+    full_stars = int(rating)
+    has_half = (rating - full_stars) >= 0.5
+    star_html = '<i class="fas fa-star"></i>' * full_stars
+
+    if has_half:
+        star_html += '<i class="fas fa-star-half-alt"></i>'
+        empty_stars = 5 - full_stars - 1
+    else:
+        empty_stars = 5 - full_stars
+
+    star_html += '<i class="far fa-star"></i>' * empty_stars
+
+    # Determine heart icon
+    if request.user.is_authenticated and look_up.loc and look_up.loc.user == request.user:
+        favourite_symbol = '<i class="fa-solid fa-heart"></i>'
+    else:
+        favourite_symbol = '<i class="fa-regular fa-heart"></i>'      
+
 
     return render(request, "display_location/display.html", {
         "code": look_up.code,
@@ -238,7 +259,8 @@ def location_display(request, location_code):
         "image_path": look_up.image_path,
         "description": look_up.description,
         "long_description": look_up.long_description,
-        "coordinate": look_up.coordinate
+        "coordinate": look_up.coordinate,
+        "favourite_symbol": favourite_symbol
     })
 
 @login_required
