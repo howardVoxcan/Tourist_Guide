@@ -11,6 +11,11 @@
 {% block content %}
 
 <div class="right-side">
+    <div class="welcome-text">
+        <h2>Chào mừng trở lại!</h2>
+        <p>Vui lòng đăng nhập để tiếp tục sử dụng dịch vụ</p>
+    </div>
+
     <form method="POST" class="form-group">
         {% csrf_token %}
         {{ form|crispy }}
@@ -18,4 +23,5 @@
     </form>
     <p><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
     <p>Don't have an account? <a href="{% url 'register' %}">Create one here</a></p>
+</div>
 {% endblock %}

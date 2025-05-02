@@ -46,22 +46,35 @@
             {{user.username}}
             {% endif %}
 
+
+
+            <div class="dropdown">
+                <button class="dropbtn"><i class="far fa-user-circle"></i></button>
+                <div class="dropdown-content">
+                    <div>
+                        <a href="#">Profile</a>
+                        <a href="#">Settings</a>
+                        {% if user.is_authenticated %}
+                        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <a href="#"><button type="submit">Đăng xuất</button></a>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
             <div>
-                {% if user.is_authenticated %}
-                <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit">Đăng xuất</button>
-                </form>
-                {% endif %}
+
             </div>
         </div>
 
         <!--Nav chính-->
         <ul class="nav-tabs">
-            <li><a href="{% url 'homepage' %}"><i class="fas fa-hotel"></i>Home</a></li>
-            <li><a href="{% url 'locations' %}"><i class="fas fa-utensils"></i>Locations</a></li>
+            <li><a href="{% url 'homepage' %}"><i class="fa fa-home"></i>Home</a></li>
+            <li><a href="{% url 'locations' %}"><i class="fas fa-map-marker-alt"></i>Location</a></li>
             <li><a href="{% url 'favourite' %}"><i class="fas fa-heart"></i>Favourite</a></li>
-            <li><a href="{% url 'my_trip' %}"><i class="fas fa-heart"></i>My Trip</a></li>
+            <li><a href="{% url 'my_trip' %}"><i class="fas fa-map-marked-alt"></i>My Trip</a></li>
         </ul>
     </header>
 

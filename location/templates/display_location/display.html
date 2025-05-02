@@ -1,15 +1,52 @@
 {% extends "layout/layout.html" %}
 {% load static %}   {# THÊM DÒNG NÀY #}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/display_location.css' %}">
+{% endblock %}
+
 {% block title %} {{location_name}} {% endblock %}
 
 {% block body %}
-    <ul>
-        <li>Location: {{ location_name }}</li>
-        <li>Rating: {{ rating }}</li>
-        <img src="{% static image_path %}" alt="{{ location.name }}">
-        <li>Address: {{ address }}</li>
-        <li>Price: {{ ticket_info }}</li>
-        <li>Description: {{ long_description }}</li>
-    </ul>
+    <div class="cart-item">
+        <div>
+            <div class="cart-column col-img">
+                <div class="location-img">
+                    <img src="{% static image_path %}" alt="{{ location.name }}">
+                </div>
+            </div>
+
+            <div class="cart-column col-info"></div>
+                <div class="location-info">
+                    <ul>
+                        <div class="location-name">
+                            <li>Location: {{ location_name }}</li>
+                        </div>
+
+                        <div class="location-rating">
+                            <li>Rating: {{ rating }}</li>
+                        </div>
+                        
+                        
+                        <div class="location-address">
+                            <li>Address: {{ address }}</li>
+                        </div>
+                        
+                        <div class="location-checkbox">
+                            
+                        </div>
+                        <li>Price: {{ ticket_info }}</li>
+                        <li>Description: {{ long_description }}</li>
+                    </ul>
+                </div>
+
+            <div class="cart-column col-checkbox">
+                <div class="checkbox">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
 {% endblock %}

@@ -9,17 +9,16 @@
     {% block css %}{% endblock %}
 </head>
 <body>
-    
     <div class="container">
         <div class="left-side">
             <div class="logo">
                 <a href="{% url 'homepage' %}"><img src="{% static 'img/authenticate.svg' %}" alt="Tourist Guide logo"></a>
             </div>
-            
             <div class="app-description">
                 Description
             </div>
         </div>
+
         {% block content %}
         {% endblock %}
     </div>

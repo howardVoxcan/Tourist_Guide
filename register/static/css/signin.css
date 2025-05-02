@@ -12,12 +12,12 @@
 
 .welcome-text h2 {
     font-size: 28px;
-    color: #1d4ed8;
+    color: #009760;
     margin-bottom: 10px;
 }
 
 .welcome-text p {
-    color: #64748b;
+    color: #009760;
     font-size: 14px;
 }
 
@@ -49,7 +49,7 @@
 
 .form-group input:focus {
     outline: none;
-    border-color: #1d4ed8;
+    border-color: #009760;
 }
 
 .remember-forgot {

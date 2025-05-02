@@ -6,13 +6,11 @@
 }
 
 body {
-    background-color: #eeffdd;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('');
-    background-size: cover;
+    background-image: url('');  
     background-position: center;
 }
 
@@ -20,7 +18,7 @@ body {
     display: flex;
     width: 900px;
     height: 600px;
-    background-color: #eeffdd;
+    background-color: white;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
