@@ -1,6 +1,4 @@
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -12,7 +10,8 @@ body {
 }
 
 .location-container {
-    margin-top: 120px !important;
+    margin-top: 30px !important;
+    margin-bottom: 15px;
     display: flex;
     width: 100%;
     max-width: 1200px;
@@ -20,23 +19,22 @@ body {
     margin: 20px auto;
     background-color: white;
     border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .locaction-card {
     flex: 1;
-    width: 400px;
     background-color: white;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .location-img {
-    width: 360px;
-    height: 360px;
+    width: 450px;
+    height: 450px;
     border-radius: 10px;
     overflow: hidden;
-    margin: 0 auto 10px;
+    margin: 10px 10px;
 }
 
 .location-img img {
@@ -64,5 +62,26 @@ body {
     margin-left: 20px;
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.head-of-info {
+    display: flex;
+    align-items: center;
+}
+
+.location-name {
+    flex: 9;
+    margin: 20px 0;
+    color: #00aa6c;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.favourite-location {
+    flex: 1;
+    text-align: right;
+}
+
+.location-ticket-info {
+    
 }
