@@ -260,7 +260,8 @@ def location_display(request, location_code):
         "description": look_up.description,
         "long_description": look_up.long_description,
         "coordinate": look_up.coordinate,
-        "favourite_symbol": favourite_symbol
+        "favourite_symbol": favourite_symbol,
+        "star_html": star_html
     })
 
 @login_required

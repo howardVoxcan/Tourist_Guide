@@ -10,38 +10,38 @@
 {% block body %}
 <div class="location-container">
     <div class="location-card">
-        <div class="location-img">
-            <img src="{% static image_path %}" alt="{{ location.name }}">
-        </div>
+                <div class="location-img">
+                    <img src="{% static image_path %}" alt="{{ location.name }}">
+                </div>
 
-        <div class="location-rating">
-            Rating: {{ rating }}
-        </div>
-
-        <div class="location-address">
+                        <div class="location-rating">
+            Rating: {{ star_html|safe }}
+                        </div>
+                        
+                        <div class="location-address">
             Address: {{ address }}
         </div>
-    </div>
-
+                        </div>
+                        
     <div class="location-info">
         <ul>
             <div class="head-of-info">
                 <div class="location-name">
                     {{ location_name }}
                 </div>
-    
+
                 <div class="favourite-location">
-                    <div class="checkbox">
-                        <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="value" value="{{ code }}">
-                            <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                <div class="checkbox">
+                    <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="value" value="{{ code }}">
+                        <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
                                 {{ favourite_symbol|safe }}
-                            </button>
-                        </form>
-                    </div>
+                        </button>
+                    </form>
                 </div>
             </div>
+        </div>
             
             <div class="location-ticket-info">
                 Price: {{ ticket_info }}
@@ -51,11 +51,7 @@
                 Description: {{ long_description }}
             </div>
         </ul>
-    </div>
-
-    
+    </div>    
 </div>
-
-
     
 {% endblock %}
