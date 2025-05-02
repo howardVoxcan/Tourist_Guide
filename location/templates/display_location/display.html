@@ -42,7 +42,13 @@
 
             <div class="cart-column col-checkbox">
                 <div class="checkbox">
-                    
+                    <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="value" value="{{ code }}">
+                        <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                            {{ favourite_symbol|safe }}
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
