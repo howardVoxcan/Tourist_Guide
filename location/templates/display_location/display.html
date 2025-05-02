@@ -8,37 +8,36 @@
 {% block title %} {{location_name}} {% endblock %}
 
 {% block body %}
-    <div class="cart-item">
-        <div>
-            <div class="cart-column col-img">
-                <div class="location-img">
-                    <img src="{% static image_path %}" alt="{{ location.name }}">
-                </div>
+    <div class="location-container">
+        <div class="location-card">
+            <div class="location-img">
+                <img src="{% static image_path %}" alt="{{ location.name }}">
             </div>
 
-            <div class="cart-column col-info"></div>
-                <div class="location-info">
-                    <ul>
-                        <div class="location-name">
-                            <li>Location: {{ location_name }}</li>
-                        </div>
+            <div class="location-rating">
+                Rating: {{ rating }}
+            </div>
 
-                        <div class="location-rating">
-                            <li>Rating: {{ rating }}</li>
-                        </div>
-                        
-                        
-                        <div class="location-address">
-                            <li>Address: {{ address }}</li>
-                        </div>
-                        
-                        <div class="location-checkbox">
-                            
-                        </div>
-                        <li>Price: {{ ticket_info }}</li>
-                        <li>Description: {{ long_description }}</li>
-                    </ul>
+            <div class="location-address">
+                Address: {{ address }}
+            </div>
+        </div>
+
+        <div class="location-info">
+            <ul>
+                <div class="location-name">
+                    <li>{{ location_name }}</li>
                 </div>
+
+                <div class="location-ticket-info">
+                    <li>Price: {{ ticket_info }}</li>
+                </div>
+                
+                <div class="location-description">
+                    <li>Description: {{ long_description }}</li>
+                </div>
+            </ul>
+        </div>
 
             <div class="cart-column col-checkbox">
                 <div class="checkbox">
