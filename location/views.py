@@ -248,18 +248,13 @@ def location_display(request, location_code):
 
 
     return render(request, "display_location/display.html", {
-        "code": look_up.code,
         "location_name": look_up.location,
         "type": look_up.type,
         "open_hours": look_up.open_hours,
-        "rating": look_up.rating,
-        "rating_half": look_up.rating,
         "ticket_info": look_up.ticket_info,
         "address": look_up.address,
         "image_path": look_up.image_path,
-        "description": look_up.description,
         "long_description": look_up.long_description,
-        "coordinate": look_up.coordinate,
         "favourite_symbol": favourite_symbol,
         "star_html": star_html
     })
