@@ -9,11 +9,37 @@
 {% endblock %}
 
 {% block body %}
+<section class="filter-section">
+    <form method="get" action="{% url 'locations' %}" style="margin-bottom: 20px;">
+        <!-- Lọc theo loại địa điểm -->
+        <label for="type">Type:</label>
+        <select name="type" id="type">
+            <option value="">All</option>
+            <option value="Accomodation" {% if current_filters.type == "Accomodation" %}selected{% endif %}>Accomodation</option>
+            <option value="Entertainment" {% if current_filters.type == "Entertainment" %}selected{% endif %}>Entertainment</option>
+            <option value="F&B" {% if current_filters.type == "F&B" %}selected{% endif %}>F&B</option>
+            <option value="Local" {% if current_filters.type == "Local" %}selected{% endif %}>Local</option>
+            <option value="Market" {% if current_filters.type == "Market" %}selected{% endif %}>Market</option>
+            <option value="Transportation" {% if current_filters.type == "Transportation" %}selected{% endif %}>Transportation</option>
+        </select>
+
+        <!-- Lọc theo đánh giá -->
+        <label for="rating">Min Rating:</label>
+        <input type="number" name="rating" id="rating" value="{{ current_filters.rating }}" min="1" max="5" step="0.1">
+
+        <!-- Lọc theo thời gian mở cửa -->
+        <label for="desired_time">Show places open at:</label>
+        <input type="time" id="desired_time" name="desired_time" value="{{ current_filters.desired_time }}">
+
+        <button type="submit">Apply Filters</button>
+    </form>
+</section>
+
 <section class="content-section">
     <div class="card-grid">
         {% for loc in locations %}
         <div class="card">
-            <a href = "{% url 'display_location' loc.code %}">
+            <a href="{% url 'display_location' loc.code %}">
                 <div class="card-image" style="background-image: url('{% static loc.image_path %}');"></div>
                 <div class="card-content">
                     <h3>{{ loc.location }}</h3>

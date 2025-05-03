@@ -1,12 +1,30 @@
 import csv
 import os
 import django
+from datetime import datetime
 
-# Đặt settings module nếu chạy file này ngoài shell
+# Thiết lập Django environment
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Tourist_Guide.settings")
 django.setup()
 
-from location.models import Location  # Đúng theo app 'location'
+from location.models import Location  # Thay đúng tên app nếu khác
+
+def parse_time_field(time_str):
+    """Chuyển '8:00', '08:00 AM', '23:00' thành datetime.time object hoặc None."""
+    if not time_str:
+        return None
+    time_str = time_str.strip()
+
+    formats = ["%I:%M %p", "%H:%M", "%I:%M:%S %p", "%H:%M:%S"]  # hỗ trợ nhiều định dạng giờ
+
+    for fmt in formats:
+        try:
+            return datetime.strptime(time_str, fmt).time()
+        except ValueError:
+            continue
+
+    print(f"[CẢNH BÁO] Không thể parse thời gian: '{time_str}'")
+    return None
 
 with open('location_db.csv', newline='', encoding='utf-8') as csvfile:
     reader = csv.DictReader(csvfile)
@@ -22,9 +40,10 @@ with open('location_db.csv', newline='', encoding='utf-8') as csvfile:
             'description': row['Description'].strip(),
             'ticket_info': row['Ticket Info'].strip(),
             'image_path': row['image_path'].strip(),
-            'open_hours': row['open_hour'].strip(),
             'coordinate': row['coordinate'].strip(),
-            'long_description': row['Long Description'].strip()
+            'long_description': row['Long Description'].strip(),
+            'open_time': parse_time_field(row.get('open_time', '')),
+            'close_time': parse_time_field(row.get('close_time', '')),
         }
 
         obj, created = Location.objects.update_or_create(
@@ -33,6 +52,6 @@ with open('location_db.csv', newline='', encoding='utf-8') as csvfile:
         )
 
         if created:
-            print(f"Đã tạo mới Location: {code}")
+            print(f"✅ Đã tạo mới Location: {code}")
         else:
-            print(f"Đã cập nhật Location: {code}")
+            print(f"🔄 Đã cập nhật Location: {code}")

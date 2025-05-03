@@ -1,10 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import time
 import uuid
-
 from sympy import true 
 
 # Create your models here.
+class LocationQuerySet(models.QuerySet):
+    def open_at(self, desired_time):
+        return self.filter(
+            models.Q(open_time__lte=desired_time, close_time__gte=desired_time) |
+            models.Q(open_time__gt=models.F('close_time')) & (
+                models.Q(open_time__lte=desired_time) | models.Q(close_time__gte=desired_time)
+            )
+        )
+    
 class Location_List(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE,related_name = "location_list")
     name = models.CharField(max_length = 50, default = "")
@@ -18,7 +27,8 @@ class Location(models.Model):
     location = models.CharField(max_length = 64)
     type = models.CharField(max_length=13, default = "")
     rating = models.FloatField(default = 5)
-    open_hours = models.CharField(max_length=128, blank=True)
+    open_time = models.TimeField(default = time(0,0))
+    close_time = models.TimeField(default = time(23,59))
     ticket_info = models.CharField(max_length = 100, default = "")
     address = models.CharField(max_length = 100, default = "")
     image_path = models.CharField(max_length=255, default='')

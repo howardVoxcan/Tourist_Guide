@@ -1,5 +1,5 @@
 from urllib import request
-
+from datetime import datetime
 from annotated_types import Len
 from shapely import length
 from location.models import Location, Location_List, TripPath, TripList
@@ -162,14 +162,13 @@ def overall_homepage(request):
 
 def locations(request):
     if request.method == "POST":
-        code = request.POST.get('value')  # an toàn hơn
+        code = request.POST.get('value')
         if not code:
-            return redirect('favourite')  # hoặc báo lỗi hợp lý hơn
-        
-        selected = Location.objects.get(code=code)
+            return redirect('favourite')
 
-        user = request.user  
-        location_list = user.location_list.first()  
+        selected = Location.objects.get(code=code)
+        user = request.user
+        location_list = user.location_list.first()
         if not location_list:
             location_list = Location_List.objects.create(user=user, name="Favourite Locations")
 
@@ -179,18 +178,44 @@ def locations(request):
             location_list.location_set.add(selected)
 
         return redirect('locations')
-    
-    else: 
+
+    else:
+        type_filter = request.GET.get('type')
+        min_rating = request.GET.get('rating')
+        desired_time = request.GET.get('desired_time')
+
         all_of_locations = Location.objects.all()
 
+        if type_filter:
+            all_of_locations = all_of_locations.filter(type__iexact=type_filter)
+
+        if min_rating:
+            try:
+                min_rating = float(min_rating)
+                all_of_locations = all_of_locations.filter(rating__gte=min_rating)
+            except ValueError:
+                pass
+
+        if desired_time:
+            try:
+                desired_time_obj = datetime.strptime(desired_time, "%H:%M").time()
+                all_of_locations = all_of_locations.filter(
+                    open_time__lte=desired_time_obj,
+                    close_time__gte=desired_time_obj
+                )
+            except ValueError:
+                pass
+
+        # Sắp xếp theo thời gian mở
+        all_of_locations = all_of_locations.order_by('open_time')
+
         location_list = Location_List.objects.filter(user=request.user).first()
-        
-        # Kiểm tra nếu location_list là None, trả về list rỗng
         locations = location_list.location_set.all() if location_list else []
-        
+
+        # Tiếp tục xử lý các location như bình thường
         processed_locations = []
         for loc in all_of_locations:
-            rating = (round(loc.rating*2))/2
+            rating = (round(loc.rating * 2)) / 2
             full_stars = int(rating)
             has_half = (rating - full_stars) >= 0.5
             star_html = '<i class="fas fa-star"></i>' * full_stars
@@ -202,12 +227,8 @@ def locations(request):
                 empty_stars = 5 - full_stars
 
             star_html += '<i class="far fa-star"></i>' * empty_stars
-            
-            # Kiểm tra xem location có trong location_list không
-            if location_list and loc in location_list.location_set.all():
-                favourite_symbol = '<i class="fa-solid fa-heart"></i>'
-            else:
-                favourite_symbol = '<i class="fa-regular fa-heart"></i>'
+
+            favourite_symbol = '<i class="fa-solid fa-heart"></i>' if location_list and loc in location_list.location_set.all() else '<i class="fa-regular fa-heart"></i>'
 
             processed_locations.append({
                 'code': loc.code,
@@ -220,7 +241,12 @@ def locations(request):
             })
 
         return render(request, "locations/locations.html", {
-            'locations': processed_locations
+            'locations': processed_locations,
+            'current_filters': {
+                'type': type_filter or '',
+                'rating': min_rating or '',
+                'desired_time': desired_time or '',
+            }
         })
 
 def location_display(request, location_code):
