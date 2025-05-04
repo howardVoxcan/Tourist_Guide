@@ -273,10 +273,12 @@ def location_display(request, location_code):
         favourite_symbol = '<i class="fa-regular fa-heart"></i>'      
 
 
+
     return render(request, "display_location/display.html", {
         "location_name": look_up.location,
         "type": look_up.type,
-        "open_hours": look_up.open_hours,
+        "open_time" : look_up.open_time,   
+        "close_time": look_up.close_time,
         "ticket_info": look_up.ticket_info,
         "address": look_up.address,
         "image_path": look_up.image_path,
