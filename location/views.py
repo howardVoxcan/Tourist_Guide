@@ -1,17 +1,18 @@
-from urllib import request
-from datetime import datetime
-from annotated_types import Len
-from shapely import length
-from location.models import Location, Location_List, TripPath, TripList
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from location.coordinate import coordinate_dict
+from location.models import Location, Location_List, TripPath, TripList
 from django.contrib.auth.models import User
-import itertools, requests, geocoder, json
 from django.contrib import messages
+from urllib import request
+from datetime import datetime
+from annotated_types import Len
+from shapely import length
+import itertools, requests, geocoder, json
+from .TSP import Graph, distance
 
 # Create your views here.
 def weather():
@@ -29,97 +30,6 @@ def weather():
     condition = data['current']['condition']['text'].lower()
 
     return location_name, celsius_degree, fahrenheit_degree, condition
-
-class Graph:
-    def __init__(self, num_vertices):
-        self.num_vertices = num_vertices
-        self.edges = [[0] * num_vertices for _ in range(num_vertices)]  # Ma trận kề
-
-    def add_edge(self, u, v, weight):
-        self.edges[u][v] = weight
-
-    def find_hamiltonian_cycle(self, fixed_position=None, precedence_constraints=None, start=None, end=None):
-        import itertools
-        vertices = list(range(self.num_vertices))
-        min_path = None
-        min_cost = float("inf")
-
-        if fixed_position is None:
-            fixed_position = [False] * (self.num_vertices + 1)
-        if precedence_constraints is None:
-            precedence_constraints = []
-
-        fixed_position_map = {}
-        for i, fixed in enumerate(fixed_position):
-            if fixed:
-                fixed_position_map[i] = None
-
-        # Loại bỏ start và end ra khỏi hoán vị (nếu có)
-        inner_vertices = vertices.copy()
-        if start is not None:
-            inner_vertices.remove(start)
-        if end is not None and end in inner_vertices:
-            inner_vertices.remove(end)
-
-        for perm in itertools.permutations(inner_vertices):
-            path = list(perm)
-            if start is not None:
-                path.insert(0, start)
-            else:
-                path.insert(0, 0)
-
-            if end is not None:
-                path.append(end)
-            else:
-                path.append(path[0])  # Quay về điểm xuất phát như TSP
-
-            valid = True
-
-            # Kiểm tra fixed_position
-            for idx, node in fixed_position_map.items():
-                if idx < len(path):
-                    if node is not None and path[idx] != node:
-                        valid = False
-                        break
-                    fixed_position_map[idx] = path[idx]
-
-            # Kiểm tra precedence_constraints
-            for u, v in precedence_constraints:
-                try:
-                    if path.index(u) >= path.index(v):
-                        valid = False
-                        break
-                except ValueError:
-                    valid = False
-                    break
-
-            if not valid:
-                continue
-
-            cost = sum(self.edges[path[i]][path[i+1]] for i in range(len(path) - 1))
-
-            if cost < min_cost:
-                min_cost = cost
-                min_path = path
-
-        return min_path, min_cost
-
-def distance(origins, destinations):
-    api_key = "nV8MX9Jxszg9MyjUJv5yfTUK4OzKhTGtG0z2E779ZGtdhd2TenzBA1QgOzOf6H2T"
-    url = "https://api-v2.distancematrix.ai/maps/api/distancematrix/json"
-
-    params = {
-        "origins": origins,
-        "destinations": destinations,
-        "key": api_key
-    }
-
-    response = requests.get(url, params=params)
-    
-    result = response.json()
-    distance = result["rows"][0]["elements"][0]["distance"]["value"]
-    duration = result["rows"][0]["elements"][0]["duration"]["value"]
-    return distance, duration
 
 def overall_homepage(request):
     all_of_locations = Location.objects.all()
@@ -236,6 +146,8 @@ def locations(request):
                 'description': loc.description,
                 'image_path': loc.image_path,
                 'rating': loc.rating,
+                'open_time': loc.open_time,
+                'close_time': loc.close_time,
                 'star_html': star_html,
                 'favourite_symbol': favourite_symbol,
             })
@@ -317,9 +229,16 @@ def my_trip(request):
         if not location_list:
             return redirect('favourite')
 
-        # Lấy toàn bộ location từ danh sách trên
-        locations = list(location_list.location_set.all())
+        # Lấy các location_id đã được chọn (qua checkbox)
+        selected_ids = request.POST.getlist('locations')
+        if not selected_ids:
+            messages.error(request, "Vui lòng chọn ít nhất một địa điểm.")
+            return redirect('favourite')
+
+        # Chỉ lấy các location được chọn
+        locations = list(location_list.location_set.filter(id__in=selected_ids))
         if not locations:
+            messages.error(request, "Không tìm thấy các địa điểm đã chọn.")
             return redirect('favourite')
 
         # Ánh xạ id <-> index trong danh sách để phục vụ TSP
@@ -396,7 +315,9 @@ def my_trip(request):
         )
 
         # Xoá danh sách đã chọn
-        location_list.location_set.clear()
+        # Chỉ xoá các địa điểm đã sử dụng trong chuyến đi
+        location_list.location_set.remove(*locations)
+
         return redirect('my_trip')
 
     # GET: Lấy và hiển thị các TripPath
