@@ -2,6 +2,9 @@ import csv
 import os
 import django
 from datetime import datetime
+import spacy
+import nltk
+from nltk.corpus import words
 
 # Thiết lập Django environment
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Tourist_Guide.settings")
@@ -10,9 +13,6 @@ django.setup()
 from location.models import Location  # Thay đúng tên app nếu khác
 
 # NLP Imports
-import spacy
-import nltk
-from nltk.corpus import words
 
 nltk.download('words')
 nlp = spacy.load("en_core_web_sm")

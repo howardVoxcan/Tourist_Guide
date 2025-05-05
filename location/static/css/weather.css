@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: #f2f2f2;
+    color: #333;
+    min-height: 100vh;
+}
+
+/* Full height layout after navbar */
+.weather-fullscreen {
+    display: flex;
+    height: calc(100vh); /* Use full viewport height */
+    overflow: hidden;
+    background-color: #f4faff;
+}
+
+/* Left: Day selection panel - Fixed position */
+.day-tabs {
+    position: fixed; /* Fix the panel to the left side */
+    top: 60px; /* Start below the navbar (adjust this if your navbar height is different) */
+    left: 0;
+    width: 220px; /* Fixed width for the day selection panel */
+    background-color: #f4faff; /* Matching your theme color */
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    height: calc(100vh - 60px); /* Ensure the panel fills the remaining height below navbar */
+    box-sizing: border-box;
+    justify-content: space-between; /* Distribute buttons evenly */
+    z-index: 10; /* Ensure it stays on top of the content */
+}
+
+/* Button for each day - stretch evenly */
+.tab-btn {
+    background-color: #00aa6c; /* Primary green color */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    border-bottom: 1px solid #004d36; /* Subtle divider between days */
+    cursor: pointer;
+    user-select: none;
+    line-height: 1.2;
+    flex-grow: 1; /* Make each button stretch evenly */
+    width: 100%; /* Buttons span the full width of the panel */
+}
+
+/* Hover effect */
+.tab-btn:hover {
+    background-color: #33c489; /* Lighter green on hover */
+}
+
+/* Remove the last bottom border for cleanliness */
+.tab-btn:last-child {
+    border-bottom: none;
+}
+
+/* Right: Forecast area */
+.forecast-days {
+    margin-left: 220px; /* Create space for the fixed left panel */
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    height: calc(100vh - 60px); /* Ensure the forecast section takes full height minus navbar */
+}
+
+/* Forecast day display */
+.forecast-day {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    width: 100%; /* Make sure it takes full available width */
+}
+
+/* Individual forecast blocks */
+.forecast-period {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 140px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Icon style for forecast periods */
+.forecast-period img {
+    width: 60px;
+    height: 60px;
+}
+
+/* Header styles */
+header {
+    background-color: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+}

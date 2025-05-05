@@ -1,0 +1,50 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Weather{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/weather.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="weather-fullscreen">
+    <!-- Vertical Day Tabs -->
+    <div class="day-tabs">
+        {% for day in forecast %}
+            <div class="tab-btn" data-day="{{ forloop.counter0 }}">
+                <strong>{{ day.date }}</strong>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Forecast Area -->
+    <div class="forecast-days">
+        {% for day in forecast %}
+            <div class="forecast-day" id="day-{{ forloop.counter0 }}" {% if not forloop.first %}style="display:none"{% endif %}>
+                {% for period in day.periods %}
+                    <div class="forecast-period">
+                        <p><strong>{{ period.time }}</strong></p>
+                        <img src="{{ period.icon }}" alt="{{ period.condition }}">
+                        <p>{{ period.temp_c }}°C</p>
+                        <p>{{ period.condition }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const index = btn.getAttribute('data-day');
+            const days = document.querySelectorAll('.forecast-day');
+            days.forEach((d, i) => {
+                d.style.display = (i == index) ? 'flex' : 'none';
+            });
+        });
+    });
+</script>
+{% endblock %}

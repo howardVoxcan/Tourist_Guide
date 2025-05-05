@@ -16,21 +16,44 @@ import itertools, requests, geocoder, json
 from .TSP import Graph, distance
 
 # Create your views here.
-def weather():
-    location = "10.762,106.6601"
+import requests
+from django.shortcuts import render
 
+def weather(request):
+    location = "10.762,106.6601"
     api_key = "5f170779de5e4c22b5542528252504"
-    url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={location}"
+    url = f"http://api.weatherapi.com/v1/forecast.json?key={api_key}&q={location}&days=3"
 
     response = requests.get(url)
     data = response.json()
 
     location_name = data['location']['name']
-    celsius_degree = data['current']['temp_c']
-    fahrenheit_degree = data['current']['temp_f']
-    condition = data['current']['condition']['text'].lower()
+    forecast_data = []
 
-    return location_name, celsius_degree, fahrenheit_degree, condition
+    for day in data['forecast']['forecastday']:
+        date = day['date']
+        periods = []
+
+        # Get 8 parts of the day (every 3 hours)
+        for hour_data in day['hour'][::3]:  # Picks 0:00, 3:00, 6:00, ..., 21:00
+            periods.append({
+                'time': hour_data['time'][11:],  # Only show HH:MM
+                'temp_c': hour_data['temp_c'],
+                'condition': hour_data['condition']['text'],
+                'icon': hour_data['condition']['icon']
+            })
+
+        forecast_data.append({
+            'date': date,
+            'periods': periods
+        })
+
+    context = {
+        'location_name': location_name,
+        'forecast': forecast_data
+    }
+
+    return render(request, 'weather/weather.html', context)
 
 def overall_homepage(request):
     all_of_locations = Location.objects.all()
@@ -60,14 +83,7 @@ def overall_homepage(request):
             'star_html': star_html,
         })
 
-    location, celsius_degree, fahrenheit_degree, condition = weather()
-
     return render(request, "homepage/homepage.html", {
-        "location": location,
-        "celsius_degree": celsius_degree,
-        "fahrenheit_degree": fahrenheit_degree,
-        "condition": condition.lower(),
-        # "locations": locations,
         "all_of_locations": processed_locations,  # Đã xử lý sao
     })
 
