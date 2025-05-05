@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -93,6 +94,7 @@ def locations(request):
         type_filter = request.GET.get('type')
         min_rating = request.GET.get('rating')
         desired_time = request.GET.get('desired_time')
+        search_query = request.GET.get('search')
 
         all_of_locations = Location.objects.all()
 
@@ -116,13 +118,19 @@ def locations(request):
             except ValueError:
                 pass
 
-        # Sắp xếp theo thời gian mở
+        if search_query:
+            all_of_locations = all_of_locations.filter(
+                Q(location__icontains=search_query) |
+                Q(description__icontains=search_query) |
+                Q(long_description__icontains=search_query) |
+                Q(tags__icontains=search_query)
+            )
+
         all_of_locations = all_of_locations.order_by('open_time')
 
         location_list = Location_List.objects.filter(user=request.user).first()
         locations = location_list.location_set.all() if location_list else []
 
-        # Tiếp tục xử lý các location như bình thường
         processed_locations = []
         for loc in all_of_locations:
             rating = (round(loc.rating * 2)) / 2
@@ -138,7 +146,11 @@ def locations(request):
 
             star_html += '<i class="far fa-star"></i>' * empty_stars
 
-            favourite_symbol = '<i class="fa-solid fa-heart"></i>' if location_list and loc in location_list.location_set.all() else '<i class="fa-regular fa-heart"></i>'
+            favourite_symbol = (
+                '<i class="fa-solid fa-heart"></i>'
+                if location_list and loc in location_list.location_set.all()
+                else '<i class="fa-regular fa-heart"></i>'
+            )
 
             processed_locations.append({
                 'code': loc.code,
@@ -158,6 +170,7 @@ def locations(request):
                 'type': type_filter or '',
                 'rating': min_rating or '',
                 'desired_time': desired_time or '',
+                'search': search_query or '',
             }
         })
 

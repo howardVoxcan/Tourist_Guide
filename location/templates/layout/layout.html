@@ -33,9 +33,19 @@
             </div>
 
             <div class="search-bar">
-                <input type="text" placeholder="Tìm điểm đến, khách sạn, nhà hàng...">
-                <button class="search-icon"><i class="fas fa-search search-icon"></i></button>
+                <form method="get" action="{% url 'locations' %}">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Searching for locations" 
+                        value="{{ current_filters.search|default_if_none:'' }}"
+                    >
+                    <button class="search-icon" type="submit">
+                        <i class="fas fa-search search-icon"></i>
+                    </button>
+                </form>
             </div>
+
             {% if not user.is_authenticated %}
             <div class="nav-buttons">
                 <a href="{% url 'login' %}"><button class="nav-button secondary">Đăng Nhập</button></a>
@@ -65,7 +75,7 @@
         <!--Nav chính-->
         <ul class="nav-tabs">
             <li><a href="{% url 'homepage' %}"><i class="fa fa-home"></i>Home</a></li>
-            <li><a href="{% url 'locations' %}"><i class="fas fa-map-marker-alt"></i>Location</a></li>
+            <li><a href="{% url 'locations' %}"><i class="fas fa-map-marker-alt"></i>Locations</a></li>
             <li><a href="{% url 'favourite' %}"><i class="fas fa-heart"></i>Favourite</a></li>
             <li><a href="{% url 'my_trip' %}"><i class="fas fa-map-marked-alt"></i>My Trip</a></li>
         </ul>

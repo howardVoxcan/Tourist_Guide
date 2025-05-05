@@ -26,6 +26,7 @@ class Location(models.Model):
     code = models.CharField(max_length=10, unique=True)
     location = models.CharField(max_length = 64)
     type = models.CharField(max_length=13, default = "")
+    tags = models.TextField(default = "")
     rating = models.FloatField(default = 5)
     open_time = models.TimeField(default = time(0,0))
     close_time = models.TimeField(default = time(23,59))
