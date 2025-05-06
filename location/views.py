@@ -36,7 +36,7 @@ def weather(request):
         periods = []
 
         # Get 8 parts of the day (every 3 hours)
-        for hour_data in day['hour'][::3]:  # Picks 0:00, 3:00, 6:00, ..., 21:00
+        for hour_data in day['hour'][::2]:  # Picks 0:00, 3:00, 6:00, ..., 21:00
             periods.append({
                 'time': hour_data['time'][11:],  # Only show HH:MM
                 'temp_c': hour_data['temp_c'],
