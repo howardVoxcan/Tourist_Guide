@@ -38,30 +38,31 @@ body {
 }
 
 .location-img img {
-    width: 100%;
-    height: 100%;
+    width: 450px;
+    height: 360px;
     object-fit: cover;
 }
 
 .locaction-rating {
-    margin-bottom: 8px;
     display: flex;
     align-items: center;
     list-style: none;
+    margin: 20px 20px;
 }
 
 .location-address {
-    margin-bottom: 8px;
     display: flex;
     align-items: center;
     list-style: none;
+    margin: 20px 20px;
 }
 
 .location-info {
-    flex: 2;
+    flex: 4;
     margin-left: 20px;
     background-color: white;
     border-radius: 10px;
+    padding: 20px;
 }
 
 .head-of-info {
@@ -71,7 +72,6 @@ body {
 
 .location-name {
     flex: 9;
-    margin: 20px 0;
     color: #00aa6c;
     font-size: 28px;
     font-weight: bold;
@@ -79,9 +79,10 @@ body {
 
 .favourite-location {
     flex: 1;
+    align-items: top;
     text-align: right;
 }
 
 .location-ticket-info {
-    
+
 }
