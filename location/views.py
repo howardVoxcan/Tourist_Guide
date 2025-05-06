@@ -8,6 +8,7 @@ from location.coordinate import coordinate_dict
 from location.models import Location, Location_List, TripPath, TripList
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.views.decorators.http import require_POST
 from urllib import request
 from datetime import datetime
 from annotated_types import Len
@@ -230,11 +231,25 @@ def location_display(request, location_code):
     })
 
 @login_required
-def favourite(request):    
-    location_list = Location_List.objects.filter(user = request.user).first()        
+def favourite(request):
+    # Xử lý POST request để xóa địa điểm yêu thích
+    if request.method == 'POST' and 'location_code' in request.POST:
+        location_code = request.POST.get('location_code')
+        location_list = Location_List.objects.filter(user=request.user).first()
+        
+        if location_code and location_list:
+            location = location_list.location_set.filter(code=location_code).first()
+            if location:
+                location_list.location_set.remove(location)
+                messages.success(request, "Đã xoá địa điểm khỏi danh sách yêu thích.")
+                
+        return redirect('favourite')
+
+    # Lấy danh sách địa điểm yêu thích của người dùng
+    location_list = Location_List.objects.filter(user=request.user).first()        
     locations = location_list.location_set.all() if location_list else []
 
-    return render(request, "favourite/favourite.html",{
+    return render(request, "favourite/favourite.html", {
         'locations': locations
     })
 
@@ -351,7 +366,7 @@ def my_trip(request):
         return redirect('my_trip')
 
     # GET: Lấy và hiển thị các TripPath
-    trip_paths = TripPath.objects.filter(trip_list=trip_list).order_by('created_at')
+    trip_paths = TripPath.objects.filter(trip_list=trip_list).order_by('-created_at')
 
     # Parse từng path → list location ids → map sang tên
     all_ids = []
