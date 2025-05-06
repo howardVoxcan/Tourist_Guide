@@ -45,13 +45,17 @@
                     <h3>{{ loc.location }}</h3>
                     <p>{{ loc.description }}</p>
                     <div>
-                        <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="value" value="{{ loc.code }}">
-                            <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
-                                {{ loc.favourite_symbol|safe }}
-                            </button>
-                        </form>
+                        <!-- Trái tim toggle -->
+                    <div>
+                        <button class="fav-btn" data-code="{{ loc.code }}" style="background: none; border: none; padding: 0; cursor: pointer;">
+                        {% if loc.favourite_symbol == '<i class="fa-solid fa-heart"></i>' %}
+                            <i class="fa-solid fa-heart"></i>
+                        {% else %}
+                            <i class="fa-regular fa-heart"></i>
+                        {% endif %}
+                        </button>
+                    </div>
+  
                     </div>
                     <div class="rating">
                         {{ loc.star_html|safe }}
@@ -80,6 +84,38 @@
       window.scrollTo(0, parseInt(scrollPos));
       sessionStorage.removeItem('scrollPos');
     }
+  });
+  
+  document.querySelectorAll('.fav-btn').forEach(function(button) {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      const code = this.dataset.code;
+      const icon = this.querySelector('i');
+
+      fetch("{% url 'locations' %}", {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: `value=${code}`
+      })
+      .then(response => {
+        if (response.ok) {
+          // Toggle icon class
+          if (icon.classList.contains('fa-regular')) {
+            icon.classList.remove('fa-regular');
+            icon.classList.add('fa-solid');
+          } else {
+            icon.classList.remove('fa-solid');
+            icon.classList.add('fa-regular');
+          }
+        } else {
+          alert("Có lỗi xảy ra khi cập nhật favourite.");
+        }
+      });
+    });
   });
 </script>
 {% endblock %}

@@ -216,6 +216,7 @@ def location_display(request, location_code):
 
 
     return render(request, "display_location/display.html", {
+        "code": look_up.code,
         "location_name": look_up.location,
         "type": look_up.type,
         "open_time" : look_up.open_time,   
