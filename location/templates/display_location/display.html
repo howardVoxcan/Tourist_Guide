@@ -17,47 +17,47 @@
 
 {% block body %}
 <div class="location-container">
-    <!-- <div class="location-card"> -->
-    <div class="location-img">
-        <img src="{% static image_path %}" alt="{{ location.name }}">
+    <div class="favourite-location">
+        <div class="location-name">
+            {{ location_name }}
+        </div>
+
+        <div class="checkbox">
+            <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="value" value="{{ code }}">
+                <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                    {{ favourite_symbol|safe }}
+                </button>
+            </form>
+        </div>
     </div>
 
     <div class="location-rating">
         Rating: {{ star_html|safe }}
     </div>
 
-    <div class="location-address">
-        Address: {{ address }}
-    </div>
-    <!-- </div> -->
-
-    <!-- <div class="location-info"> -->
-    <div class="head-of-info">
-        <div class="location-name">
-            {{ location_name }}
-        </div>
-
-        <div class="favourite-location">
-            <div class="checkbox">
-                <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="value" value="{{ code }}">
-                    <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
-                        {{ favourite_symbol|safe }}
-                    </button>
-                </form>
-            </div>
-        </div>
+    <div class="location-img">
+        <img src="{% static image_path %}" alt="{{ location.name }}">
     </div>
 
-    <div class="location-ticket-info">
-        Price: {{ ticket_info }}
+    <div class="location-info">
+        <div class="head-of-info">
+
+        </div>
+
+        <div class="location-ticket-info">
+            Price: {{ ticket_info }}
+        </div>
+
+        <div class="location-address">
+            Address: {{ address }}
+        </div>
     </div>
 
     <div class="location-description">
         Description: {{ long_description }}
     </div>
-    <!-- </div> -->
 
     <div id="map"></div>
 
