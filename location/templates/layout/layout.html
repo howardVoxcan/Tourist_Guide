@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}?v={{ timestamp }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <title> {% block title %} Django's Tourist {% endblock %}</title>
     <style>
@@ -58,8 +58,6 @@
                 <button class="dropbtn"><i class="far fa-user-circle"></i></button>
                 <div class="dropdown-content">
                     <div>
-                        <a href="#">Profile</a>
-                        <a href="#">Settings</a>
                         {% if user.is_authenticated %}
                         <form action="{% url 'logout' %}" method="post" style="display: inline;">
                             {% csrf_token %}

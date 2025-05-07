@@ -13,7 +13,7 @@ body {
 }
 
 body {
-    background-color: #f2f2f2;
+    background-color: #f4faff;
     color: #333;
     min-height: 100vh;
 }
@@ -22,12 +22,12 @@ body {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 50px;
+    padding: 0 20px;
 }
 
 /* Header styles */
 header {
-    background-color: white;
+    background-color: #f4faff;
     padding: 15px 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: sticky;
@@ -323,4 +323,9 @@ footer {
         margin-right: 0;
         margin-bottom: 10px;
     }
+}
+
+footer {
+    padding: 1rem;
+    text-align: center;
 }

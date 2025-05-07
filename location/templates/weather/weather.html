@@ -5,7 +5,7 @@
 {% block title %}Weather{% endblock %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'css/weather.css' %}">
+    <link rel="stylesheet" href="{% static 'css/weather.css' %}?v={{ timestamp }}">
 {% endblock %}
 
 {% block body %}

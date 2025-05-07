@@ -1,10 +1,4 @@
-* {
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
 body {
-    background-color: #f5f5f5;
     color: #333;
     line-height: 1.5;
 }
@@ -38,8 +32,6 @@ body {
 }
 
 .location-img img {
-    width: 450px;
-    height: 360px;
     object-fit: cover;
 }
 

@@ -2,6 +2,7 @@
 {% load static %}   {# THÊM DÒNG NÀY #}
 
 {% block css %}
+<<<<<<< Updated upstream
 <link rel="stylesheet" href="{% static 'css/display_location.css' %}">
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 <style>
@@ -10,6 +11,9 @@
       width: 100%;
     }
   </style>
+=======
+<link rel="stylesheet" href="{% static 'css/display_location.css' %}?v={{ timestamp }}">
+>>>>>>> Stashed changes
 {% endblock %}
 
 {% block title %} {{location_name}} {% endblock %}
