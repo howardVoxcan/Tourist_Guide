@@ -3,6 +3,13 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/display_location.css' %}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<style>
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
 {% endblock %}
 
 {% block title %} {{location_name}} {% endblock %}
@@ -10,17 +17,17 @@
 {% block body %}
 <div class="location-container">
     <div class="location-card">
-                <div class="location-img">
-                    <img src="{% static image_path %}" alt="{{ location.name }}">
-                </div>
+        <div class="location-img">
+            <img src="{% static image_path %}" alt="{{ location.name }}">
+        </div>
 
-                <div class="location-rating">
-                    Rating: {{ star_html|safe }}
-                </div>
-                
-                <div class="location-address">
-                    Address: {{ address }}
-                </div>
+        <div class="location-rating">
+            Rating: {{ star_html|safe }}
+        </div>
+        
+        <div class="location-address">
+            Address: {{ address }}
+        </div>
     </div>
                         
     <div class="location-info">
@@ -51,7 +58,33 @@
                 Description: {{ long_description }}
             </div>
         </ul>
-    </div>    
+    </div>
+    
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script
+      src="https://unpkg.com/leaflet/dist/leaflet.js">
+    </script>
+
+    <script>
+      // Set your coordinates here
+      const latitude = {{ lat }};
+      const longitude = {{ long }};
+
+      const map = L.map('map').setView([latitude, longitude], 40);
+
+      // Load and display tile layer from OSM
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Add a marker
+      L.marker([latitude, longitude]).addTo(map)
+        .bindPopup('Your location')
+        .openPopup();
+    </script>
 </div>
     
 {% endblock %}

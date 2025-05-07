@@ -214,7 +214,7 @@ def location_display(request, location_code):
     else:
         favourite_symbol = '<i class="fa-regular fa-heart"></i>'      
 
-
+    lat, long = look_up.coordinate.split(", ")
 
     return render(request, "display_location/display.html", {
         "code": look_up.code,
@@ -227,6 +227,8 @@ def location_display(request, location_code):
         "image_path": look_up.image_path,
         "long_description": look_up.long_description,
         "favourite_symbol": favourite_symbol,
+        "lat": lat,
+        "long": long,
         "star_html": star_html
     })
 
