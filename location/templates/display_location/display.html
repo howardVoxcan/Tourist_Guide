@@ -17,12 +17,12 @@
 
 {% block body %}
 <div class="location-container">
-    <div class="favourite-location">
+    <div class="head-of-info">
         <div class="location-name">
             {{ location_name }}
         </div>
 
-        <div class="checkbox">
+        <div class="favourite-location">
             <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
                 {% csrf_token %}
                 <input type="hidden" name="value" value="{{ code }}">
