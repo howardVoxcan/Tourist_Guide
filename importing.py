@@ -3,7 +3,7 @@ import os
 import django
 from datetime import datetime
 
-# Thiết lập Django environment
+# Set up Django environment
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Tourist_Guide.settings")
 django.setup()
 
@@ -11,23 +11,25 @@ from location.models import Location
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 
-# Step 1: Đọc toàn bộ file CSV và lưu vào bộ nhớ
 csv_path = 'location_db.csv'
-rows = []
-long_descriptions = []
+output_csv_path = 'location_db_with_tags.csv'  # Change to 'location_db.csv' to overwrite original
 
+rows = []
+tags_long_descriptions = []
+
+# Step 1: Read CSV file
 with open(csv_path, newline='', encoding='utf-8') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
         rows.append(row)
-        long_descriptions.append(row['Long Description'].strip())
+        tags_long_descriptions.append(row['Tags_Creation_Description'].strip())
 
-# Step 2: Huấn luyện TF-IDF trên toàn bộ long_descriptions
+# Step 2: Generate TF-IDF tags
 vectorizer = TfidfVectorizer(stop_words='english', max_features=1000)
-tfidf_matrix = vectorizer.fit_transform(long_descriptions)
+tfidf_matrix = vectorizer.fit_transform(tags_long_descriptions)
 feature_names = vectorizer.get_feature_names_out()
 
-# Hàm chuyển thời gian
+# Function to parse time strings into Python time objects
 def parse_time_field(time_str):
     if not time_str:
         return None
@@ -41,7 +43,7 @@ def parse_time_field(time_str):
     print(f"[CẢNH BÁO] Không thể parse thời gian: '{time_str}'")
     return None
 
-# Step 3: Duyệt từng dòng, trích xuất top từ khóa và ghi vào DB
+# Step 3: Update Django DB and prepare tags for CSV
 for idx, row in enumerate(rows):
     tfidf_scores = tfidf_matrix[idx].toarray().flatten()
     top_indices = tfidf_scores.argsort()[::-1][:10]
@@ -66,6 +68,7 @@ for idx, row in enumerate(rows):
         'tags': tags,
     }
 
+    # Save to DB
     obj, created = Location.objects.update_or_create(
         code=code,
         defaults=data
@@ -75,3 +78,16 @@ for idx, row in enumerate(rows):
         print(f"✅ Đã tạo mới Location: {code}")
     else:
         print(f"🔄 Đã cập nhật Location: {code}")
+
+    # Save tags back to the row for CSV writing
+    row['tags'] = ', '.join(tags)
+
+# Step 4: Write updated data (with tags) back to CSV
+fieldnames = rows[0].keys()
+
+with open(output_csv_path, mode='w', newline='', encoding='utf-8') as csvfile:
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(rows)
+
+print(f"📝 CSV đã được cập nhật với tags tại: {output_csv_path}")
