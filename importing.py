@@ -58,7 +58,7 @@ def parse_time_field(time_str):
 # === Step 3: Update Django DB and attach tags to each row ===
 for idx, row in enumerate(rows):
     tfidf_scores = tfidf_matrix[idx].toarray().flatten()
-    top_indices = tfidf_scores.argsort()[::-1][:10]
+    top_indices = tfidf_scores.argsort()[::-1][:6]
     tags = [feature_names[i] for i in top_indices if tfidf_scores[i] > 0]
 
     code = row['CODE'].strip()

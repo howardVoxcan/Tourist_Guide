@@ -1,0 +1,783 @@
+{
+  "name": "find.location.particular",
+  "auto": true,
+  "responses": [
+    {
+      "messages": [
+        {
+          "type": "message",
+          "condition": "",
+          "speech": [
+            "Sure, here is what I found for that location."
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "name": "location",
+          "dataType": "@locations",
+          "value": "$location",
+          "isList": false
+        }
+      ]
+    }
+  ],
+  "userSays": [
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to find ",
+          "userDefined": false
+        },
+        {
+          "text": "Tan Son Nhat International Airport",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I'm looking for ",
+          "userDefined": false
+        },
+        {
+          "text": "Tan Son Nhat International Airport",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you show me ?",
+          "userDefined": false
+        },
+        {
+          "text": "Tan Son Nhat International Airport",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Where is ?",
+          "userDefined": false
+        },
+        {
+          "text": "Tan Son Nhat International Airport",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Find  for me",
+          "userDefined": false
+        },
+        {
+          "text": "Tan Son Nhat International Airport",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to look for ",
+          "userDefined": false
+        },
+        {
+          "text": "Tan Son Nhat International Airport",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to find ",
+          "userDefined": false
+        },
+        {
+          "text": "Tao Dan Park",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I'm looking for ",
+          "userDefined": false
+        },
+        {
+          "text": "Tao Dan Park",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you show me ?",
+          "userDefined": false
+        },
+        {
+          "text": "Tao Dan Park",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Where is ?",
+          "userDefined": false
+        },
+        {
+          "text": "Tao Dan Park",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Find  for me",
+          "userDefined": false
+        },
+        {
+          "text": "Tao Dan Park",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to look for ",
+          "userDefined": false
+        },
+        {
+          "text": "Tao Dan Park",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to find ",
+          "userDefined": false
+        },
+        {
+          "text": "Takashimaya Vietnam",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I'm looking for ",
+          "userDefined": false
+        },
+        {
+          "text": "Takashimaya Vietnam",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you show me ?",
+          "userDefined": false
+        },
+        {
+          "text": "Takashimaya Vietnam",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Where is ?",
+          "userDefined": false
+        },
+        {
+          "text": "Takashimaya Vietnam",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Find  for me",
+          "userDefined": false
+        },
+        {
+          "text": "Takashimaya Vietnam",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to look for ",
+          "userDefined": false
+        },
+        {
+          "text": "Takashimaya Vietnam",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to find ",
+          "userDefined": false
+        },
+        {
+          "text": "Kappou Nishiyama",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I'm looking for ",
+          "userDefined": false
+        },
+        {
+          "text": "Kappou Nishiyama",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you show me ?",
+          "userDefined": false
+        },
+        {
+          "text": "Kappou Nishiyama",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Where is ?",
+          "userDefined": false
+        },
+        {
+          "text": "Kappou Nishiyama",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Find  for me",
+          "userDefined": false
+        },
+        {
+          "text": "Kappou Nishiyama",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to look for ",
+          "userDefined": false
+        },
+        {
+          "text": "Kappou Nishiyama",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to find ",
+          "userDefined": false
+        },
+        {
+          "text": "Brand New Cozy Home at the heart of SG",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I'm looking for ",
+          "userDefined": false
+        },
+        {
+          "text": "Brand New Cozy Home at the heart of SG",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you show me ?",
+          "userDefined": false
+        },
+        {
+          "text": "Brand New Cozy Home at the heart of SG",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Where is ?",
+          "userDefined": false
+        },
+        {
+          "text": "Brand New Cozy Home at the heart of SG",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Find  for me",
+          "userDefined": false
+        },
+        {
+          "text": "Brand New Cozy Home at the heart of SG",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to look for ",
+          "userDefined": false
+        },
+        {
+          "text": "Brand New Cozy Home at the heart of SG",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to find ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Railway Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I'm looking for ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Railway Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you show me ?",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Railway Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Where is ?",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Railway Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Find  for me",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Railway Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to look for ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Railway Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to find ",
+          "userDefined": false
+        },
+        {
+          "text": "Rex Hotel",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I'm looking for ",
+          "userDefined": false
+        },
+        {
+          "text": "Rex Hotel",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you show me ?",
+          "userDefined": false
+        },
+        {
+          "text": "Rex Hotel",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Where is ?",
+          "userDefined": false
+        },
+        {
+          "text": "Rex Hotel",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Find  for me",
+          "userDefined": false
+        },
+        {
+          "text": "Rex Hotel",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to look for ",
+          "userDefined": false
+        },
+        {
+          "text": "Rex Hotel",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        }
+      ],
+      "id": ""
+    }
+  ]
+}
