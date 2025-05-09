@@ -216,12 +216,22 @@ def location_display(request, location_code):
 
     lat, long = look_up.coordinate.split(", ")
 
+    open_time = look_up.open_time.strftime("%H:%M")
+    close_time = look_up.close_time.strftime("%H:%M")
+
+    if open_time == "00:00" and close_time == "23:59":
+        open_time = "All day"
+    elif look_up.close_time < look_up.open_time:
+        open_time = f"{open_time} - {close_time} (The next day)"
+    else:
+        open_time = f"{open_time} - {close_time}"
+
     return render(request, "display_location/display.html", {
         "code": look_up.code,
         "location_name": look_up.location,
         "type": look_up.type,
-        "open_time" : look_up.open_time,   
-        "close_time": look_up.close_time,
+        "open_time" : open_time,   
+        # "close_time": look_up.close_time,
         "ticket_info": look_up.ticket_info,
         "address": look_up.address,
         "image_path": look_up.image_path,
