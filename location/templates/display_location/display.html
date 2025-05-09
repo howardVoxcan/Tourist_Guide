@@ -22,36 +22,36 @@
             {{ location_name }}
         </div>
 
-        <div class="checkbox">
-            <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
-                {% csrf_token %}
-                <input type="hidden" name="value" value="{{ code }}">
-                <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
-                    {{ favourite_symbol|safe }}
-                </button>
-            </form>
+        <div class="favourite-block">
+            <div class="favourite-location">
+                <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="value" value="{{ code }}">
+                    <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                        {{ favourite_symbol|safe }}
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
     <div class="location-rating">
-        Rating: {{ star_html|safe }}
+        <strong>Rating:</strong>{{ star_html|safe }}
     </div>
 
-    <div class="location-img">
-        <img src="{% static image_path %}" alt="{{ location.name }}">
+    <div class="location-address">
+        <strong>Address:</strong>{{ address }}
+    </div>
+
+    <div class="image-block">
+        <div class="location-img">
+            <img src="{% static image_path %}" alt="{{ location.name }}">
+        </div>
     </div>
 
     <div class="location-info">
-        <div class="head-of-info">
-
-        </div>
-
         <div class="location-ticket-info">
             Price: {{ ticket_info }}
-        </div>
-
-        <div class="location-address">
-            Address: {{ address }}
         </div>
     </div>
 
@@ -82,6 +82,38 @@
         L.marker([latitude, longitude]).addTo(map)
             .bindPopup('{{ location_name }}')
             .openPopup();
+
+        document.querySelectorAll('.fav-btn').forEach(function (button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Ngăn chuyển trang
+                const code = this.dataset.code;
+                const icon = this.querySelector('i');
+
+                fetch("{% url 'locations' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: `value=${code}`
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Đổi icon khi thành công
+                            if (icon.classList.contains('fa-regular')) {
+                                icon.classList.remove('fa-regular');
+                                icon.classList.add('fa-solid');
+                            } else {
+                                icon.classList.remove('fa-solid');
+                                icon.classList.add('fa-regular');
+                            }
+                        } else {
+                            alert("Có lỗi xảy ra khi cập nhật favourite.");
+                        }
+                    });
+            });
+        });
     </script>
 </div>
 

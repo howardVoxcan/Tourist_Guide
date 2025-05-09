@@ -26,8 +26,20 @@ body {
     font-weight: bold;
 }
 
+.favourite-block {
+    display: block;
+}
+
 .favourite-location i {
     color: red;
+}
+
+.image-block {
+    display: block;
+    width: 450px;
+    height: 450px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .location-img {
@@ -36,6 +48,7 @@ body {
     border-radius: 10px;
     overflow: hidden;
     background-size: cover;
+    background-position: center;
 }
 
 .locaction-rating {
@@ -44,14 +57,24 @@ body {
     text-align: left;
 }
 
+.locaction-rating strong {
+    margin-right: 20px;
+}
+
 .location-rating i {
     color: #fbb002;
 }
 
 .location-address {
     display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
     align-items: center;
     list-style: none;
+}
+
+.location-address strong {
+    margin-right: 20px;
 }
 
 .favourite-location {
@@ -59,4 +82,3 @@ body {
     align-items: top;
     text-align: right;
 }
-
