@@ -17,22 +17,8 @@
 
 {% block body %}
 <div class="location-container">
-    <div class="favourite-location">
-        <div class="location-name">
-            {{ location_name }}
-        </div>
-
-        <div class="favourite-block">
-            <div class="favourite-location">
-                <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="value" value="{{ code }}">
-                    <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
-                        {{ favourite_symbol|safe }}
-                    </button>
-                </form>
-            </div>
-        </div>
+    <div class="location-name">
+        {{ location_name }}
     </div>
 
     <div class="location-rating">
@@ -49,14 +35,12 @@
         </div>
     </div>
 
-    <div class="location-info">
-        <div class="location-ticket-info">
-            Price: {{ ticket_info }}
-        </div>
+    <div class="location-ticket-info">
+        <strong>Price:</strong>{{ ticket_info }}
     </div>
 
     <div class="location-description">
-        Description: {{ long_description }}
+        <strong>Description:</strong>{{ long_description }}
     </div>
 
     <div id="map"></div>
@@ -115,6 +99,18 @@
             });
         });
     </script>
+
+    <div class="favourite-block">
+        <div class="favourite-location">
+            <form method="post" action="{% url 'locations' %}" class="fav-form" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="value" value="{{ code }}">
+                <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                    {{ favourite_symbol|safe }}
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

@@ -24,22 +24,30 @@ body {
     color: #00aa6c;
     font-size: 28px;
     font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.favourite-block {
-    display: block;
+.locaction-rating {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: left;
 }
 
-.favourite-location i {
-    color: red;
+.locaction-rating strong {
+    margin-right: 10px;
+}
+
+.location-rating i {
+    color: #fbb002;
 }
 
 .image-block {
     display: block;
     width: 450px;
     height: 450px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .location-img {
@@ -51,20 +59,6 @@ body {
     background-position: center;
 }
 
-.locaction-rating {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    text-align: left;
-}
-
-.locaction-rating strong {
-    margin-right: 20px;
-}
-
-.location-rating i {
-    color: #fbb002;
-}
-
 .location-address {
     display: flex;
     margin-top: 10px;
@@ -73,12 +67,39 @@ body {
     list-style: none;
 }
 
+.location-ticket-info {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.location-ticket-info strong {
+    margin-right: 10px;
+}
+
+.location-description {
+    margin: 0 auto;
+}
+
+.location-description strong {
+    margin-right: 10px;
+
+}
+
 .location-address strong {
-    margin-right: 20px;
+    margin-right: 10px;
+}
+
+.favourite-block {
+    display: block;
+    margin-top: 20px;
 }
 
 .favourite-location {
     flex: 1;
     align-items: top;
-    text-align: right;
+    text-align: center;
+}
+
+.favourite-location i {
+    color: red;
 }
