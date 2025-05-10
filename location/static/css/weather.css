@@ -30,10 +30,6 @@ body {
     z-index: 10; /* Ensure it stays on top of the content */
 }
 
-#day-tabs {
-
-}
-
 /* Button for each day - stretch evenly */
 .tab-btn {
     background-color: #00aa6c; /* Primary green color */

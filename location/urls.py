@@ -10,4 +10,5 @@ urlpatterns = [
     path('locations', views.locations, name = 'locations'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
     path('<str:location_code>/',views.location_display, name='display_location'),
+    # path('<str:location_code>/comment/', views.post_comment, name='post_comment'),  # Add this for comment submission
 ]
