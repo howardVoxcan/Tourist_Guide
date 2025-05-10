@@ -12,17 +12,13 @@ body {
 
 /* Full height layout after navbar */
 .weather-fullscreen {
-    display: flex;
-    height: calc(100vh); /* Use full viewport height */
+    display: flex; /* Use full viewport height */
     overflow: hidden;
     background-color: #f4faff;
 }
 
 /* Left: Day selection panel - Fixed position */
 .day-tabs {
-    position: fixed; /* Fix the panel to the left side */
-    top: 60px; /* Start below the navbar (adjust this if your navbar height is different) */
-    left: 0;
     width: 220px; /* Fixed width for the day selection panel */
     background-color: #f4faff; /* Matching your theme color */
     display: flex;
@@ -50,9 +46,13 @@ body {
     width: 100%; /* Buttons span the full width of the panel */
 }
 
-/* Hover effect */
+/* Day tabs hover effect */
 .tab-btn:hover {
-    background-color: #33c489; /* Lighter green on hover */
+    background-color: #f4faff;
+}
+
+.tab-btn:hover strong {
+    color: #00aa6c; /* Lighter green on hover */
 }
 
 /* Remove the last bottom border for cleanliness */
