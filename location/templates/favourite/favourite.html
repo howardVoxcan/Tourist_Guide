@@ -2,6 +2,10 @@
 {% load static %}
 {% block title %}Favourite{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/favourite.css' %}?v={{ timestamp }}">
+{% endblock %}
+
 {% block body %}
   {% if locations %}
     <form method="POST" action="{% url 'my_trip' %}">

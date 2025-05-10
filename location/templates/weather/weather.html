@@ -22,7 +22,7 @@
     <!-- Forecast Area -->
     <div class="forecast-days">
         {% for day in forecast %}
-            <div class="forecast-day" id="day-{{ forloop.counter0 }}" {% if not forloop.first %}style="display:none"{% endif %}>
+            <div class="forecast-day" id="day-tabs" {% if not forloop.first %}style="display:none"{% endif %}>
                 {% for period in day.periods %}
                     <div class="forecast-period">
                         <p><strong>{{ period.time }}</strong></p>
