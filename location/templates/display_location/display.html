@@ -1,5 +1,5 @@
 {% extends "layout/layout.html" %}
-{% load static %} {# THÊM DÒNG NÀY #}
+{% load static %}
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/display_location.css' %}">
@@ -8,6 +8,36 @@
     #map {
         height: 500px;
         width: 100%;
+    }
+
+    .comment-box, .reply-box {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+    }
+
+    .reply-box {
+        background-color: #f0f0f0;
+    }
+
+    textarea {
+        width: 100%;
+        resize: vertical;
+    }
+
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 6px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
     }
 </style>
 <link rel="stylesheet" href="{% static 'css/display_location.css' %}?v={{ timestamp }}">
@@ -54,26 +84,23 @@
     </script>
 
     <script>
-        // Set your coordinates here
         const latitude = {{ lat }};
         const longitude = {{ long }};
 
         const map = L.map('map').setView([latitude, longitude], 40);
 
-        // Load and display tile layer from OSM
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // Add a marker
         L.marker([latitude, longitude]).addTo(map)
             .bindPopup('{{ location_name }}')
             .openPopup();
 
         document.querySelectorAll('.fav-btn').forEach(function (button) {
             button.addEventListener('click', function (e) {
-                e.preventDefault(); // Ngăn chuyển trang
+                e.preventDefault();
                 const code = this.dataset.code;
                 const icon = this.querySelector('i');
 
@@ -88,7 +115,6 @@
                 })
                     .then(response => {
                         if (response.ok) {
-                            // Đổi icon khi thành công
                             if (icon.classList.contains('fa-regular')) {
                                 icon.classList.remove('fa-regular');
                                 icon.classList.add('fa-solid');
@@ -115,6 +141,34 @@
             </form>
         </div>
     </div>
-</div>
 
+    <!-- 🔽 Comment Section Start -->
+    {% for comment in comments %}
+        <div class="comment">
+            <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+            <p><em>Bot reply:</em> {{ comment.bot_reply }}</p>
+
+            <!-- Displaying replies if they exist -->
+            {% if comment.replies.all %}
+                <div class="replies">
+                    {% for reply in comment.replies.all %}
+                        <div class="reply">
+                            <p><strong>{{ reply.user.username }}</strong>: {{ reply.content }}</p>
+                            <p><em>Bot reply:</em> {{ reply.bot_reply }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <!-- Comment Form -->
+    <h3>Post a comment</h3>
+    <form method="post" action="{% url 'display_location' code %}">
+        {% csrf_token %}
+        <textarea name="content" placeholder="Write your comment..." required></textarea>
+        <button type="submit">Submit Comment</button>
+    </form>
+
+</div>
 {% endblock %}

@@ -40,6 +40,24 @@ class Location(models.Model):
     def __str__(self):
         return f"{self.code} {self.location} : {self.description} "
 
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments') 
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='comments')  
+    content = models.TextField() 
+    created_at = models.DateTimeField(auto_now_add=True) 
+    updated_at = models.DateTimeField(auto_now=True)
+    is_edited = models.BooleanField(default=False)
+    is_flagged = models.BooleanField(default=False)
+    bot_reply = models.TextField(blank=True, null=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+
+    class Meta:
+        ordering = ['-created_at']  # Show newest comments first
+
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.location.location}"
+
+
 class TripList(models.Model):
     id = models.CharField(
         primary_key=True, max_length=255, editable=False

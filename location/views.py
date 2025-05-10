@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from location.coordinate import coordinate_dict
-from location.models import Location, Location_List, TripPath, TripList
+from location.models import Location, Location_List, TripPath, TripList, Comment
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.decorators.http import require_POST
@@ -15,10 +15,31 @@ from annotated_types import Len
 from shapely import length
 import itertools, requests, geocoder, json
 from .TSP import Graph, distance
+import requests, joblib, os, spacy
+from django.conf import settings
 
 # Create your views here.
-import requests
-from django.shortcuts import render
+nlp = spacy.load("en_core_web_sm")
+
+label_encoder_path = os.path.join(settings.BASE_DIR, 'location', 'label_encoder.pkl')
+vectorizer_path = os.path.join(settings.BASE_DIR, 'location', 'tfidf_vectorizer.pkl')
+model_path = os.path.join(settings.BASE_DIR, 'location', 'xgboost_model.pkl')
+
+label_encoder = joblib.load(label_encoder_path)
+vectorizer = joblib.load(vectorizer_path)
+model = joblib.load(model_path)
+
+def predict_sentiment(text):
+    # Preprocessing
+    doc = nlp(text.lower())
+    tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
+    cleaned_text = ' '.join(tokens)
+
+    # Predictions
+    X = vectorizer.transform([cleaned_text])
+    pred_label = model.predict(X)[0]
+    sentiment = label_encoder.inverse_transform([pred_label])[0]
+    return sentiment
 
 def weather(request):
     location = "10.762,106.6601"
@@ -191,56 +212,83 @@ def locations(request):
             }
         })
 
-def location_display(request, location_code):
-    look_up = get_object_or_404(Location, code=location_code)
+def location_display(request, location_code): 
+    if request.method == "POST":
+        content = request.POST.get('content', '').strip()
+        if not content:
+            return redirect('location_display', location_code=location_code)
 
-    # Calculate star HTML once
-    rating = round(look_up.rating * 2) / 2
-    full_stars = int(rating)
-    has_half = (rating - full_stars) >= 0.5
-    star_html = '<i class="fas fa-star"></i>' * full_stars
+        location = get_object_or_404(Location, code=location_code)
 
-    if has_half:
-        star_html += '<i class="fas fa-star-half-alt"></i>'
-        empty_stars = 5 - full_stars - 1
+        # Sentiment analysis and auto-reply logic
+        sentiment = predict_sentiment(content)
+        if sentiment == "positive":
+            bot_reply = "Thanks for having a great trip here!"
+        elif sentiment == "negative":
+            bot_reply = "Sorry for your bad experience here."
+        else:
+            bot_reply = "Thanks for your feedback!"
+
+        # Save comment with bot reply
+        Comment.objects.create(
+            location=location,
+            user=request.user,
+            content=content,
+            bot_reply=bot_reply
+        )
+
+        return redirect('display_location', location_code = location_code)
     else:
-        empty_stars = 5 - full_stars
+        look_up = get_object_or_404(Location, code=location_code)
 
-    star_html += '<i class="far fa-star"></i>' * empty_stars
+        comments = Comment.objects.filter(location=look_up).prefetch_related('replies')
 
-    # Determine heart icon
-    if request.user.is_authenticated and look_up.loc and look_up.loc.user == request.user:
-        favourite_symbol = '<i class="fa-solid fa-heart"></i>'
-    else:
-        favourite_symbol = '<i class="fa-regular fa-heart"></i>'      
+        # Stars
+        rating = round(look_up.rating * 2) / 2
+        full_stars = int(rating)
+        has_half = (rating - full_stars) >= 0.5
+        star_html = '<i class="fas fa-star"></i>' * full_stars
+        if has_half:
+            star_html += '<i class="fas fa-star-half-alt"></i>'
+            empty_stars = 5 - full_stars - 1
+        else:
+            empty_stars = 5 - full_stars
+        star_html += '<i class="far fa-star"></i>' * empty_stars
 
-    lat, long = look_up.coordinate.split(", ")
+        # Heart icon
+        if request.user.is_authenticated and look_up.loc and look_up.loc.user == request.user:
+            favourite_symbol = '<i class="fa-solid fa-heart"></i>'
+        else:
+            favourite_symbol = '<i class="fa-regular fa-heart"></i>'
 
-    open_time = look_up.open_time.strftime("%H:%M")
-    close_time = look_up.close_time.strftime("%H:%M")
+        lat, long = look_up.coordinate.split(", ")
+        open_time = look_up.open_time.strftime("%H:%M")
+        close_time = look_up.close_time.strftime("%H:%M")
+        if open_time == "00:00" and close_time == "23:59":
+            open_time = "All day"
+        elif look_up.close_time < look_up.open_time:
+            open_time = f"{open_time} - {close_time} (The next day)"
+        else:
+            open_time = f"{open_time} - {close_time}"
 
-    if open_time == "00:00" and close_time == "23:59":
-        open_time = "All day"
-    elif look_up.close_time < look_up.open_time:
-        open_time = f"{open_time} - {close_time} (The next day)"
-    else:
-        open_time = f"{open_time} - {close_time}"
+        comments = Comment.objects.filter(location=look_up, parent=None).prefetch_related('replies').order_by('-created_at')
 
-    return render(request, "display_location/display.html", {
-        "code": look_up.code,
-        "location_name": look_up.location,
-        "type": look_up.type,
-        "open_time" : open_time,   
-        # "close_time": look_up.close_time,
-        "ticket_info": look_up.ticket_info,
-        "address": look_up.address,
-        "image_path": look_up.image_path,
-        "long_description": look_up.long_description,
-        "favourite_symbol": favourite_symbol,
-        "lat": lat,
-        "long": long,
-        "star_html": star_html
-    })
+        return render(request, "display_location/display.html", {
+            "code": look_up.code,
+            "location_name": look_up.location,
+            "type": look_up.type,
+            "open_time": open_time,
+            "ticket_info": look_up.ticket_info,
+            "address": look_up.address,
+            "image_path": look_up.image_path,
+            "long_description": look_up.long_description,
+            "favourite_symbol": favourite_symbol,
+            "lat": lat,
+            "long": long,
+            "star_html": star_html,
+            "comments": comments, 
+            "location_obj": look_up  # needed for POST form
+        })
 
 @login_required
 def favourite(request):
@@ -406,3 +454,31 @@ def my_trip(request):
         'trip_paths': parsed_trip_paths,
         'location_map': location_map
     })
+
+@login_required
+def post_comment(request, location_code):
+    if request.method == 'POST':
+        content = request.POST.get('content', '').strip()
+        if not content:
+            return redirect('location_display', location_code=location_code)
+
+        location = get_object_or_404(Location, code=location_code)
+
+        # Sentiment analysis and auto-reply logic
+        sentiment = predict_sentiment(content)
+        if sentiment == "positive":
+            bot_reply = "Thanks for having a great trip here!"
+        elif sentiment == "negative":
+            bot_reply = "Sorry for your bad experience here."
+        else:
+            bot_reply = "Thanks for your feedback!"
+
+        # Save comment with bot reply
+        Comment.objects.create(
+            location=location,
+            user=request.user,
+            content=content,
+            bot_reply=bot_reply
+        )
+
+    return redirect('location_display', location_code=location_code)
