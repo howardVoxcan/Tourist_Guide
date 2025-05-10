@@ -22,72 +22,72 @@
 </head>
 
 <body>
-    <header>
-        <div class="header-container">
-            <div class="logo">
-                <a href="https://github.com/howardVoxcan/Tourist_Guide">
-                    <picture>
-                        <img src="{% static 'img/logo-tourist-guide.svg' %}" alt="">
-                    </picture>
-                </a>
-            </div>
+    <div class="wrapper">
+        <header>
+            <div class="header-container">
+                <div class="logo">
+                    <a href="https://github.com/howardVoxcan/Tourist_Guide">
+                        <picture>
+                            <img src="{% static 'img/logo-tourist-guide.svg' %}" alt="">
+                        </picture>
+                    </a>
+                </div>
 
-            <div class="search-bar">
-                <form method="get" action="{% url 'locations' %}">
-                    <input 
-                        type="text" 
-                        name="search" 
-                        placeholder="Searching for locations" 
-                        value="{{ current_filters.search|default_if_none:'' }}"
-                    >
-                    <button class="search-icon" type="submit">
-                        <i class="fas fa-search search-icon"></i>
-                    </button>
-                </form>
-            </div>
+                <div class="search-bar">
+                    <form method="get" action="{% url 'locations' %}">
+                        <input type="text" name="search" placeholder="Searching for locations"
+                            value="{{ current_filters.search|default_if_none:'' }}">
+                        <button class="search-icon" type="submit">
+                            <i class="fas fa-search search-icon"></i>
+                        </button>
+                    </form>
+                </div>
 
-            {% if not user.is_authenticated %}
-            <div class="nav-buttons">
-                <a href="{% url 'login' %}"><button class="nav-button secondary">Đăng Nhập</button></a>
-                <a href="{% url 'register'%}"><button class="nav-button primary">Đăng Ký</button></a>
-            </div>
-            {% else %}
-            <!-- logo người dùng ở đây, kiểu như facebook mặc định, xong có thêm cái username -->
-            {{user.username}}
-            <div class="dropdown">
-                <button class="dropbtn"><i class="far fa-user-circle"></i></button>
-                <div class="dropdown-content">
-                    <div>
-                        {% if user.is_authenticated %}
-                        <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                            {% csrf_token %}
-                            <a href="#"><button type="submit">Đăng xuất</button></a>
-                        </form>
-                        {% endif %}
+                {% if not user.is_authenticated %}
+                <div class="nav-buttons">
+                    <a href="{% url 'login' %}"><button class="nav-button secondary">Đăng Nhập</button></a>
+                    <a href="{% url 'register'%}"><button class="nav-button primary">Đăng Ký</button></a>
+                </div>
+                {% else %}
+                <!-- logo người dùng ở đây, kiểu như facebook mặc định, xong có thêm cái username -->
+                {{user.username}}
+                <div class="dropdown">
+                    <button class="dropbtn"><i class="far fa-user-circle"></i></button>
+                    <div class="dropdown-content">
+                        <div>
+                            {% if user.is_authenticated %}
+                            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <a href="#"><button type="submit">Đăng xuất</button></a>
+                            </form>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
-            {% endif %}
-        </div>
 
-        <!--Nav chính-->
-        <ul class="nav-tabs">
-            <li><a href="{% url 'homepage' %}"><i class="fa fa-home"></i>Home</a></li>
-            <li><a href="{% url 'weather' %}"><i class="fa-solid fa-sun"></i>Weather</a></li>
-            <li><a href="{% url 'locations' %}"><i class="fas fa-map-marker-alt"></i>Locations</a></li>
-            <li><a href="{% url 'favourite' %}"><i class="fas fa-heart"></i>Favourite</a></li>
-            <li><a href="{% url 'my_trip' %}"><i class="fas fa-map-marked-alt"></i>My Trip</a></li>
-        </ul>
-    </header>
+            <!--Nav chính-->
+            <ul class="nav-tabs">
+                <li><a href="{% url 'homepage' %}"><i class="fa fa-home"></i>Home</a></li>
+                <li><a href="{% url 'weather' %}"><i class="fa-solid fa-sun"></i>Weather</a></li>
+                <li><a href="{% url 'locations' %}"><i class="fas fa-map-marker-alt"></i>Locations</a></li>
+                <li><a href="{% url 'favourite' %}"><i class="fas fa-heart"></i>Favourite</a></li>
+                <li><a href="{% url 'my_trip' %}"><i class="fas fa-map-marked-alt"></i>My Trip</a></li>
+            </ul>
+        </header>
 
-    {% block body %}
-    {% endblock %}
+        <main>
+            {% block body %}
+            {% endblock %}
+        </main>
 
-    <footer>
-        <p>&copy; 2025 Tourist Guide. Mọi quyền được bảo lưu.</p>
-    </footer>
+        <footer>
+            <p>&copy; 2025 Tourist Guide. Mọi quyền được bảo lưu.</p>
+        </footer>
 
-    <script src="script.js"></script>
+        <script src="script.js"></script>
+    </div>
 </body>
 
 </html>
