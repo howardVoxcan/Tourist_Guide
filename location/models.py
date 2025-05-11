@@ -44,6 +44,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments') 
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='comments')  
     content = models.TextField() 
+    rating = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True) 
     updated_at = models.DateTimeField(auto_now=True)
     is_edited = models.BooleanField(default=False)

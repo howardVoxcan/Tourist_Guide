@@ -212,32 +212,52 @@ def locations(request):
             }
         })
 
-def location_display(request, location_code): 
-    if request.method == "POST":
+def display_location(request, location_code): 
+    if request.method == 'POST':
         content = request.POST.get('content', '').strip()
-        if not content:
-            return redirect('location_display', location_code=location_code)
-
+        rating = request.POST.get('rating')
         location = get_object_or_404(Location, code=location_code)
 
-        # Sentiment analysis and auto-reply logic
-        sentiment = predict_sentiment(content)
-        if sentiment == "positive":
-            bot_reply = "Thanks for having a great trip here!"
-        elif sentiment == "negative":
-            bot_reply = "Sorry for your bad experience here."
-        else:
-            bot_reply = "Thanks for your feedback!"
+        if not content:
+            return redirect('display_location', location_code=location_code)
 
-        # Save comment with bot reply
+        bot_reply = "Thanks for your comment!"  # Default fallback reply
+
+        if not rating:
+            sentiment = predict_sentiment(content)
+            if sentiment == "positive":
+                bot_reply = "We're thrilled you had a great time! Hope to see you again!"
+                rating = 4
+            elif sentiment == "negative":
+                bot_reply = "We're sorry to hear that. Your feedback helps us get better."
+                rating = 2
+            else:
+                bot_reply = "Thank you for sharing your thoughts. We appreciate your input!"
+                rating = 3
+        else:
+            rating = int(rating)
+            if rating == 5:
+                bot_reply = "Awesome! We're thrilled you loved it!"
+            elif rating == 4:
+                bot_reply = "Great! Glad you had a good time."
+            elif rating == 3:
+                bot_reply = "Thanks! We'll try to make your next visit even better."
+            elif rating == 2:
+                bot_reply = "Sorry to hear that. We hope things improve."
+            elif rating == 1:
+                bot_reply = "We sincerely apologize. Your feedback is valuable to us."
+            else:
+                bot_reply = "Thanks for your feedback!"
+
         Comment.objects.create(
             location=location,
             user=request.user,
             content=content,
+            rating=rating,
             bot_reply=bot_reply
         )
-
-        return redirect('display_location', location_code = location_code)
+        return redirect('display_location', location_code=location_code)
+    
     else:
         look_up = get_object_or_404(Location, code=location_code)
 
@@ -455,30 +475,53 @@ def my_trip(request):
         'location_map': location_map
     })
 
-@login_required
-def post_comment(request, location_code):
-    if request.method == 'POST':
-        content = request.POST.get('content', '').strip()
-        if not content:
-            return redirect('location_display', location_code=location_code)
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, get_object_or_404
+from .models import Comment, Location
 
-        location = get_object_or_404(Location, code=location_code)
+# @login_required
+# def post_comment(request, location_code):
+#     if request.method == 'POST':
+#         content = request.POST.get('content', '').strip()
+#         rating = request.POST.get('rating')  # This comes as a string
+#         location = get_object_or_404(Location, code=location_code)
 
-        # Sentiment analysis and auto-reply logic
-        sentiment = predict_sentiment(content)
-        if sentiment == "positive":
-            bot_reply = "Thanks for having a great trip here!"
-        elif sentiment == "negative":
-            bot_reply = "Sorry for your bad experience here."
-        else:
-            bot_reply = "Thanks for your feedback!"
+#         if not content:
+#             return redirect('location_display', location_code=location_code)
 
-        # Save comment with bot reply
-        Comment.objects.create(
-            location=location,
-            user=request.user,
-            content=content,
-            bot_reply=bot_reply
-        )
+#         bot_reply = "Thanks for your comment!"  # Default fallback reply
 
-    return redirect('location_display', location_code=location_code)
+#         if not rating:
+#             sentiment = predict_sentiment(content)
+#             if sentiment == "positive":
+#                 bot_reply = "We're thrilled you had a great time! Hope to see you again!"
+#             elif sentiment == "negative":
+#                 bot_reply = "We're sorry to hear that. Your feedback helps us get better."
+#             else:
+#                 bot_reply = "Thank you for sharing your thoughts. We appreciate your input!"
+
+#             rating = None  # Explicitly set to None if not rated
+#         else:
+#             rating = int(rating)  # Convert string to integer
+#             if rating == 5:
+#                 bot_reply = "Awesome! We're thrilled you loved it!"
+#             elif rating == 4:
+#                 bot_reply = "Great! Glad you had a good time."
+#             elif rating == 3:
+#                 bot_reply = "Thanks! We'll try to make your next visit even better."
+#             elif rating == 2:
+#                 bot_reply = "Sorry to hear that. We hope things improve."
+#             elif rating == 1:
+#                 bot_reply = "We sincerely apologize. Your feedback is valuable to us."
+#             else:
+#                 bot_reply = "Thanks for your feedback!"
+
+#         Comment.objects.create(
+#             location=location,
+#             user=request.user,
+#             content=content,
+#             rating=rating,
+#             bot_reply=bot_reply
+#         )
+
+#     return redirect('location_display', location_code=location_code)
