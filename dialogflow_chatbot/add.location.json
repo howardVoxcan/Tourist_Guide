@@ -1,0 +1,1469 @@
+{
+  "name": "add.location",
+  "auto": true,
+  "responses": [
+    {
+      "messages": [
+        {
+          "type": "message",
+          "condition": "",
+          "speech": [
+            "Okay, I've added the location(s) to your list."
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "name": "location",
+          "dataType": "@locations",
+          "value": "$location",
+          "isList": true
+        }
+      ]
+    }
+  ],
+  "userSays": [
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Ben Thanh Bus Hub",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Book Street",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Dim Tu Tac",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "?",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you add ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "?",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you add ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "?",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you add ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "?",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you add ",
+          "userDefined": false
+        },
+        {
+          "text": "Ben Thanh Bus Hub",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "?",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you add ",
+          "userDefined": false
+        },
+        {
+          "text": "Book Street",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "?",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Can you add ",
+          "userDefined": false
+        },
+        {
+          "text": "Dim Tu Tac",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "?",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to add ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to add ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to add ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to add ",
+          "userDefined": false
+        },
+        {
+          "text": "Ben Thanh Bus Hub",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to add ",
+          "userDefined": false
+        },
+        {
+          "text": "Book Street",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to add ",
+          "userDefined": false
+        },
+        {
+          "text": "Dim Tu Tac",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please include ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please include ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please include ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please include ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please include ",
+          "userDefined": false
+        },
+        {
+          "text": "Ben Thanh Bus Hub",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please include ",
+          "userDefined": false
+        },
+        {
+          "text": "Book Street",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please include ",
+          "userDefined": false
+        },
+        {
+          "text": "Dim Tu Tac",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Put ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in my list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Put ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in my list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Put ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in my list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Put ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in my list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Put ",
+          "userDefined": false
+        },
+        {
+          "text": "Ben Thanh Bus Hub",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in my list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Put ",
+          "userDefined": false
+        },
+        {
+          "text": "Book Street",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in my list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Put ",
+          "userDefined": false
+        },
+        {
+          "text": "Dim Tu Tac",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in my list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please add both ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please add both ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please add both ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Include ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in my list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Include ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in my list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Include ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in my list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " as well as ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " as well as ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " as well as ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " along with ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " along with ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " along with ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Put ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in the list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Put ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in the list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Put ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " in the list",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Could you add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and also ",
+          "userDefined": false
+        },
+        {
+          "text": "Banh Mi Huynh Hoa",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "?",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Could you add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and also ",
+          "userDefined": false
+        },
+        {
+          "text": "Mien Tay Bus Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "?",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Could you add ",
+          "userDefined": false
+        },
+        {
+          "text": "Hotel Majestic Saigon",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and also ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Square",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "?",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    }
+  ]
+}

@@ -142,7 +142,27 @@
         </div>
     </div>
 
+    <!-- Comment Form -->
+    <h3>Post a comment</h3>
+    <form id="comment-form">
+        {% csrf_token %}
+        <textarea name="content" placeholder="Write your comment..." required></textarea>
+        <label for="rating">Rate this location:</label>
+        <select name="rating" id="rating">
+            <option value="">-- Optional --</option>
+            <option value="5">5 - Excellent</option>
+            <option value="4">4 - Very Good</option>
+            <option value="3">3 - Average</option>
+            <option value="2">2 - Poor</option>
+            <option value="1">1 - Terrible</option>
+        </select>
+        <br><br>
+        <button type="submit">Submit Comment</button>
+    </form>
+
     <!-- 🔽 Comment Section Start -->
+    <div id="new-comment-result"></div>
+
     {% for comment in comments %}
         <div class="comment">
             <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
@@ -161,25 +181,6 @@
             {% endif %}
         </div>
     {% endfor %}
-    <div id="new-comment-result"></div>
-
-    <!-- Comment Form -->
-    <h3>Post a comment</h3>
-    <form id="comment-form">
-        {% csrf_token %}
-        <textarea name="content" placeholder="Write your comment..." required></textarea>
-        <label for="rating">Rate this location:</label>
-        <select name="rating" id="rating">
-            <option value="">-- Optional --</option>
-            <option value="5">5 - Excellent</option>
-            <option value="4">4 - Very Good</option>
-            <option value="3">3 - Average</option>
-            <option value="2">2 - Poor</option>
-            <option value="1">1 - Terrible</option>
-        </select>
-        <br><br>
-        <button type="submit">Submit Comment</button>
-    </form>
 
     <script>
         document.getElementById("comment-form").addEventListener("submit", function(e) {
