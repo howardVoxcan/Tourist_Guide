@@ -1,17 +1,26 @@
 {% extends "authenticate_layout/authenticate_layout.html" %}
+
+{% load static %}
 {% block title %} Create a new account {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="register/static/css/signup.css">
+<link rel="stylesheet" href="{% static 'css/signup.css' %}?v={{ timestamp }}">
 {% endblock %}
 
 {% load crispy_forms_tags %}
 {% block content %}
+<div class="right-side">
+    <div class="welcome-text">
+        <h2>Đăng ký tài khoản</h2>
+        <p>Vui lòng đăng nhập để tiếp tục sử dụng dịch vụ</p>
+    </div>
+
     <div>
         <form method="POST" class="form-group">
             {% csrf_token %}
             {{ form|crispy }}
-            <button type = "submit" class="btn btn-success"> Register </button>
+            <button type="submit" class="btn btn-success"> Register </button>
         </form>
     </div>
+</div>
 {% endblock %}

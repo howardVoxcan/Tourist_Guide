@@ -19,9 +19,9 @@
     <form method="POST" class="form-group">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class="btn btn-success">Login</button>
+        <button type="submit" class="submit-button">Login</button>
     </form>
-    <p><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
+    <p><a href="{% url 'password_reset' %}" class="forgot-password">Forgot your password?</a></p>
     <p>Don't have an account? <a href="{% url 'register' %}">Create one here</a></p>
 </div>
 {% endblock %}

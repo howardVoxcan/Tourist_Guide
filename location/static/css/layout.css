@@ -120,6 +120,7 @@ picture {
 }
 
 .nav-button.primary {
+    border: 1px solid #00aa6c;
     background-color: #00aa6c;
     color: white;
 }
@@ -130,31 +131,20 @@ picture {
 }
 
 /* Dropdown container */
-.dropdown {
+.user-block {
     position: relative;
-    display: inline-block;
-}
-  
-/* Button to open the dropdown */
-.dropbtn {
-    background-color: #00aa6c;
-    color: white;
-    padding: 12px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+    display: flex;
 }
 
-/* Dropdown content (hidden by default) */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    border-radius: 6px;
-    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-    z-index: 1;
+/* Button to open the dropdown */
+.dropbtn {
+    background-color: white;
+    color: #00aa6c;
+    padding: 12px 16px;
+    font-size: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: 2px solid #00aa6c;
 }
 
 /* Links inside the dropdown */
@@ -163,21 +153,6 @@ picture {
     padding: 12px 16px;
     display: block;
     text-decoration: none;
-}
-
-/* Hover effect on links */
-.dropdown-content a:hover {
-    background-color: transparent;
-}
-
-/* Show the dropdown when hovering over the button */
-.dropdown:hover .dropdown-content {
-display: block;
-}
-
-/* Optional: Hover effect for button */
-.dropdown:hover .dropbtn {
-    background-color: #00aa6c;
 }
 
 /* Navigation tabs */

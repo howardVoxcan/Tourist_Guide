@@ -45,24 +45,24 @@
 
                 {% if not user.is_authenticated %}
                 <div class="nav-buttons">
-                    <a href="{% url 'login' %}"><button class="nav-button secondary">Đăng Nhập</button></a>
-                    <a href="{% url 'register'%}"><button class="nav-button primary">Đăng Ký</button></a>
+                    <a href="{% url 'login' %}"><button class="nav-button secondary">Sign In</button></a>
+                    <a href="{% url 'register'%}"><button class="nav-button primary">Sign Up</button></a>
                 </div>
                 {% else %}
                 <!-- logo người dùng ở đây, kiểu như facebook mặc định, xong có thêm cái username -->
-                {{user.username}}
-                <div class="dropdown">
-                    <button class="dropbtn"><i class="far fa-user-circle"></i></button>
-                    <div class="dropdown-content">
-                        <div>
-                            {% if user.is_authenticated %}
-                            <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                                {% csrf_token %}
-                                <a href="#"><button type="submit">Đăng xuất</button></a>
-                            </form>
-                            {% endif %}
-                        </div>
-                    </div>
+
+
+                <div class="user-block">
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <a href="#"><button type="submit">Log Out</button></a>
+                    </form>
+                    {% endif %}
+                    <button class="dropbtn">
+                        {{user.username}}
+                        <i class="far fa-user-circle"></i>
+                    </button>
                 </div>
                 {% endif %}
             </div>

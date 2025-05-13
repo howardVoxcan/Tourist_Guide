@@ -7,18 +7,18 @@
 }
 
 .welcome-text {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .welcome-text h2 {
     font-size: 28px;
-    color: #009760;
+    color: #00aa6c;
     margin-bottom: 10px;
 }
 
 .welcome-text p {
-    color: #009760;
-    font-size: 14px;
+    color: #00aa6c;
+    font-size: 16px;
 }
 
 .login-form {
@@ -74,12 +74,12 @@
     text-decoration: none;
 }
 
-.login-button {
-    background-color: #1d4ed8;
+.submit-button {
+    background-color: #00aa6c;
     color: white;
     border: none;
-    border-radius: 5px;
-    padding: 12px;
+    border-radius: 10px;
+    padding: 12px 30px;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
@@ -87,7 +87,7 @@
 }
 
 .login-button:hover {
-    background-color: #1e40af;
+    background-color: #029e65;
 }
 
 .register-text {

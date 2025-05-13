@@ -1,0 +1,22 @@
+.right-side {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.welcome-text {
+    margin-bottom: 20px;
+}
+
+.welcome-text h2 {
+    font-size: 28px;
+    color: #00aa6c;
+    margin-bottom: 10px;
+}
+
+.welcome-text p {
+    color: #00aa6c;
+    font-size: 16px;
+}
