@@ -144,12 +144,17 @@ picture {
     position: relative;
     padding: 15px 30px;
     margin-left: 30px;
-    border: 1px solid #00aa6c;
+    border: 0.25px solid #00aa6c;
     border-radius: 20px;
     background-color: #00aa6c;
     color: white;
     font-weight: bolder;
     cursor: pointer;
+}
+
+.logout-button:hover {
+    border: 1px solid #029e65;
+    background-color: #029e65;
 }
 
 /* User display */
@@ -204,6 +209,11 @@ picture {
 }
 
 .nav-tabs a:hover {
+    color: #00aa6c;
+    border-bottom: 2px solid #00aa6c;
+}
+
+.nav-tabs a.active {
     color: #00aa6c;
     border-bottom: 2px solid #00aa6c;
 }

@@ -2,11 +2,14 @@
     background: white;
     height: auto;
     max-width: 1200px;
-    margin: 30px auto;
+    margin: 0 auto;
     border-radius: 10px;
     padding: 10px 20px;
 }
 
-.location-block {
-    
+.location-block {}
+
+.dashed-line {
+    border-top: 2px dashed #00aa6c;
+    margin: 20px 0;
 }
