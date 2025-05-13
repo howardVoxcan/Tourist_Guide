@@ -16,8 +16,6 @@
             color: inherit;
         }
     </style>
-
-    </style>
     {% block css %}{% endblock %}
 </head>
 
@@ -51,16 +49,17 @@
 
 
                 <div class="user-block">
+                    <div class="dropbtn">
+                        {{user.username}}
+                        <i class="far fa-user-circle"></i>
+                    </div>
+
                     {% if user.is_authenticated %}
                     <form action="{% url 'logout' %}" method="post" style="display: inline;">
                         {% csrf_token %}
                         <a href="{% url 'logout' %}"><button type="submit" class="logout-button">Log Out</button></a>
                     </form>
                     {% endif %}
-                    <button class="dropbtn">
-                        {{user.username}}
-                        <i class="far fa-user-circle"></i>
-                    </button>
                 </div>
                 {% endif %}
             </div>

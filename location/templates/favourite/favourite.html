@@ -7,80 +7,84 @@
 {% endblock %}
 
 {% block body %}
-  {% if locations %}
-    <form method="POST" action="{% url 'my_trip' %}">
-      {% csrf_token %}
-      <h3>Chọn địa điểm:</h3>
-      {% for location in locations %}
-        <div class="location-block">
-          <input type="checkbox" name="locations" value="{{ location.id }}">
-          <label>{{ location.location }} ({{ location.coordinate }})</label><br>
+<div class="content-section">
+	{% if locations %}
+	<form method="POST" action="{% url 'my_trip' %}">
+		{% csrf_token %}
+		<h3>Chọn địa điểm:</h3>
+		{% for location in locations %}
+		<div class="location-block">
+			<input type="checkbox" name="locations" value="{{ location.id }}">
+			<label>{{ location.location }} ({{ location.coordinate }})</label><br>
 
-          <!-- Check để chọn điểm bắt đầu và kết thúc -->
-          <label>
-            <input type="radio" name="start_point" value="{{ location.id }}" onchange="toggleInputs()"> Chọn làm điểm bắt đầu
-          </label><br>
-          
-          <label>
-            <input type="radio" name="end_point" value="{{ location.id }}" onchange="toggleInputs()"> Chọn làm điểm kết thúc
-          </label><br>
+			<!-- Check để chọn điểm bắt đầu và kết thúc -->
+			<label>
+				<input type="radio" name="start_point" value="{{ location.id }}" onchange="toggleInputs()">Chọn làm điểm bắt đầu
+			</label><br>
 
-          <div id="extra-inputs-{{ location.id }}" class="extra-inputs">
-            <label>Ghim vào vị trí:</label>
-            <input type="number" name="pinned_order_{{ location.id }}" min="1" placeholder="Vị trí (1,2,3...)"><br>
+			<label>
+				<input type="radio" name="end_point" value="{{ location.id }}" onchange="toggleInputs()"> Chọn làm điểm
+				kết thúc
+			</label><br>
 
-            <label>Phải đi sau địa điểm ID:</label>
-            <input type="number" name="precedence_after_{{ location.id }}" placeholder="ID của địa điểm phải đi sau (optional)">
-          </div>
+			<div id="extra-inputs-{{ location.id }}" class="extra-inputs">
+				<label>Ghim vào vị trí:</label>
+				<input type="number" name="pinned_order_{{ location.id }}" min="1" placeholder="Vị trí (1,2,3...)"><br>
 
-          <hr>
-        </div>
-      {% endfor %}
+				<label>Phải đi sau địa điểm ID:</label>
+				<input type="number" name="precedence_after_{{ location.id }}"
+					placeholder="ID của địa điểm phải đi sau (optional)">
+			</div>
 
-      <h3>Tên chuyến đi:</h3>
-      <input type="text" name="path_name" placeholder="Nhập tên chuyến đi" required>
+			<hr>
+		</div>
+		{% endfor %}
 
-      <input type="hidden" name="trip_list_id" value="{{ trip_list.id }}">
+		<h3>Tên chuyến đi:</h3>
+		<input type="text" name="path_name" placeholder="Nhập tên chuyến đi" required>
 
-      <button type="submit">Tạo lịch trình</button>
-    </form>
+		<input type="hidden" name="trip_list_id" value="{{ trip_list.id }}">
 
-    <script>
-      function updateExtraInputsVisibility() {
-        // Lấy tất cả radio đang được chọn
-        const selectedStart = document.querySelector('input[name="start_point"]:checked');
-        const selectedEnd = document.querySelector('input[name="end_point"]:checked');
-    
-        // Lấy ID của địa điểm được chọn làm start hoặc end (có thể giống nhau hoặc khác)
-        const hiddenIds = new Set();
-        if (selectedStart) hiddenIds.add(selectedStart.value);
-        if (selectedEnd) hiddenIds.add(selectedEnd.value);
-    
-        // Lặp qua tất cả các div extra inputs và xử lý hiển thị
-        document.querySelectorAll('.extra-inputs').forEach(div => {
-          const locationId = div.id.replace('extra-inputs-', '');
-          if (hiddenIds.has(locationId)) {
-            div.style.display = 'none';
-          } else {
-            div.style.display = 'block';
-          }
-        });
-      }
-    
-      // Gắn sự kiện onchange cho radio sau khi DOM đã load
-      window.addEventListener('DOMContentLoaded', () => {
-        // Gọi lần đầu để xử lý các radio đã chọn sẵn
-        updateExtraInputsVisibility();
-    
-        // Gắn sự kiện cho tất cả các radio
-        document.querySelectorAll('input[name="start_point"], input[name="end_point"]').forEach(radio => {
-          radio.addEventListener('change', updateExtraInputsVisibility);
-        });
-      });
-    </script>
-    
-    
-  {% else %}
-    <p>Chưa có địa điểm nào trong danh sách.</p>
-  {% endif %}
+		<button type="submit">Tạo lịch trình</button>
+	</form>
+</div>
+
+<script>
+	function updateExtraInputsVisibility() {
+		// Lấy tất cả radio đang được chọn
+		const selectedStart = document.querySelector('input[name="start_point"]:checked');
+		const selectedEnd = document.querySelector('input[name="end_point"]:checked');
+
+		// Lấy ID của địa điểm được chọn làm start hoặc end (có thể giống nhau hoặc khác)
+		const hiddenIds = new Set();
+		if (selectedStart) hiddenIds.add(selectedStart.value);
+		if (selectedEnd) hiddenIds.add(selectedEnd.value);
+
+		// Lặp qua tất cả các div extra inputs và xử lý hiển thị
+		document.querySelectorAll('.extra-inputs').forEach(div => {
+			const locationId = div.id.replace('extra-inputs-', '');
+			if (hiddenIds.has(locationId)) {
+				div.style.display = 'none';
+			} else {
+				div.style.display = 'block';
+			}
+		});
+	}
+
+	// Gắn sự kiện onchange cho radio sau khi DOM đã load
+	window.addEventListener('DOMContentLoaded', () => {
+		// Gọi lần đầu để xử lý các radio đã chọn sẵn
+		updateExtraInputsVisibility();
+
+		// Gắn sự kiện cho tất cả các radio
+		document.querySelectorAll('input[name="start_point"], input[name="end_point"]').forEach(radio => {
+			radio.addEventListener('change', updateExtraInputsVisibility);
+		});
+	});
+</script>
+
+
+{% else %}
+<p>Chưa có địa điểm nào trong danh sách.</p>
+{% endif %}
 {% endblock %}
