@@ -40,7 +40,7 @@
 
 .form-group input {
     width: 100%;
-    padding: 12px 15px;
+    padding: 16px 15px;
     border: 1px solid #cbd5e1;
     border-radius: 5px;
     font-size: 14px;
@@ -70,7 +70,7 @@
 }
 
 .forgot-password {
-    color: #1d4ed8;
+    color: blue;
     text-decoration: none;
 }
 
@@ -86,21 +86,22 @@
     transition: background-color 0.3s;
 }
 
-.login-button:hover {
+.submit-button:hover {
     background-color: #029e65;
 }
 
-.register-text {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 14px;
-    color: #64748b;
+.register-request {
+    display: flex;
+}
+
+.question-register {
+    flex: 1;
+    font-size: 16px;
 }
 
 .register-link {
-    color: #1d4ed8;
-    text-decoration: none;
-    font-weight: 500;
+    flex: 1;
+    color: blue;
 }
 
 @media (max-width: 768px) {
