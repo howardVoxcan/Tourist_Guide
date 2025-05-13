@@ -51,7 +51,6 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 0 10px;
-    flex-wrap: nowrap;
 }
 
 .logo .search-bar .nav-buttons {
@@ -63,7 +62,8 @@ picture {
     display: block;
 }
 
-.logo a, .logo picture {
+.logo a,
+.logo picture {
     width: 200px;
     height: auto;
     padding: 50px auto;
@@ -74,13 +74,11 @@ picture {
 .search-bar {
     flex: 1;
     max-width: 600px;
-    margin-top: 0;
     position: relative;
     align-items: center;
 }
 
 .search-bar input {
-    display: flex;
     width: 100%;
     padding: 10px 20px;
     border: 1px solid #e0e0e0;
@@ -93,11 +91,15 @@ picture {
     border-color: #00aa6c;
 }
 
-.search-icon {
+.search-button {
     position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
+}
+
+.search-button i {
+    position: absolute;
+    padding: 15px 20px;
+    right: 5px;
+    align-items: center;
     color: #666;
 }
 
@@ -130,7 +132,27 @@ picture {
     color: #00aa6c;
 }
 
-/* Dropdown container */
+/* Logout */
+.logout {
+    display: flex;
+    align-items: right;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.logout-button {
+    position: relative;
+    padding: 15px 30px;
+    margin-left: 30px;
+    border: 1px solid #00aa6c;
+    border-radius: 20px;
+    background-color: #00aa6c;
+    color: white;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+/* User display */
 .user-block {
     position: relative;
     display: flex;
@@ -142,8 +164,6 @@ picture {
     color: #00aa6c;
     padding: 12px 16px;
     font-size: 16px;
-    border-radius: 20px;
-    cursor: pointer;
     border: 2px solid #00aa6c;
 }
 

@@ -16,8 +16,6 @@
             color: inherit;
         }
     </style>
-
-    </style>
     {% block css %}{% endblock %}
 </head>
 
@@ -37,9 +35,7 @@
                     <form method="get" action="{% url 'locations' %}">
                         <input type="text" name="search" placeholder="Searching for locations"
                             value="{{ current_filters.search|default_if_none:'' }}">
-                        <button class="search-icon" type="submit">
-                            <i class="fas fa-search search-icon"></i>
-                        </button>
+                        <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
                     </form>
                 </div>
 
@@ -53,16 +49,17 @@
 
 
                 <div class="user-block">
+                    <div class="dropbtn">
+                        {{user.username}}
+                        <i class="far fa-user-circle"></i>
+                    </div>
+
                     {% if user.is_authenticated %}
                     <form action="{% url 'logout' %}" method="post" style="display: inline;">
                         {% csrf_token %}
-                        <a href="#"><button type="submit">Log Out</button></a>
+                        <a href="{% url 'logout' %}"><button type="submit" class="logout-button">Log Out</button></a>
                     </form>
                     {% endif %}
-                    <button class="dropbtn">
-                        {{user.username}}
-                        <i class="far fa-user-circle"></i>
-                    </button>
                 </div>
                 {% endif %}
             </div>
