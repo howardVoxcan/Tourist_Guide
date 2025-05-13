@@ -86,7 +86,8 @@
       sessionStorage.removeItem('scrollPos');
     }
   });
-  
+
+  // Bắt sự kiện click vào trái tim
   document.querySelectorAll('.fav-btn').forEach(function(button) {
     button.addEventListener('click', function (e) {
       e.preventDefault();
@@ -103,7 +104,10 @@
         body: `value=${code}`
       })
       .then(response => {
-        if (response.ok) {
+        if (response.status === 401) {
+          alert("Bạn cần đăng nhập để thêm vào danh sách yêu thích.");
+          window.location.href = "{% url 'login' %}";
+        } else if (response.ok) {
           // Toggle icon class
           if (icon.classList.contains('fa-regular')) {
             icon.classList.remove('fa-regular');
@@ -115,8 +119,13 @@
         } else {
           alert("Có lỗi xảy ra khi cập nhật favourite.");
         }
+      })
+      .catch(error => {
+        console.error('Lỗi:', error);
+        alert("Không thể kết nối với server.");
       });
     });
   });
 </script>
+
 {% endblock %}

@@ -111,6 +111,9 @@ def overall_homepage(request):
 
 def locations(request):
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            return JsonResponse({'error': 'unauthenticated'}, status=401)
+
         code = request.POST.get('value')
         if not code:
             return redirect('favourite')
@@ -166,8 +169,10 @@ def locations(request):
 
         all_of_locations = all_of_locations.order_by('open_time')
 
-        location_list = Location_List.objects.filter(user=request.user).first()
-        locations = location_list.location_set.all() if location_list else []
+        if request.user.is_authenticated:
+            location_list = Location_List.objects.filter(user=request.user).first()
+        else:
+            location_list = None
 
         processed_locations = []
         for loc in all_of_locations:
