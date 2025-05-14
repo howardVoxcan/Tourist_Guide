@@ -1,0 +1,64 @@
+{
+  "name": "trip.create.complete",
+  "auto": true,
+  "contexts": ["awaiting_trip_completion"],
+  "responses": [
+    {
+      "resetContexts": true,
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "en",
+          "speech": [
+            "Great! Your trip is now ready.",
+            "All set. The trip has been created successfully!",
+            "Your trip setup is complete. Ready to go!"
+          ]
+        }
+      ]
+    }
+  ],
+  "userSays": [
+    {
+      "data": [
+        {
+          "text": "That's all"
+        }
+      ],
+      "isTemplate": false
+    },
+    {
+      "data": [
+        {
+          "text": "I'm done"
+        }
+      ],
+      "isTemplate": false
+    },
+    {
+      "data": [
+        {
+          "text": "Trip is ready"
+        }
+      ],
+      "isTemplate": false
+    },
+    {
+      "data": [
+        {
+          "text": "Create the trip"
+        }
+      ],
+      "isTemplate": false
+    },
+    {
+      "data": [
+        {
+          "text": "Start the trip now"
+        }
+      ],
+      "isTemplate": false
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "name": "add.location",
+  "name": "remove.location",
   "auto": true,
   "responses": [
     {
@@ -8,7 +8,7 @@
           "type": "message",
           "condition": "",
           "speech": [
-            "Okay, I've added the location(s) to your list."
+            "Got it. I've removed the location(s)."
           ]
         }
       ],
@@ -29,11 +29,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Add ",
+          "text": "Remove ",
           "userDefined": false
         },
         {
-          "text": "Hotel Majestic Saigon",
+          "text": "Nha Rong Wharf",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -51,11 +51,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Add ",
+          "text": "Remove ",
           "userDefined": false
         },
         {
-          "text": "Banh Mi Huynh Hoa",
+          "text": "Saigon Railway Station",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -73,11 +73,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Add ",
+          "text": "Remove ",
           "userDefined": false
         },
         {
-          "text": "Mien Tay Bus Station",
+          "text": "Jade Emperor Pagoda",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -95,11 +95,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Add ",
+          "text": "Remove ",
           "userDefined": false
         },
         {
-          "text": "Saigon Square",
+          "text": "Club V E-Gaming",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -117,11 +117,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Add ",
+          "text": "Remove ",
           "userDefined": false
         },
         {
-          "text": "Ben Thanh Bus Hub",
+          "text": "Tan Son Nhat International Airport",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -139,11 +139,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Add ",
+          "text": "Remove ",
           "userDefined": false
         },
         {
-          "text": "Book Street",
+          "text": "Lagom Café - Belgian Beer & Coffee Lounge",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -161,11 +161,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Add ",
+          "text": "Remove ",
           "userDefined": false
         },
         {
-          "text": "Dim Tu Tac",
+          "text": "The Cafe Apartments",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -183,11 +183,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Can you add ",
+          "text": "Can you remove ",
           "userDefined": false
         },
         {
-          "text": "Hotel Majestic Saigon",
+          "text": "Nha Rong Wharf",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -205,11 +205,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Can you add ",
+          "text": "Can you remove ",
           "userDefined": false
         },
         {
-          "text": "Banh Mi Huynh Hoa",
+          "text": "Saigon Railway Station",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -227,11 +227,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Can you add ",
+          "text": "Can you remove ",
           "userDefined": false
         },
         {
-          "text": "Mien Tay Bus Station",
+          "text": "Jade Emperor Pagoda",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -249,11 +249,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Can you add ",
+          "text": "Can you remove ",
           "userDefined": false
         },
         {
-          "text": "Saigon Square",
+          "text": "Club V E-Gaming",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -271,11 +271,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Can you add ",
+          "text": "Can you remove ",
           "userDefined": false
         },
         {
-          "text": "Ben Thanh Bus Hub",
+          "text": "Tan Son Nhat International Airport",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -293,11 +293,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Can you add ",
+          "text": "Can you remove ",
           "userDefined": false
         },
         {
-          "text": "Book Street",
+          "text": "Lagom Café - Belgian Beer & Coffee Lounge",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -315,11 +315,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Can you add ",
+          "text": "Can you remove ",
           "userDefined": false
         },
         {
-          "text": "Dim Tu Tac",
+          "text": "The Cafe Apartments",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -337,11 +337,11 @@
       "updated": null,
       "data": [
         {
-          "text": "I want to add ",
+          "text": "I want to remove ",
           "userDefined": false
         },
         {
-          "text": "Hotel Majestic Saigon",
+          "text": "Nha Rong Wharf",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -359,11 +359,11 @@
       "updated": null,
       "data": [
         {
-          "text": "I want to add ",
+          "text": "I want to remove ",
           "userDefined": false
         },
         {
-          "text": "Banh Mi Huynh Hoa",
+          "text": "Saigon Railway Station",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -381,11 +381,11 @@
       "updated": null,
       "data": [
         {
-          "text": "I want to add ",
+          "text": "I want to remove ",
           "userDefined": false
         },
         {
-          "text": "Mien Tay Bus Station",
+          "text": "Jade Emperor Pagoda",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -403,11 +403,11 @@
       "updated": null,
       "data": [
         {
-          "text": "I want to add ",
+          "text": "I want to remove ",
           "userDefined": false
         },
         {
-          "text": "Saigon Square",
+          "text": "Club V E-Gaming",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -425,11 +425,11 @@
       "updated": null,
       "data": [
         {
-          "text": "I want to add ",
+          "text": "I want to remove ",
           "userDefined": false
         },
         {
-          "text": "Ben Thanh Bus Hub",
+          "text": "Tan Son Nhat International Airport",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -447,11 +447,11 @@
       "updated": null,
       "data": [
         {
-          "text": "I want to add ",
+          "text": "I want to remove ",
           "userDefined": false
         },
         {
-          "text": "Book Street",
+          "text": "Lagom Café - Belgian Beer & Coffee Lounge",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -469,11 +469,11 @@
       "updated": null,
       "data": [
         {
-          "text": "I want to add ",
+          "text": "I want to remove ",
           "userDefined": false
         },
         {
-          "text": "Dim Tu Tac",
+          "text": "The Cafe Apartments",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -491,11 +491,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Please include ",
+          "text": "Please delete ",
           "userDefined": false
         },
         {
-          "text": "Hotel Majestic Saigon",
+          "text": "Nha Rong Wharf",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -513,11 +513,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Please include ",
+          "text": "Please delete ",
           "userDefined": false
         },
         {
-          "text": "Banh Mi Huynh Hoa",
+          "text": "Saigon Railway Station",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -535,11 +535,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Please include ",
+          "text": "Please delete ",
           "userDefined": false
         },
         {
-          "text": "Mien Tay Bus Station",
+          "text": "Jade Emperor Pagoda",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -557,11 +557,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Please include ",
+          "text": "Please delete ",
           "userDefined": false
         },
         {
-          "text": "Saigon Square",
+          "text": "Club V E-Gaming",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -579,11 +579,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Please include ",
+          "text": "Please delete ",
           "userDefined": false
         },
         {
-          "text": "Ben Thanh Bus Hub",
+          "text": "Tan Son Nhat International Airport",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -601,11 +601,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Please include ",
+          "text": "Please delete ",
           "userDefined": false
         },
         {
-          "text": "Book Street",
+          "text": "Lagom Café - Belgian Beer & Coffee Lounge",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -623,11 +623,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Please include ",
+          "text": "Please delete ",
           "userDefined": false
         },
         {
-          "text": "Dim Tu Tac",
+          "text": "The Cafe Apartments",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -645,165 +645,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Put ",
+          "text": "Remove ",
           "userDefined": false
         },
         {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in my list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Put ",
-          "userDefined": false
-        },
-        {
-          "text": "Banh Mi Huynh Hoa",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in my list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Put ",
-          "userDefined": false
-        },
-        {
-          "text": "Mien Tay Bus Station",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in my list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Put ",
-          "userDefined": false
-        },
-        {
-          "text": "Saigon Square",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in my list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Put ",
-          "userDefined": false
-        },
-        {
-          "text": "Ben Thanh Bus Hub",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in my list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Put ",
-          "userDefined": false
-        },
-        {
-          "text": "Book Street",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in my list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Put ",
-          "userDefined": false
-        },
-        {
-          "text": "Dim Tu Tac",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in my list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Add ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
+          "text": "Nha Rong Wharf",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -813,7 +659,7 @@
           "userDefined": false
         },
         {
-          "text": "Banh Mi Huynh Hoa",
+          "text": "Saigon Railway Station",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -831,11 +677,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Add ",
+          "text": "Remove ",
           "userDefined": false
         },
         {
-          "text": "Hotel Majestic Saigon",
+          "text": "Nha Rong Wharf",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -845,7 +691,7 @@
           "userDefined": false
         },
         {
-          "text": "Mien Tay Bus Station",
+          "text": "Jade Emperor Pagoda",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -863,11 +709,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Add ",
+          "text": "Remove ",
           "userDefined": false
         },
         {
-          "text": "Hotel Majestic Saigon",
+          "text": "Nha Rong Wharf",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -877,7 +723,7 @@
           "userDefined": false
         },
         {
-          "text": "Saigon Square",
+          "text": "Club V E-Gaming",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -895,11 +741,11 @@
       "updated": null,
       "data": [
         {
-          "text": "Please add both ",
+          "text": "Can you remove ",
           "userDefined": false
         },
         {
-          "text": "Hotel Majestic Saigon",
+          "text": "Nha Rong Wharf",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -909,487 +755,7 @@
           "userDefined": false
         },
         {
-          "text": "Banh Mi Huynh Hoa",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": "",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Please add both ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " and ",
-          "userDefined": false
-        },
-        {
-          "text": "Mien Tay Bus Station",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": "",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Please add both ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " and ",
-          "userDefined": false
-        },
-        {
-          "text": "Saigon Square",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": "",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Include ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " and ",
-          "userDefined": false
-        },
-        {
-          "text": "Banh Mi Huynh Hoa",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in my list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Include ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " and ",
-          "userDefined": false
-        },
-        {
-          "text": "Mien Tay Bus Station",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in my list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Include ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " and ",
-          "userDefined": false
-        },
-        {
-          "text": "Saigon Square",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in my list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "I want to add ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " as well as ",
-          "userDefined": false
-        },
-        {
-          "text": "Banh Mi Huynh Hoa",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": "",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "I want to add ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " as well as ",
-          "userDefined": false
-        },
-        {
-          "text": "Mien Tay Bus Station",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": "",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "I want to add ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " as well as ",
-          "userDefined": false
-        },
-        {
-          "text": "Saigon Square",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": "",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Add ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " along with ",
-          "userDefined": false
-        },
-        {
-          "text": "Banh Mi Huynh Hoa",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": "",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Add ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " along with ",
-          "userDefined": false
-        },
-        {
-          "text": "Mien Tay Bus Station",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": "",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Add ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " along with ",
-          "userDefined": false
-        },
-        {
-          "text": "Saigon Square",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": "",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Put ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " and ",
-          "userDefined": false
-        },
-        {
-          "text": "Banh Mi Huynh Hoa",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in the list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Put ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " and ",
-          "userDefined": false
-        },
-        {
-          "text": "Mien Tay Bus Station",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in the list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Put ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " and ",
-          "userDefined": false
-        },
-        {
-          "text": "Saigon Square",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " in the list",
-          "userDefined": false
-        }
-      ],
-      "id": ""
-    },
-    {
-      "isTemplate": false,
-      "count": 0,
-      "updated": null,
-      "data": [
-        {
-          "text": "Could you add ",
-          "userDefined": false
-        },
-        {
-          "text": "Hotel Majestic Saigon",
-          "alias": "locations",
-          "meta": "@locations",
-          "userDefined": true
-        },
-        {
-          "text": " and also ",
-          "userDefined": false
-        },
-        {
-          "text": "Banh Mi Huynh Hoa",
+          "text": "Saigon Railway Station",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -1407,21 +773,21 @@
       "updated": null,
       "data": [
         {
-          "text": "Could you add ",
+          "text": "Can you remove ",
           "userDefined": false
         },
         {
-          "text": "Hotel Majestic Saigon",
+          "text": "Nha Rong Wharf",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
         },
         {
-          "text": " and also ",
+          "text": " and ",
           "userDefined": false
         },
         {
-          "text": "Mien Tay Bus Station",
+          "text": "Jade Emperor Pagoda",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
@@ -1439,27 +805,219 @@
       "updated": null,
       "data": [
         {
-          "text": "Could you add ",
+          "text": "Can you remove ",
           "userDefined": false
         },
         {
-          "text": "Hotel Majestic Saigon",
+          "text": "Nha Rong Wharf",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
         },
         {
-          "text": " and also ",
+          "text": " and ",
           "userDefined": false
         },
         {
-          "text": "Saigon Square",
+          "text": "Club V E-Gaming",
           "alias": "locations",
           "meta": "@locations",
           "userDefined": true
         },
         {
           "text": "?",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please delete ",
+          "userDefined": false
+        },
+        {
+          "text": "Nha Rong Wharf",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Railway Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please delete ",
+          "userDefined": false
+        },
+        {
+          "text": "Nha Rong Wharf",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Jade Emperor Pagoda",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Please delete ",
+          "userDefined": false
+        },
+        {
+          "text": "Nha Rong Wharf",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Club V E-Gaming",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to remove both ",
+          "userDefined": false
+        },
+        {
+          "text": "Nha Rong Wharf",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Saigon Railway Station",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to remove both ",
+          "userDefined": false
+        },
+        {
+          "text": "Nha Rong Wharf",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Jade Emperor Pagoda",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to remove both ",
+          "userDefined": false
+        },
+        {
+          "text": "Nha Rong Wharf",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": " and ",
+          "userDefined": false
+        },
+        {
+          "text": "Club V E-Gaming",
+          "alias": "locations",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
           "userDefined": false
         }
       ],

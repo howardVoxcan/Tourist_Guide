@@ -152,10 +152,16 @@ remove_intent = {
 }
 
 # Save to JSON files
-with open("add.location.json", "w", encoding="utf-8") as f:
+with open("trip.create.add.location.json", "w", encoding="utf-8") as f:
     json.dump(add_intent, f, indent=2, ensure_ascii=False)
 
-with open("remove.location.json", "w", encoding="utf-8") as f:
+with open("trip.create.remove.location.json", "w", encoding="utf-8") as f:
+    json.dump(remove_intent, f, indent=2, ensure_ascii=False)
+
+with open("favourite.add.location.json", "w", encoding="utf-8") as f:
+    json.dump(add_intent, f, indent=2, ensure_ascii=False)
+
+with open("favourite.remove.location.json", "w", encoding="utf-8") as f:
     json.dump(remove_intent, f, indent=2, ensure_ascii=False)
 
 print("✅ Add and Remove intent files created successfully.")
