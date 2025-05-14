@@ -1,0 +1,39 @@
+{
+  "name": "projects/YOUR_PROJECT_ID/agent/intents/",
+  "displayName": "discover.ability",
+  "priority": 500000,
+  "trainingPhrases": [
+    {
+      "type": "EXAMPLE",
+      "parts": [{ "text": "What can you do?" }]
+    },
+    {
+      "type": "EXAMPLE",
+      "parts": [{ "text": "Tell me your features." }]
+    },
+    {
+      "type": "EXAMPLE",
+      "parts": [{ "text": "What services do you provide?" }]
+    },
+    {
+      "type": "EXAMPLE",
+      "parts": [{ "text": "How can you assist me?" }]
+    },
+    {
+      "type": "EXAMPLE",
+      "parts": [{ "text": "What are you capable of?" }]
+    }
+  ],
+  "messages": [
+    {
+      "text": {
+        "text": [
+          "Sure! Here's what I can help you with:",
+          "📍 Find locations",
+          "❓ Answer frequently asked questions",
+          "🗺️ Add places to your favorites or create a trip path"
+        ]
+      }
+    }
+  ]
+}

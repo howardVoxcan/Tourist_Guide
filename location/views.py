@@ -162,8 +162,7 @@ def locations(request):
         if search_query:
             all_of_locations = all_of_locations.filter(
                 Q(location__icontains=search_query) |
-                Q(description__icontains=search_query) |
-                Q(long_description__icontains=search_query) |
+                Q(address__icontains=search_query) |
                 Q(tags__icontains=search_query)
             )
 

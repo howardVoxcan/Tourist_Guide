@@ -1,0 +1,75 @@
+{
+  "name": "discover.ability",
+  "auto": true,
+  "priority": 500000,
+  "fallbackIntent": false,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [],
+      "parameters": [],
+      "messages": [
+        {
+          "type": "message",
+          "condition": "",
+          "speech": [
+            "Sure! Here’s what I can help you with: 📍 Find locations,   ❓ Answer frequently asked questions,   🗺️ Add places to your favorites or create a trip path",
+            "I can assist you with: 📍 Showing nearby locations, ❓ Answering your questions with smart FAQ matching, 🗺️ Helping you plan your trip by saving favorite spots or building a route",
+            "I’ve got a few tricks up my sleeve: Want to find a place? I can help! 📍, Have a question? I’ll try to answer it. ❓, Planning a trip? I can save your favorite locations or generate a path! 🗺️"
+          ]
+        }
+      ],
+      "defaultResponsePlatforms": {}
+    }
+  ],
+  "userSays": [
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "What are you capable of?",
+          "userDefined": false
+        }
+      ]
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "How can you assist me?",
+          "userDefined": false
+        }
+      ]
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "What services do you provide?",
+          "userDefined": false
+        }
+      ]
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "Tell me your features.",
+          "userDefined": false
+        }
+      ]
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "What can you do?",
+          "userDefined": false
+        }
+      ]
+    }
+  ],
+  "events": []
+}
