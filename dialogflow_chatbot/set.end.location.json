@@ -1,0 +1,797 @@
+{
+  "name": "set.end.location",
+  "auto": true,
+  "responses": [
+    {
+      "messages": [
+        {
+          "type": "message",
+          "condition": "",
+          "speech": [
+            "Alright. I’ve set the ending location."
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "name": "location",
+          "dataType": "@locations",
+          "value": "$location",
+          "isList": false
+        }
+      ]
+    }
+  ],
+  "userSays": [
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "End at ",
+          "userDefined": false
+        },
+        {
+          "text": "23/9 Park",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "End at ",
+          "userDefined": false
+        },
+        {
+          "text": "Monte-Carlo Saigon",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "End at ",
+          "userDefined": false
+        },
+        {
+          "text": "Nguyen Hue Walking Street",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "End at ",
+          "userDefined": false
+        },
+        {
+          "text": "Ho Chi Minh City Post Office",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "End at ",
+          "userDefined": false
+        },
+        {
+          "text": "TTC Hotel - Airport",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "End at ",
+          "userDefined": false
+        },
+        {
+          "text": "Pho 2000",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "End at ",
+          "userDefined": false
+        },
+        {
+          "text": "Bo Kho Ganh",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Finish at ",
+          "userDefined": false
+        },
+        {
+          "text": "23/9 Park",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Finish at ",
+          "userDefined": false
+        },
+        {
+          "text": "Monte-Carlo Saigon",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Finish at ",
+          "userDefined": false
+        },
+        {
+          "text": "Nguyen Hue Walking Street",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Finish at ",
+          "userDefined": false
+        },
+        {
+          "text": "Ho Chi Minh City Post Office",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Finish at ",
+          "userDefined": false
+        },
+        {
+          "text": "TTC Hotel - Airport",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Finish at ",
+          "userDefined": false
+        },
+        {
+          "text": "Pho 2000",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "Finish at ",
+          "userDefined": false
+        },
+        {
+          "text": "Bo Kho Ganh",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "My last stop is ",
+          "userDefined": false
+        },
+        {
+          "text": "23/9 Park",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "My last stop is ",
+          "userDefined": false
+        },
+        {
+          "text": "Monte-Carlo Saigon",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "My last stop is ",
+          "userDefined": false
+        },
+        {
+          "text": "Nguyen Hue Walking Street",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "My last stop is ",
+          "userDefined": false
+        },
+        {
+          "text": "Ho Chi Minh City Post Office",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "My last stop is ",
+          "userDefined": false
+        },
+        {
+          "text": "TTC Hotel - Airport",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "My last stop is ",
+          "userDefined": false
+        },
+        {
+          "text": "Pho 2000",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "My last stop is ",
+          "userDefined": false
+        },
+        {
+          "text": "Bo Kho Ganh",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "The trip ends at ",
+          "userDefined": false
+        },
+        {
+          "text": "23/9 Park",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "The trip ends at ",
+          "userDefined": false
+        },
+        {
+          "text": "Monte-Carlo Saigon",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "The trip ends at ",
+          "userDefined": false
+        },
+        {
+          "text": "Nguyen Hue Walking Street",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "The trip ends at ",
+          "userDefined": false
+        },
+        {
+          "text": "Ho Chi Minh City Post Office",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "The trip ends at ",
+          "userDefined": false
+        },
+        {
+          "text": "TTC Hotel - Airport",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "The trip ends at ",
+          "userDefined": false
+        },
+        {
+          "text": "Pho 2000",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "The trip ends at ",
+          "userDefined": false
+        },
+        {
+          "text": "Bo Kho Ganh",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to end at ",
+          "userDefined": false
+        },
+        {
+          "text": "23/9 Park",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to end at ",
+          "userDefined": false
+        },
+        {
+          "text": "Monte-Carlo Saigon",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to end at ",
+          "userDefined": false
+        },
+        {
+          "text": "Nguyen Hue Walking Street",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to end at ",
+          "userDefined": false
+        },
+        {
+          "text": "Ho Chi Minh City Post Office",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to end at ",
+          "userDefined": false
+        },
+        {
+          "text": "TTC Hotel - Airport",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to end at ",
+          "userDefined": false
+        },
+        {
+          "text": "Pho 2000",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    },
+    {
+      "isTemplate": false,
+      "count": 0,
+      "updated": null,
+      "data": [
+        {
+          "text": "I want to end at ",
+          "userDefined": false
+        },
+        {
+          "text": "Bo Kho Ganh",
+          "alias": "location",
+          "meta": "@locations",
+          "userDefined": true
+        },
+        {
+          "text": "",
+          "userDefined": false
+        }
+      ],
+      "id": ""
+    }
+  ]
+}

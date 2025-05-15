@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from location.coordinate import coordinate_dict
 from location.models import Location, Location_List, TripPath, TripList, Comment
 from django.contrib.auth.models import User
@@ -13,10 +14,10 @@ from urllib import request
 from datetime import datetime
 from annotated_types import Len
 from shapely import length
-import itertools, requests, geocoder, json
 from .TSP import Graph, distance
-import requests, joblib, os, spacy
+import requests, joblib, os, spacy, json
 from django.conf import settings
+from urllib.parse import urlencode
 
 # Create your views here.
 nlp = spacy.load("en_core_web_sm")
@@ -342,7 +343,6 @@ def my_trip(request):
     user = request.user
     trip_list_id = f"{user.username}-favourite"
 
-    # Tạo TripList nếu chưa có
     trip_list, _ = TripList.objects.get_or_create(id=trip_list_id, defaults={
         'user': user,
         'name': f"{user.username}'s Favourite Trip"
@@ -353,24 +353,20 @@ def my_trip(request):
         if not path_name:
             return redirect('my_trip')
 
-        # Lấy Location_List đầu tiên của user
         location_list = Location_List.objects.filter(user=user).first()
         if not location_list:
             return redirect('favourite')
 
-        # Lấy các location_id đã được chọn (qua checkbox)
         selected_ids = request.POST.getlist('locations')
         if not selected_ids:
             messages.error(request, "Vui lòng chọn ít nhất một địa điểm.")
             return redirect('favourite')
 
-        # Chỉ lấy các location được chọn
         locations = list(location_list.location_set.filter(id__in=selected_ids))
         if not locations:
             messages.error(request, "Không tìm thấy các địa điểm đã chọn.")
             return redirect('favourite')
 
-        # Ánh xạ id <-> index trong danh sách để phục vụ TSP
         id_to_index = {loc.id: idx for idx, loc in enumerate(locations)}
         index_to_id = {idx: loc.id for idx, loc in enumerate(locations)}
         coordinates = [loc.coordinate for loc in locations]
@@ -379,19 +375,16 @@ def my_trip(request):
         fixed_position_flags = [False] * len(locations)
         precedence_constraints = []
 
-        # Lấy id của điểm bắt đầu và kết thúc từ form
         start_id_str = request.POST.get('start_point')
         end_id_str = request.POST.get('end_point')
         start_id = int(start_id_str) if start_id_str and start_id_str.isdigit() else None
         end_id = int(end_id_str) if end_id_str and end_id_str.isdigit() else None
 
-        # Xử lý pinned/precedence (ràng buộc)
         for loc in locations:
             loc_id = loc.id
             loc_id_str = str(loc_id)
             index = id_to_index[loc_id]
 
-            # Pinned
             pinned_str = request.POST.get(f'pinned_order_{loc_id_str}')
             if pinned_str and pinned_str.isdigit():
                 pinned_index = int(pinned_str) - 1
@@ -399,22 +392,23 @@ def my_trip(request):
                     pinned_positions[pinned_index] = index
                     fixed_position_flags[pinned_index] = True
 
-            # Ràng buộc đi sau
             after_id_str = request.POST.get(f'precedence_after_{loc_id_str}')
             if after_id_str and after_id_str.isdigit():
                 after_id = int(after_id_str)
                 if after_id in id_to_index:
                     precedence_constraints.append((id_to_index[after_id], index))
 
-        # Tính khoảng cách
+        # Calculate distances and durations
         distances = []
-        for i in range(len(coordinates)):
-            for j in range(i + 1, len(coordinates)):
-                dist, _ = distance(coordinates[i], coordinates[j])
-                distances.append((i, j, dist))
-                distances.append((j, i, dist))
+        durations_map = {}
 
-        # Tạo graph
+        for i in range(len(coordinates)):
+            for j in range(len(coordinates)):
+                if i != j:
+                    dist, duration = distance(coordinates[i], coordinates[j])
+                    distances.append((i, j, dist))
+                    durations_map[(i, j)] = duration
+
         graph = Graph(len(locations))
         for u, v, w in distances:
             graph.add_edge(u, v, w)
@@ -433,26 +427,27 @@ def my_trip(request):
             messages.error(request, "Không thể tạo lịch trình hợp lệ với các ràng buộc đã chọn.")
             return redirect('favourite')
 
+        total_duration = 0
+        for i in range(len(path) - 1):
+            u, v = path[i], path[i + 1]
+            total_duration += durations_map.get((u, v), 0)
+
         ordered_location_ids = [index_to_id[i] for i in path]
 
-        # Lưu TripPath mới (chuyển list -> JSON string)
         TripPath.objects.create(
             trip_list=trip_list,
             path_name=path_name,
             locations_ordered=json.dumps(ordered_location_ids),
-            total_distance=cost
+            total_distance=cost,
+            total_duration=total_duration
         )
 
-        # Xoá danh sách đã chọn
-        # Chỉ xoá các địa điểm đã sử dụng trong chuyến đi
         location_list.location_set.remove(*locations)
 
         return redirect('my_trip')
 
-    # GET: Lấy và hiển thị các TripPath
     trip_paths = TripPath.objects.filter(trip_list=trip_list).order_by('-created_at')
 
-    # Parse từng path → list location ids → map sang tên
     all_ids = []
     parsed_trip_paths = []
 
@@ -467,10 +462,10 @@ def my_trip(request):
             'path_name': path.path_name,
             'locations': loc_ids,
             'distance': round(path.total_distance / 1000, 1),
+            'duration': round(path.total_duration/ 60, 1) if path.total_duration else None,
             'created_at': path.created_at
         })
 
-    # Query tên các địa điểm
     location_qs = Location.objects.filter(id__in=all_ids)
     location_map = {loc.id: loc.location for loc in location_qs}
 
@@ -478,10 +473,6 @@ def my_trip(request):
         'trip_paths': parsed_trip_paths,
         'location_map': location_map
     })
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, get_object_or_404
-from .models import Comment, Location
 
 @require_POST
 @login_required
@@ -534,3 +525,238 @@ def submit_comment_ajax(request, location_code):
         'content': comment.content,
         'bot_reply': comment.bot_reply
     })
+
+@csrf_exempt
+def dialogflow_webhook(request):
+    if request.method == "POST":
+        user = request.user
+        if not user.is_authenticated:
+            return JsonResponse({"fulfillmentText": "Please log in to use the chatbot."}, status=401)
+
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            intent_name = data['queryResult']['intent']['displayName']
+            parameters = data['queryResult'].get('parameters', {})
+
+            result = handle_intent(intent_name, parameters, user)
+
+            if result is True:
+                # Use Dialogflow's own response
+                fulfillment_text = data['queryResult'].get('fulfillmentText', "")
+                return JsonResponse({"fulfillmentText": fulfillment_text})
+            elif isinstance(result, str):
+                # Custom error or other message
+                return JsonResponse({"fulfillmentText": result})
+            else:
+                return JsonResponse({"fulfillmentText": "Unhandled case."})
+
+        except Exception as e:
+            return JsonResponse({
+                "fulfillmentText": "An error occurred while processing your request.",
+                "debug": str(e)
+            })
+
+    return JsonResponse({"error": "Only POST requests are allowed."}, status=405)
+
+def handle_intent(intent_name, parameters, user):
+    session = request.session
+    trip_cart = session.get("trip_cart", {
+        "locations": [],
+        "start_location": None,
+        "end_location": None
+    })
+
+    if intent_name == "Default Welcome Intent":
+        return True
+
+    elif intent_name == "Default Fallback Intent":
+        return True
+
+    elif intent_name == "discovering.ability":
+        return True
+
+    elif intent_name == "favourite.add.location":
+        locations = parameters.get("locations")
+        if not locations:
+            return "Please specify a location to add."
+        
+        if isinstance(locations, str):
+            locations = [locations]
+
+        for loc in locations:
+            exists = Location_List.objects.filter(user=user, name=loc).exists()
+
+            if exists:
+                return f"The location '{loc}' is already in your favourite list."            
+            Location_List.objects.create(user=user, name=loc)
+
+        return True
+
+    elif intent_name == "favourite.remove.location":
+        locations = parameters.get("locations")
+        if not locations:
+            return "Please specify a location to remove."
+
+        if isinstance(locations, str):
+            locations = [locations]
+
+        for loc in locations:
+            exists = Location_List.objects.filter(user=user, name=loc).exists()
+            if not exists:
+                return f"The location '{loc}' is not in your favourite list."
+
+            Location_List.objects.filter(user=user, name=loc).delete()
+
+        return True
+
+    elif intent_name == "find.location.particular":
+        locations = parameters.get("locations")
+        if not locations:
+            return "Please specify the location you're looking for."
+
+        if isinstance(locations, str):
+            locations = [locations]
+
+        for loc in locations:
+            try:
+                location_obj = Location.objects.get(name__iexact=loc)
+                location_url = reverse('display_location', args=[location_obj.code])
+                return f"Here is the path: {location_url}"
+            except Location.DoesNotExist:
+                return f"Sorry, I couldn't find a location named '{loc}'."
+
+    elif intent_name == "find.location.tags":
+        tag = parameters.get("tags")
+        if not tag:
+            return "Please provide a tag to search for."
+
+        if isinstance(tag, list):
+            tag = tag[0]  # Use the first one if multiple accidentally passed
+
+        base_url = reverse('locations')  # e.g., "/locations/"
+        query_string = urlencode({'search': tag})
+        full_url = f"{base_url}?{query_string}"
+
+        return f"Here's a location search result for tag '{tag}': {full_url}"
+    
+    elif intent_name == "start.trip":
+        trip_cart = {"locations": [], "start_location": None, "end_location": None}
+        session["trip_cart"] = trip_cart
+        return "Great! Let's start planning your trip. You can now add locations."
+
+    elif intent_name == "set.start.location":
+        location = parameters.get("locations")
+        if location:
+            trip_cart["start_location"] = location
+            session["trip_cart"] = trip_cart
+            return f"Start location set to {location}."
+        return "Please tell me which location to set as the starting point."
+
+    elif intent_name == "set.end.location":
+        location = parameters.get("locations")
+        if location:
+            trip_cart["end_location"] = location
+            session["trip_cart"] = trip_cart
+            return f"End location set to {location}."
+        return "Please tell me which location to set as the ending point."
+
+    elif intent_name == "trip.create.add.location":
+        location = parameters.get("locations")
+        if location:
+            trip_cart["locations"].append(location)
+            session["trip_cart"] = trip_cart
+            return f"Added {location} to your trip."
+        return "Please specify a location to add."
+
+    elif intent_name == "trip.create.remove.location":
+        location = parameters.get("locations")
+        if location in trip_cart["locations"]:
+            trip_cart["locations"].remove(location)
+            session["trip_cart"] = trip_cart
+            return f"Removed {location} from your trip."
+        return f"{location} is not in your trip list."
+
+    elif intent_name == "trip.create.complete":
+        locations = trip_cart.get("locations", [])
+        start_name = trip_cart.get("start_location")
+        end_name = trip_cart.get("end_location")
+
+        if not locations:
+            return "Your trip has no locations. Please add some before finishing."
+
+        # Step 1: Combine all location names (remove duplicates)
+        all_location_names = list(set(locations + ([start_name] if start_name else []) + ([end_name] if end_name else [])))
+
+        # Step 2: Fetch Location objects from DB
+        location_objs = list(Location.objects.filter(name__in=all_location_names))
+        if len(location_objs) < len(all_location_names):
+            return "Some locations could not be found in the database."
+
+        name_to_obj = {loc.name: loc for loc in location_objs}
+
+        # Step 3: Arrange locations: start → middle → end
+        location_list = []
+        if start_name:
+            location_list.append(name_to_obj[start_name])
+        location_list += [name_to_obj[name] for name in locations if name != start_name and name != end_name]
+        if end_name:
+            location_list.append(name_to_obj[end_name])
+
+        coordinates = [loc.coordinate for loc in location_list]
+        id_map = {i: location_list[i].id for i in range(len(location_list))}
+
+        # Step 4: Build both distance and duration matrices
+        distances = []
+        durations_map = {}  # key: (u, v), value: duration
+
+        for i in range(len(coordinates)):
+            for j in range(len(coordinates)):
+                if i != j:
+                    dist, duration = distance(coordinates[i], coordinates[j])
+                    distances.append((i, j, dist))
+                    durations_map[(i, j)] = duration
+
+        graph = Graph(len(location_list))
+        for u, v, w in distances:
+            graph.add_edge(u, v, w)
+
+        # Step 5: Solve the TSP
+        path, total_distance = graph.find_hamiltonian_cycle(start=start_name, end=end_name)
+        if not path:
+            return "Could not generate an optimal path. Try modifying locations."
+
+        ordered_location_ids = [id_map[i] for i in path]
+
+        # Step 6: Calculate total duration from the path
+        total_duration = 0
+        for i in range(len(path) - 1):
+            u, v = path[i], path[i + 1]
+            duration = durations_map.get((u, v), 0)
+            total_duration += duration
+
+        # Step 7: Save to database
+        trip_list_id = f"{user.username}-favourite"
+        trip_list, _ = TripList.objects.get_or_create(
+            id=trip_list_id,
+            defaults={"user": user, "name": f"{user.username}'s Trip"}
+        )
+
+        TripPath.objects.create(
+            trip_list=trip_list,
+            path_name="Chatbot Trip",
+            locations_ordered=json.dumps(ordered_location_ids),
+            total_distance=total_distance,
+            total_duration=total_duration
+        )
+
+        # Step 8: Clear trip_cart
+        session["trip_cart"] = {
+            "locations": [],
+            "start_location": None,
+            "end_location": None
+        }
+
+        return f"Trip created successfully with {len(path)} stops. Estimated duration: {round(total_duration, 2)} minutes."
+
+    else:
+        return "This intent is not currently handled."

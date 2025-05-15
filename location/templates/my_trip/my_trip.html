@@ -10,6 +10,7 @@
         {% for path in trip_paths %}
             <h3>{{ path.path_name }}</h3>
             <p>Total distance: {{ path.distance }} km</p>
+            <p>Total duration: {{ path.duration }} minutes</p>
             <ul>
                 {% for loc_id in path.locations %}
                 <li>{{ location_map|get_item:loc_id }}</li>
