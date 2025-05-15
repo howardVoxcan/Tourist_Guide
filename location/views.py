@@ -538,7 +538,7 @@ def dialogflow_webhook(request):
             intent_name = data['queryResult']['intent']['displayName']
             parameters = data['queryResult'].get('parameters', {})
 
-            result = handle_intent(intent_name, parameters, user)
+            result = handle_intent(request, intent_name, parameters, user)
 
             if result is True:
                 # Use Dialogflow's own response
@@ -558,7 +558,7 @@ def dialogflow_webhook(request):
 
     return JsonResponse({"error": "Only POST requests are allowed."}, status=405)
 
-def handle_intent(intent_name, parameters, user):
+def handle_intent(request, intent_name, parameters, user):
     session = request.session
     trip_cart = session.get("trip_cart", {
         "locations": [],
@@ -579,15 +579,14 @@ def handle_intent(intent_name, parameters, user):
         locations = parameters.get("locations")
         if not locations:
             return "Please specify a location to add."
-        
+
         if isinstance(locations, str):
             locations = [locations]
 
         for loc in locations:
             exists = Location_List.objects.filter(user=user, name=loc).exists()
-
             if exists:
-                return f"The location '{loc}' is already in your favourite list."            
+                return f"The location '{loc}' is already in your favourite list."
             Location_List.objects.create(user=user, name=loc)
 
         return True
@@ -604,7 +603,6 @@ def handle_intent(intent_name, parameters, user):
             exists = Location_List.objects.filter(user=user, name=loc).exists()
             if not exists:
                 return f"The location '{loc}' is not in your favourite list."
-
             Location_List.objects.filter(user=user, name=loc).delete()
 
         return True
@@ -631,14 +629,14 @@ def handle_intent(intent_name, parameters, user):
             return "Please provide a tag to search for."
 
         if isinstance(tag, list):
-            tag = tag[0]  # Use the first one if multiple accidentally passed
+            tag = tag[0]
 
-        base_url = reverse('locations')  # e.g., "/locations/"
+        base_url = reverse('locations')
         query_string = urlencode({'search': tag})
         full_url = f"{base_url}?{query_string}"
 
         return f"Here's a location search result for tag '{tag}': {full_url}"
-    
+
     elif intent_name == "start.trip":
         trip_cart = {"locations": [], "start_location": None, "end_location": None}
         session["trip_cart"] = trip_cart
@@ -648,7 +646,7 @@ def handle_intent(intent_name, parameters, user):
         location = parameters.get("locations")
         if location:
             trip_cart["start_location"] = location
-            session["trip_cart"] = trip_cart
+            request.session.modified = True
             return f"Start location set to {location}."
         return "Please tell me which location to set as the starting point."
 
@@ -656,7 +654,7 @@ def handle_intent(intent_name, parameters, user):
         location = parameters.get("locations")
         if location:
             trip_cart["end_location"] = location
-            session["trip_cart"] = trip_cart
+            request.session.modified = True
             return f"End location set to {location}."
         return "Please tell me which location to set as the ending point."
 
@@ -664,7 +662,7 @@ def handle_intent(intent_name, parameters, user):
         location = parameters.get("locations")
         if location:
             trip_cart["locations"].append(location)
-            session["trip_cart"] = trip_cart
+            request.session.modified = True
             return f"Added {location} to your trip."
         return "Please specify a location to add."
 
@@ -672,7 +670,7 @@ def handle_intent(intent_name, parameters, user):
         location = parameters.get("locations")
         if location in trip_cart["locations"]:
             trip_cart["locations"].remove(location)
-            session["trip_cart"] = trip_cart
+            request.session.modified = True
             return f"Removed {location} from your trip."
         return f"{location} is not in your trip list."
 
@@ -684,17 +682,14 @@ def handle_intent(intent_name, parameters, user):
         if not locations:
             return "Your trip has no locations. Please add some before finishing."
 
-        # Step 1: Combine all location names (remove duplicates)
         all_location_names = list(set(locations + ([start_name] if start_name else []) + ([end_name] if end_name else [])))
 
-        # Step 2: Fetch Location objects from DB
         location_objs = list(Location.objects.filter(name__in=all_location_names))
         if len(location_objs) < len(all_location_names):
             return "Some locations could not be found in the database."
 
         name_to_obj = {loc.name: loc for loc in location_objs}
 
-        # Step 3: Arrange locations: start → middle → end
         location_list = []
         if start_name:
             location_list.append(name_to_obj[start_name])
@@ -705,9 +700,8 @@ def handle_intent(intent_name, parameters, user):
         coordinates = [loc.coordinate for loc in location_list]
         id_map = {i: location_list[i].id for i in range(len(location_list))}
 
-        # Step 4: Build both distance and duration matrices
         distances = []
-        durations_map = {}  # key: (u, v), value: duration
+        durations_map = {}
 
         for i in range(len(coordinates)):
             for j in range(len(coordinates)):
@@ -720,21 +714,18 @@ def handle_intent(intent_name, parameters, user):
         for u, v, w in distances:
             graph.add_edge(u, v, w)
 
-        # Step 5: Solve the TSP
         path, total_distance = graph.find_hamiltonian_cycle(start=start_name, end=end_name)
         if not path:
             return "Could not generate an optimal path. Try modifying locations."
 
         ordered_location_ids = [id_map[i] for i in path]
 
-        # Step 6: Calculate total duration from the path
         total_duration = 0
         for i in range(len(path) - 1):
             u, v = path[i], path[i + 1]
             duration = durations_map.get((u, v), 0)
             total_duration += duration
 
-        # Step 7: Save to database
         trip_list_id = f"{user.username}-favourite"
         trip_list, _ = TripList.objects.get_or_create(
             id=trip_list_id,
@@ -749,7 +740,6 @@ def handle_intent(intent_name, parameters, user):
             total_duration=total_duration
         )
 
-        # Step 8: Clear trip_cart
         session["trip_cart"] = {
             "locations": [],
             "start_location": None,
