@@ -157,3 +157,7 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = 'touristguide.company@gmail.com'
 EMAIL_HOST_PASSWORD = 'qayg qrxm yywt vscp' 
+
+CSRF_TRUSTED_ORIGINS = [
+    '',
+]

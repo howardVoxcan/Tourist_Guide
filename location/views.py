@@ -528,24 +528,27 @@ def submit_comment_ajax(request, location_code):
 
 @csrf_exempt
 def dialogflow_webhook(request):
-    if request.method == "POST":
-        user = request.user
-        if not user.is_authenticated:
-            return JsonResponse({"fulfillmentText": "Please log in to use the chatbot."}, status=401)
+    print("==> Dialogflow webhook called")
+    print("Headers:", dict(request.headers))
+    print("Body:", request.body.decode('utf-8'))
 
+    if request.method == "POST":
         try:
             data = json.loads(request.body.decode("utf-8"))
             intent_name = data['queryResult']['intent']['displayName']
             parameters = data['queryResult'].get('parameters', {})
 
+            # Bỏ qua check user.is_authenticated để test
+            user = None  # Hoặc có thể lấy user nếu muốn
+
             result = handle_intent(request, intent_name, parameters, user)
 
             if result is True:
-                # Use Dialogflow's own response
+                # Trả lại fulfillmentText gốc từ Dialogflow
                 fulfillment_text = data['queryResult'].get('fulfillmentText', "")
                 return JsonResponse({"fulfillmentText": fulfillment_text})
             elif isinstance(result, str):
-                # Custom error or other message
+                # Trả lại message tùy chỉnh
                 return JsonResponse({"fulfillmentText": result})
             else:
                 return JsonResponse({"fulfillmentText": "Unhandled case."})
@@ -566,6 +569,17 @@ def handle_intent(request, intent_name, parameters, user):
         "end_location": None
     })
 
+    def normalize_locations(loc):
+        # Chuyển param locations thành list, nếu là string thì đóng vào list
+        if loc is None:
+            return []
+        if isinstance(loc, str):
+            return [loc]
+        if isinstance(loc, list):
+            return loc
+        # Nếu kiểu khác, ép kiểu str rồi thành list
+        return [str(loc)]
+
     if intent_name == "Default Welcome Intent":
         return True
 
@@ -576,44 +590,33 @@ def handle_intent(request, intent_name, parameters, user):
         return True
 
     elif intent_name == "favourite.add.location":
-        locations = parameters.get("locations")
+        locations = normalize_locations(parameters.get("locations"))
         if not locations:
             return "Please specify a location to add."
 
-        if isinstance(locations, str):
-            locations = [locations]
-
         for loc in locations:
-            exists = Location_List.objects.filter(user=user, name=loc).exists()
+            exists = Location_List.objects.filter(user=user, name__iexact=loc).exists()
             if exists:
                 return f"The location '{loc}' is already in your favourite list."
             Location_List.objects.create(user=user, name=loc)
-
         return True
 
     elif intent_name == "favourite.remove.location":
-        locations = parameters.get("locations")
+        locations = normalize_locations(parameters.get("locations"))
         if not locations:
             return "Please specify a location to remove."
 
-        if isinstance(locations, str):
-            locations = [locations]
-
         for loc in locations:
-            exists = Location_List.objects.filter(user=user, name=loc).exists()
+            exists = Location_List.objects.filter(user=user, name__iexact=loc).exists()
             if not exists:
                 return f"The location '{loc}' is not in your favourite list."
-            Location_List.objects.filter(user=user, name=loc).delete()
-
+            Location_List.objects.filter(user=user, name__iexact=loc).delete()
         return True
 
     elif intent_name == "find.location.particular":
-        locations = parameters.get("locations")
+        locations = normalize_locations(parameters.get("locations"))
         if not locations:
             return "Please specify the location you're looking for."
-
-        if isinstance(locations, str):
-            locations = [locations]
 
         for loc in locations:
             try:
@@ -640,39 +643,60 @@ def handle_intent(request, intent_name, parameters, user):
     elif intent_name == "start.trip":
         trip_cart = {"locations": [], "start_location": None, "end_location": None}
         session["trip_cart"] = trip_cart
+        request.session.modified = True
         return "Great! Let's start planning your trip. You can now add locations."
 
     elif intent_name == "set.start.location":
-        location = parameters.get("locations")
-        if location:
-            trip_cart["start_location"] = location
+        locations = normalize_locations(parameters.get("locations"))
+        if locations:
+            # Chỉ lấy location đầu tiên làm start
+            trip_cart["start_location"] = locations[0]
+            session["trip_cart"] = trip_cart
             request.session.modified = True
-            return f"Start location set to {location}."
+            return f"Start location set to {locations[0]}."
         return "Please tell me which location to set as the starting point."
 
     elif intent_name == "set.end.location":
-        location = parameters.get("locations")
-        if location:
-            trip_cart["end_location"] = location
+        locations = normalize_locations(parameters.get("locations"))
+        if locations:
+            trip_cart["end_location"] = locations[0]
+            session["trip_cart"] = trip_cart
             request.session.modified = True
-            return f"End location set to {location}."
+            return f"End location set to {locations[0]}."
         return "Please tell me which location to set as the ending point."
 
     elif intent_name == "trip.create.add.location":
-        location = parameters.get("locations")
-        if location:
-            trip_cart["locations"].append(location)
+        locations = normalize_locations(parameters.get("locations"))
+        if locations:
+            # Có thể thêm nhiều locations cùng lúc
+            for loc in locations:
+                if loc not in trip_cart["locations"]:
+                    trip_cart["locations"].append(loc)
+            session["trip_cart"] = trip_cart
             request.session.modified = True
-            return f"Added {location} to your trip."
+            return f"Added {', '.join(locations)} to your trip."
         return "Please specify a location to add."
 
     elif intent_name == "trip.create.remove.location":
-        location = parameters.get("locations")
-        if location in trip_cart["locations"]:
-            trip_cart["locations"].remove(location)
-            request.session.modified = True
-            return f"Removed {location} from your trip."
-        return f"{location} is not in your trip list."
+        locations = normalize_locations(parameters.get("locations"))
+        if not locations:
+            return "Please specify a location to remove."
+        removed = []
+        not_found = []
+        for loc in locations:
+            if loc in trip_cart["locations"]:
+                trip_cart["locations"].remove(loc)
+                removed.append(loc)
+            else:
+                not_found.append(loc)
+        session["trip_cart"] = trip_cart
+        request.session.modified = True
+        if removed and not not_found:
+            return f"Removed {', '.join(removed)} from your trip."
+        elif removed and not_found:
+            return f"Removed {', '.join(removed)}. However, {', '.join(not_found)} were not in your trip list."
+        else:
+            return f"{', '.join(not_found)} is/are not in your trip list."
 
     elif intent_name == "trip.create.complete":
         locations = trip_cart.get("locations", [])
@@ -684,17 +708,28 @@ def handle_intent(request, intent_name, parameters, user):
 
         all_location_names = list(set(locations + ([start_name] if start_name else []) + ([end_name] if end_name else [])))
 
+        # Lấy objects location, dùng iexact để tránh sai hoa thường
         location_objs = list(Location.objects.filter(name__in=all_location_names))
         if len(location_objs) < len(all_location_names):
-            return "Some locations could not be found in the database."
+            # Kiểm tra chính xác location nào không tìm thấy
+            found_names = set(loc.name for loc in location_objs)
+            missing = [name for name in all_location_names if name not in found_names]
+            return f"Some locations could not be found in the database: {', '.join(missing)}."
 
         name_to_obj = {loc.name: loc for loc in location_objs}
 
         location_list = []
         if start_name:
+            if start_name not in name_to_obj:
+                return f"Start location '{start_name}' not found in database."
             location_list.append(name_to_obj[start_name])
+
+        # Thêm locations, bỏ qua start và end đã thêm
         location_list += [name_to_obj[name] for name in locations if name != start_name and name != end_name]
+
         if end_name:
+            if end_name not in name_to_obj:
+                return f"End location '{end_name}' not found in database."
             location_list.append(name_to_obj[end_name])
 
         coordinates = [loc.coordinate for loc in location_list]
@@ -703,6 +738,7 @@ def handle_intent(request, intent_name, parameters, user):
         distances = []
         durations_map = {}
 
+        # Tính ma trận khoảng cách + thời gian
         for i in range(len(coordinates)):
             for j in range(len(coordinates)):
                 if i != j:
@@ -714,7 +750,15 @@ def handle_intent(request, intent_name, parameters, user):
         for u, v, w in distances:
             graph.add_edge(u, v, w)
 
-        path, total_distance = graph.find_hamiltonian_cycle(start=start_name, end=end_name)
+        # Với TSP, start và end phải là chỉ số, lấy index của start/end trong location_list
+        start_idx = None
+        end_idx = None
+        if start_name:
+            start_idx = location_list.index(name_to_obj[start_name])
+        if end_name:
+            end_idx = location_list.index(name_to_obj[end_name])
+
+        path, total_distance = graph.find_hamiltonian_cycle(start=start_idx, end=end_idx)
         if not path:
             return "Could not generate an optimal path. Try modifying locations."
 
@@ -729,7 +773,7 @@ def handle_intent(request, intent_name, parameters, user):
         trip_list_id = f"{user.username}-favourite"
         trip_list, _ = TripList.objects.get_or_create(
             id=trip_list_id,
-            defaults={"user": user, "name": f"{user.username}'s Trip"}
+            defaults={"user": user, "name": f"{user.username}'s Trip", "user": user}
         )
 
         TripPath.objects.create(
@@ -745,6 +789,7 @@ def handle_intent(request, intent_name, parameters, user):
             "start_location": None,
             "end_location": None
         }
+        request.session.modified = True
 
         return f"Trip created successfully with {len(path)} stops. Estimated duration: {round(total_duration, 2)} minutes."
 

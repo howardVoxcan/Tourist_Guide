@@ -89,6 +89,16 @@
             {% endblock %}
         </main>
 
+        {% if user.is_authenticated %}
+            <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+            <df-messenger
+            intent="WELCOME"
+            chat-title="Tourist-Guide-Assistant"
+            agent-id="00f36564-09cc-4623-b8a3-4ea29b3960f8"
+            language-code="en"
+            ></df-messenger>
+        {% endif %}
+
         <footer>
             <p>&copy; 2025 Tourist Guide. Mọi quyền được bảo lưu.</p>
         </footer>

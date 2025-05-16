@@ -174,7 +174,7 @@
                     {% for reply in comment.replies.all %}
                         <div class="reply">
                             <p><strong>{{ reply.user.username }}</strong>: {{ reply.content }}</p>
-                            <p><em>Bot reply:</em> {{ reply.bot_reply }}</p>
+                            <p><em>{{location_name}}'s manager reply:</em> {{ reply.bot_reply }}</p>
                         </div>
                     {% endfor %}
                 </div>
