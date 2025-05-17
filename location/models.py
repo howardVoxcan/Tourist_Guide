@@ -78,6 +78,7 @@ class TripPath(models.Model):
     total_distance = models.FloatField(null=True, blank=True)
     total_duration = models.FloatField(null=True, blank = True)
     created_at = models.DateTimeField(auto_now_add=True)
+    locations = models.ManyToManyField(Location, related_name="trip_paths")
 
     def __str__(self):
         return self.path_name

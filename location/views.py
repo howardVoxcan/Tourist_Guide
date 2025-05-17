@@ -612,7 +612,6 @@ def dialogflow_webhook(request):
         })
 
 def handle_intent(request, intent_name, parameters, user=None, session_id=None):
-    # Nếu chưa có session_id thì thử lấy từ request hoặc parameters
     if not session_id:
         try:
             data = json.loads(request.body.decode("utf-8"))
@@ -626,7 +625,6 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
     if user is None and session_id:
         user = get_or_create_temp_user(session_id)
 
-    # Lấy hoặc tạo TemporaryTripCart cho session + user
     try:
         trip_cart_obj = get_or_create_temp_cart(session_id, user)
     except:
@@ -634,7 +632,6 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
 
     locations_list = normalize_locations(parameters.get("locations"))
 
-    # Xử lý các intent
     if intent_name in ["Default Welcome Intent", "Default Fallback Intent", "discovering.ability"]:
         return True
 
@@ -696,14 +693,14 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
         if locations_list:
             trip_cart_obj.start_location = locations_list[0]
             trip_cart_obj.save()
-            return f"Start location set to {locations_list[0]}."
+            return True
         return "Please tell me which location to set as the starting point."
 
     elif intent_name == "set.end.location":
         if locations_list:
             trip_cart_obj.end_location = locations_list[0]
             trip_cart_obj.save()
-            return f"End location set to {locations_list[0]}."
+            return True 
         return "Please tell me which location to set as the ending point."
 
     elif intent_name == "trip.create.add.location":
@@ -714,7 +711,7 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
                 updated = True
         if updated:
             trip_cart_obj.save()
-            return f"Added {', '.join(locations_list)} to your trip."
+            return True
         return "Those locations are already in your trip."
 
     elif intent_name == "trip.create.remove.location":
@@ -742,35 +739,33 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
         if not locations and not (start_name and end_name):
             return "Your trip has no locations. Please add some before finishing."
 
-        # Tổng hợp danh sách địa điểm bao gồm start và end
-        all_location_names = set(locations)
-        if start_name:
-            all_location_names.add(start_name)
-        if end_name:
-            all_location_names.add(end_name)
+        # Tổng hợp danh sách địa điểm, ưu tiên start và end riêng biệt, giữ thứ tự cho middle
+        # Loại bỏ start và end khỏi locations nếu có để tránh trùng lặp
+        middle_names = [loc for loc in locations if loc != start_name and loc != end_name]
 
-        location_objs = list(Location.objects.filter(location__in=all_location_names))
-        if len(location_objs) < len(all_location_names):
+        # Tạo danh sách tên theo thứ tự: start -> middle -> end
+        location_names_ordered = []
+        if start_name:
+            location_names_ordered.append(start_name)
+        location_names_ordered.extend(middle_names)
+        if end_name:
+            location_names_ordered.append(end_name)
+
+        location_objs = list(Location.objects.filter(location__in=location_names_ordered))
+        if len(location_objs) < len(set(location_names_ordered)):
             found_names = set(loc.location for loc in location_objs)
-            missing = [name for name in all_location_names if name not in found_names]
+            missing = [name for name in set(location_names_ordered) if name not in found_names]
             return f"Some locations could not be found: {', '.join(missing)}."
 
-        # Mapping name -> object
         name_to_obj = {loc.location: loc for loc in location_objs}
 
-        # Xây danh sách Location theo thứ tự: start -> middle -> end
-        location_list = []
-        if start_name and start_name in name_to_obj:
-            location_list.append(name_to_obj[start_name])
-        middle_names = [name for name in locations if name != start_name and name != end_name]
-        location_list += [name_to_obj[name] for name in middle_names if name in name_to_obj]
-        if end_name and end_name in name_to_obj:
-            location_list.append(name_to_obj[end_name])
+        # Chuyển tên thành object theo thứ tự location_names_ordered, bỏ những tên không tìm thấy
+        location_list = [name_to_obj[name] for name in location_names_ordered if name in name_to_obj]
 
         coordinates = [loc.coordinate for loc in location_list]
         index_to_id = {i: location_list[i].id for i in range(len(location_list))}
 
-        # Tính distance và duration
+        # Xây dựng graph như cũ
         distances = []
         durations_map = {}
         for i in range(len(coordinates)):
@@ -784,9 +779,8 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
         for u, v, w in distances:
             graph.add_edge(u, v, w)
 
-        # Xác định index của start và end
-        start_idx = location_list.index(name_to_obj[start_name]) if start_name in name_to_obj else None
-        end_idx = location_list.index(name_to_obj[end_name]) if end_name in name_to_obj else None
+        start_idx = location_names_ordered.index(start_name) if start_name in location_names_ordered else None
+        end_idx = location_names_ordered.index(end_name) if end_name in location_names_ordered else None
 
         best_path, cost = graph.find_hamiltonian_cycle(
             fixed_position=None,
@@ -803,10 +797,7 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
             for i in range(len(best_path) - 1)
         )
 
-        # Tự động tạo TripList nếu chưa có
         trip_list, created = TripList.objects.get_or_create(user=user)
-
-        # Tạo tên trip path
         trip_name = f"{user.username} chatbot TripPath"
 
         trip_path = TripPath.objects.create(
@@ -822,5 +813,6 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
         base_url = reverse('my_trip')
         query = urlencode({'id': trip_list.id})
         return f"Your trip has been saved. View it here: {base_url}?{query}"
+
 
     return "This intent is not handled yet."
