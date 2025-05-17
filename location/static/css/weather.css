@@ -40,7 +40,6 @@ body {
     border: none;
     cursor: pointer;
     user-select: none;
-    line-height: 1.2;
     flex-grow: 1; /* Make each button stretch evenly */
     width: 100%; /* Buttons span the full width of the panel */
 }

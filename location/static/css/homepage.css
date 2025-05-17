@@ -64,6 +64,7 @@
 }
 
 .card {
+    height: 100%;
     background-color: white;
     border-radius: 8px;
     overflow: hidden;
@@ -83,11 +84,11 @@
 }
 
 .card-content {
+    flex: 1;
     padding: 15px;
+    display: flex;
     flex-direction: column;
     justify-content: space-between;
-    display: flex;
-    flex-grow: 1;
     height: 100%;
     padding: 16px;
 }
@@ -103,7 +104,8 @@
     font-size: 14px;
 }
 
-.card .rating {
+.rating {
+    height: 24px;
     display: flex;
     align-items: flex-end;
     margin-bottom: auto;

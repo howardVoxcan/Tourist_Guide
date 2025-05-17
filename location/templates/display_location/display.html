@@ -10,7 +10,8 @@
         width: 100%;
     }
 
-    .comment-box, .reply-box {
+    .comment-box,
+    .reply-box {
         background-color: #f9f9f9;
         border: 1px solid #ddd;
         padding: 12px;
@@ -40,6 +41,7 @@
         background-color: #45a049;
     }
 </style>
+
 <link rel="stylesheet" href="{% static 'css/display_location.css' %}?v={{ timestamp }}">
 {% endblock %}
 
@@ -59,10 +61,8 @@
         <strong>Address:</strong>{{ address }}
     </div>
 
-    <div class="image-block">
-        <div class="location-img">
-            <img src="{% static image_path %}" alt="{{ location.name }}">
-        </div>
+    <div class="location-img">
+        <img src="{% static image_path %}" alt="{{ location.name }}">
     </div>
 
     <div class="time-block">
@@ -164,26 +164,26 @@
     <div id="new-comment-result"></div>
 
     {% for comment in comments %}
-        <div class="comment">
-            <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
-            <p><em>Bot reply:</em> {{ comment.bot_reply }}</p>
+    <div class="comment">
+        <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+        <p><em>Bot reply:</em> {{ comment.bot_reply }}</p>
 
-            <!-- Displaying replies if they exist -->
-            {% if comment.replies.all %}
-                <div class="replies">
-                    {% for reply in comment.replies.all %}
-                        <div class="reply">
-                            <p><strong>{{ reply.user.username }}</strong>: {{ reply.content }}</p>
-                            <p><em>{{location_name}}'s manager reply:</em> {{ reply.bot_reply }}</p>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+        <!-- Displaying replies if they exist -->
+        {% if comment.replies.all %}
+        <div class="replies">
+            {% for reply in comment.replies.all %}
+            <div class="reply">
+                <p><strong>{{ reply.user.username }}</strong>: {{ reply.content }}</p>
+                <p><em>{{location_name}}'s manager reply:</em> {{ reply.bot_reply }}</p>
+            </div>
+            {% endfor %}
         </div>
+        {% endif %}
+    </div>
     {% endfor %}
 
     <script>
-        document.getElementById("comment-form").addEventListener("submit", function(e) {
+        document.getElementById("comment-form").addEventListener("submit", function (e) {
             e.preventDefault();
             const form = e.target;
             const formData = new FormData(form);
@@ -194,23 +194,23 @@
                 },
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    const commentHTML = `
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        const commentHTML = `
                         <div class="comment">
                             <p><strong>${data.username}</strong>: ${data.content}</p>
                             <p><em>Bot reply:</em> ${data.bot_reply}</p>
                         </div>
                     `;
-                    // Append the new comment at the bottom of the comment section
-                    document.getElementById("new-comment-result").insertAdjacentHTML('beforeend', commentHTML);
-                    form.reset();
-                }
-            })
-            .catch(error => console.error("Error:", error));
+                        // Append the new comment at the bottom of the comment section
+                        document.getElementById("new-comment-result").insertAdjacentHTML('beforeend', commentHTML);
+                        form.reset();
+                    }
+                })
+                .catch(error => console.error("Error:", error));
         });
     </script>
 </div>
