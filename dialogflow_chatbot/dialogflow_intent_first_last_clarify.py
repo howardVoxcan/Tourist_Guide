@@ -1,6 +1,5 @@
 import csv
 import json
-import random
 
 # Load locations from CSV
 filename = "location_db_with_tags.csv"
@@ -23,15 +22,13 @@ end_templates = [
     "The trip ends at {}", "I want to end at {}"
 ]
 
-# Function to generate userSays
+# Function to generate userSays for ALL locations (no random sampling)
 def generate_user_says(locations, templates):
     user_says = []
-    sample_size = max(1, int(len(locations) * 0.1))
-    sampled = random.sample(locations, sample_size)
 
     for template in templates:
         prefix, suffix = template.split('{}')
-        for loc in sampled:
+        for loc in locations:
             user_says.append({
                 "isTemplate": False,
                 "count": 0,
@@ -40,7 +37,7 @@ def generate_user_says(locations, templates):
                     {"text": prefix, "userDefined": False},
                     {
                         "text": loc,
-                        "alias": "location",
+                        "alias": "locations",
                         "meta": "@locations",
                         "userDefined": True
                     },

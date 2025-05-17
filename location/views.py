@@ -528,101 +528,113 @@ def submit_comment_ajax(request, location_code):
         'bot_reply': comment.bot_reply
     })
 
+def get_or_create_temp_user(session_id: str) -> TemporaryUser:
+    temp_user, created = TemporaryUser.objects.get_or_create(session_id=session_id)
+    return temp_user
+
+def normalize_locations(loc):
+    if loc is None:
+        return []
+    if isinstance(loc, str):
+        return [loc]
+    if isinstance(loc, list):
+        return loc
+    return [str(loc)]
+
+def extract_session_id(data, parameters):
+    session_full = data.get('session', '')
+    session_id = session_full.split('/')[-1] if session_full else None
+
+    if not session_id and 'originalDetectIntentRequest' in data:
+        session_id = data['originalDetectIntentRequest'].get('payload', {}).get('sessionId')
+
+    if not session_id:
+        session_id = parameters.get('session_id')
+
+    return session_id
+
+def get_or_create_temp_user(session_id):
+    user, _ = TemporaryUser.objects.get_or_create(session_id=session_id)
+    return user
+
+def get_or_create_temp_cart(session_id, user=None):
+    cart, created = TemporaryTripCart.objects.get_or_create(session_id=session_id, defaults={"user": user})
+    if not created and cart.user is None and user is not None:
+        cart.user = user
+        cart.save()
+    return cart
+
 @csrf_exempt
 def dialogflow_webhook(request):
-    print("==> Dialogflow webhook called")
-    print("Headers:", dict(request.headers))
-    print("Body:", request.body.decode('utf-8'))
+    if request.method != "POST":
+        return JsonResponse({"error": "Only POST requests are allowed."}, status=405)
 
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body.decode("utf-8"))
-            intent_name = data['queryResult']['intent']['displayName']
-            parameters = data['queryResult'].get('parameters', {})
+    try:
+        print (request.body)
+        data = json.loads(request.body.decode("utf-8"))
+        intent_name = data['queryResult']['intent']['displayName']
+        parameters = data['queryResult'].get('parameters', {})
 
-            user_id = None
-            session_id = None
+        # Lấy session_id
+        session_id = extract_session_id(data, parameters)
 
-            if 'originalDetectIntentRequest' in data:
-                payload = data['originalDetectIntentRequest'].get('payload', {})
-                user_id = payload.get('userId')
-                session_id = payload.get('sessionId')
-            if not user_id:
-                user_id = parameters.get('user_id')
-            if not session_id:
-                session_id = parameters.get('session_id')
+        # Lấy user_id
+        user_id = None
+        if 'originalDetectIntentRequest' in data:
+            user_id = data['originalDetectIntentRequest'].get('payload', {}).get('userId')
+        if not user_id:
+            user_id = parameters.get('user_id')
 
-            user = None
-            if user_id:
-                User = get_user_model()
-                try:
-                    user = User.objects.get(id=user_id)
-                except User.DoesNotExist:
-                    user = None
+        # Lấy user model nếu có user_id
+        user = None
+        if user_id:
+            User = get_user_model()
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                user = None
 
-            result = handle_intent(request, intent_name, parameters, user, session_id)
+        result = handle_intent(request, intent_name, parameters, user, session_id)
 
-            if result is True:
-                fulfillment_text = data['queryResult'].get('fulfillmentText', "")
-                return JsonResponse({"fulfillmentText": fulfillment_text})
-            elif isinstance(result, str):
-                return JsonResponse({"fulfillmentText": result})
-            else:
-                return JsonResponse({"fulfillmentText": "Unhandled case."})
+        if result is True:
+            fulfillment_text = data['queryResult'].get('fulfillmentText', "Done.")
+            return JsonResponse({"fulfillmentText": fulfillment_text})
+        elif isinstance(result, str):
+            return JsonResponse({"fulfillmentText": result})
+        else:
+            return JsonResponse({"fulfillmentText": "Unhandled case."})
 
-        except Exception as e:
-            traceback.print_exc()
-            return JsonResponse({
-                "fulfillmentText": "An error occurred while processing your request.",
-                "debug": str(e)
-            })
-
-    return JsonResponse({"error": "Only POST requests are allowed."}, status=405)
-
+    except Exception as e:
+        traceback.print_exc()
+        return JsonResponse({
+            "fulfillmentText": "An error occurred while processing your request.",
+            "debug": str(e)
+        })
 
 def handle_intent(request, intent_name, parameters, user=None, session_id=None):
-    # Ưu tiên lấy session_id từ payload hoặc parameters nếu chưa có
+    # Nếu chưa có session_id thì thử lấy từ request hoặc parameters
     if not session_id:
-        if request.method == "POST":
-            try:
-                data = json.loads(request.body.decode("utf-8"))
-                if 'originalDetectIntentRequest' in data:
-                    payload = data['originalDetectIntentRequest'].get('payload', {})
-                    session_id = payload.get('sessionId')
-                if not session_id:
-                    session_id = data.get('session', '').split('/')[-1]  # fallback
-            except:
-                pass
-    if not session_id:
-        session_id = parameters.get("session_id")
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            session_id = extract_session_id(data, parameters)
+        except:
+            pass
     if not session_id:
         return "Missing session ID."
 
-    # Nếu không có user nhưng có session_id, tạo hoặc lấy TemporaryUser
+    # Tạo hoặc lấy TemporaryUser nếu user None
     if user is None and session_id:
-        user, _ = TemporaryUser.objects.get_or_create(session_id=session_id)
+        user = get_or_create_temp_user(session_id)
 
-    # Lấy hoặc tạo TemporaryTripCart liên quan đến session_id và user
+    # Lấy hoặc tạo TemporaryTripCart cho session + user
     try:
-        trip_cart_obj, _ = TemporaryTripCart.objects.get_or_create(session_id=session_id, defaults={"user": user})
-        # Nếu trip_cart_obj đã tồn tại nhưng user chưa được set, set user
-        if trip_cart_obj.user is None and user is not None:
-            trip_cart_obj.user = user
-            trip_cart_obj.save()
+        trip_cart_obj = get_or_create_temp_cart(session_id, user)
     except:
         return "Could not create or access your trip session."
 
-    def normalize_locations(loc):
-        if loc is None:
-            return []
-        if isinstance(loc, str):
-            return [loc]
-        if isinstance(loc, list):
-            return loc
-        return [str(loc)]
-
     locations_list = normalize_locations(parameters.get("locations"))
 
+    # Xử lý các intent
     if intent_name in ["Default Welcome Intent", "Default Fallback Intent", "discovering.ability"]:
         return True
 
@@ -727,29 +739,38 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
         start_name = trip_cart_obj.start_location
         end_name = trip_cart_obj.end_location
 
-        if not locations:
+        if not locations and not (start_name and end_name):
             return "Your trip has no locations. Please add some before finishing."
 
-        all_location_names = list(set(locations + ([start_name] if start_name else []) + ([end_name] if end_name else [])))
+        # Tổng hợp danh sách địa điểm bao gồm start và end
+        all_location_names = set(locations)
+        if start_name:
+            all_location_names.add(start_name)
+        if end_name:
+            all_location_names.add(end_name)
 
-        location_objs = list(Location.objects.filter(name__in=all_location_names))
+        location_objs = list(Location.objects.filter(location__in=all_location_names))
         if len(location_objs) < len(all_location_names):
-            found_names = set(loc.name for loc in location_objs)
+            found_names = set(loc.location for loc in location_objs)
             missing = [name for name in all_location_names if name not in found_names]
             return f"Some locations could not be found: {', '.join(missing)}."
 
-        name_to_obj = {loc.name: loc for loc in location_objs}
+        # Mapping name -> object
+        name_to_obj = {loc.location: loc for loc in location_objs}
 
+        # Xây danh sách Location theo thứ tự: start -> middle -> end
         location_list = []
-        if start_name:
+        if start_name and start_name in name_to_obj:
             location_list.append(name_to_obj[start_name])
-        location_list += [name_to_obj[name] for name in locations if name != start_name and name != end_name]
-        if end_name:
+        middle_names = [name for name in locations if name != start_name and name != end_name]
+        location_list += [name_to_obj[name] for name in middle_names if name in name_to_obj]
+        if end_name and end_name in name_to_obj:
             location_list.append(name_to_obj[end_name])
 
         coordinates = [loc.coordinate for loc in location_list]
-        id_map = {i: location_list[i].id for i in range(len(location_list))}
+        index_to_id = {i: location_list[i].id for i in range(len(location_list))}
 
+        # Tính distance và duration
         distances = []
         durations_map = {}
         for i in range(len(coordinates)):
@@ -763,44 +784,43 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
         for u, v, w in distances:
             graph.add_edge(u, v, w)
 
-        start_idx = location_list.index(name_to_obj[start_name]) if start_name else None
-        end_idx = location_list.index(name_to_obj[end_name]) if end_name else None
+        # Xác định index của start và end
+        start_idx = location_list.index(name_to_obj[start_name]) if start_name in name_to_obj else None
+        end_idx = location_list.index(name_to_obj[end_name]) if end_name in name_to_obj else None
 
-        path, total_distance = graph.find_hamiltonian_cycle(start=start_idx, end=end_idx)
-        if not path:
-            return "Could not generate an optimal path. Try modifying locations."
-
-        ordered_location_ids = [id_map[i] for i in path]
-        total_duration = sum(durations_map.get((path[i], path[i+1]), 0) for i in range(len(path) - 1))
-
-        # Tạo TripList khác nhau nếu user tạm thời hoặc user thật
-        if isinstance(user, TemporaryUser):
-            trip_list_id = f"temp-{user.session_id}-favourite"
-            trip_list, _ = TripList.objects.get_or_create(
-                id=trip_list_id,
-                defaults={"name": f"Temporary Trip {user.session_id}"}
-            )
-        else:
-            trip_list_id = f"{user.username}-favourite"
-            trip_list, _ = TripList.objects.get_or_create(
-                id=trip_list_id,
-                defaults={"user": user, "name": f"{user.username}'s Trip"}
-            )
-
-        TripPath.objects.create(
-            trip_list=trip_list,
-            path_name="Chatbot Trip",
-            locations_ordered=json.dumps(ordered_location_ids),
-            total_distance=total_distance,
-            total_duration=total_duration
+        best_path, cost = graph.find_hamiltonian_cycle(
+            fixed_position=None,
+            precedence_constraints=None,
+            start=start_idx,
+            end=end_idx
         )
 
-        # Reset cart
-        trip_cart_obj.locations = []
-        trip_cart_obj.start_location = None
-        trip_cart_obj.end_location = None
-        trip_cart_obj.save()
+        if best_path is None:
+            return "Unable to generate a valid trip with the selected start/end points."
 
-        return f"Trip created successfully with {len(path)} stops. Estimated duration: {round(total_duration, 2)} minutes."
+        trip_duration = sum(
+            durations_map.get((best_path[i], best_path[i + 1]), 0)
+            for i in range(len(best_path) - 1)
+        )
 
-    return "This intent is not currently handled."
+        # Tự động tạo TripList nếu chưa có
+        trip_list, created = TripList.objects.get_or_create(user=user)
+
+        # Tạo tên trip path
+        trip_name = f"{user.username} chatbot TripPath"
+
+        trip_path = TripPath.objects.create(
+            trip_list=trip_list,
+            total_duration=trip_duration,
+            total_distance=cost,
+            locations_ordered=json.dumps([index_to_id[i] for i in best_path]),
+            path_name=trip_name
+        )
+        trip_path.location.add(*[location_list[i] for i in best_path])
+        trip_path.save()
+
+        base_url = reverse('my_trip')
+        query = urlencode({'id': trip_list.id})
+        return f"Your trip has been saved. View it here: {base_url}?{query}"
+
+    return "This intent is not handled yet."
