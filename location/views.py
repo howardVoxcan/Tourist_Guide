@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from location.coordinate import coordinate_dict
@@ -15,7 +15,7 @@ from datetime import datetime
 from annotated_types import Len
 from shapely import length
 from .TSP import Graph, distance
-import requests, joblib, os, spacy, json
+import requests, joblib, os, spacy, json, traceback
 from django.conf import settings
 from urllib.parse import urlencode
 
@@ -119,16 +119,18 @@ def locations(request):
         if not code:
             return redirect('favourite')
 
-        selected = Location.objects.get(code=code)
-        user = request.user
-        location_list = user.location_list.first()
-        if not location_list:
-            location_list = Location_List.objects.create(user=user, name="Favourite Locations")
+        try:
+            selected = Location.objects.get(code=code)
+        except Location.DoesNotExist:
+            return JsonResponse({'error': 'Location not found'}, status=404)
 
-        if selected in location_list.location_set.all():
-            location_list.location_set.remove(selected)
+        user = request.user
+
+        # Thêm/xóa user vào favourited_by của Location
+        if user in selected.favourited_by.all():
+            selected.favourited_by.remove(user)
         else:
-            location_list.location_set.add(selected)
+            selected.favourited_by.add(user)
 
         return redirect('locations')
 
@@ -169,10 +171,7 @@ def locations(request):
 
         all_of_locations = all_of_locations.order_by('open_time')
 
-        if request.user.is_authenticated:
-            location_list = Location_List.objects.filter(user=request.user).first()
-        else:
-            location_list = None
+        user = request.user if request.user.is_authenticated else None
 
         processed_locations = []
         for loc in all_of_locations:
@@ -191,7 +190,7 @@ def locations(request):
 
             favourite_symbol = (
                 '<i class="fa-solid fa-heart"></i>'
-                if location_list and loc in location_list.location_set.all()
+                if user and loc.favourited_by.filter(id=user.id).exists()
                 else '<i class="fa-regular fa-heart"></i>'
             )
 
@@ -217,11 +216,13 @@ def locations(request):
             }
         })
 
+@login_required
 def display_location(request, location_code): 
+    location = get_object_or_404(Location, code=location_code)
+
     if request.method == 'POST':
         content = request.POST.get('content', '').strip()
         rating = request.POST.get('rating')
-        location = get_object_or_404(Location, code=location_code)
 
         if not content:
             return redirect('display_location', location_code=location_code)
@@ -240,7 +241,11 @@ def display_location(request, location_code):
                 bot_reply = "Thank you for sharing your thoughts. We appreciate your input!"
                 rating = 3
         else:
-            rating = int(rating)
+            try:
+                rating = int(rating)
+            except ValueError:
+                rating = 3  # default rating if invalid
+
             if rating == 5:
                 bot_reply = "Awesome! We're thrilled you loved it!"
             elif rating == 4:
@@ -262,14 +267,13 @@ def display_location(request, location_code):
             bot_reply=bot_reply
         )
         return redirect('display_location', location_code=location_code)
-    
+
     else:
-        look_up = get_object_or_404(Location, code=location_code)
+        # Lấy comment gốc (parent=None) và replies prefetch
+        comments = Comment.objects.filter(location=location, parent=None).prefetch_related('replies').order_by('-created_at')
 
-        comments = Comment.objects.filter(location=look_up).prefetch_related('replies')
-
-        # Stars
-        rating = round(look_up.rating * 2) / 2
+        # Tính sao hiển thị
+        rating = round(location.rating * 2) / 2 if location.rating else 0
         full_stars = int(rating)
         has_half = (rating - full_stars) >= 0.5
         star_html = '<i class="fas fa-star"></i>' * full_stars
@@ -280,39 +284,39 @@ def display_location(request, location_code):
             empty_stars = 5 - full_stars
         star_html += '<i class="far fa-star"></i>' * empty_stars
 
-        # Heart icon
-        if request.user.is_authenticated and look_up.loc and look_up.loc.user == request.user:
+        # Biểu tượng yêu thích (dựa trên nhiều trường hợp, ví dụ bạn lưu favourite ở Location.favourited_by M2M)
+        if request.user.is_authenticated and location.favourited_by.filter(id=request.user.id).exists():
             favourite_symbol = '<i class="fa-solid fa-heart"></i>'
         else:
             favourite_symbol = '<i class="fa-regular fa-heart"></i>'
 
-        lat, long = look_up.coordinate.split(", ")
-        open_time = look_up.open_time.strftime("%H:%M")
-        close_time = look_up.close_time.strftime("%H:%M")
-        if open_time == "00:00" and close_time == "23:59":
-            open_time = "All day"
-        elif look_up.close_time < look_up.open_time:
-            open_time = f"{open_time} - {close_time} (The next day)"
-        else:
-            open_time = f"{open_time} - {close_time}"
+        # Xử lý thời gian mở cửa
+        lat, long = location.coordinate.split(", ")
+        open_time = location.open_time.strftime("%H:%M") if location.open_time else "N/A"
+        close_time = location.close_time.strftime("%H:%M") if location.close_time else "N/A"
 
-        comments = Comment.objects.filter(location=look_up, parent=None).prefetch_related('replies').order_by('-created_at')
+        if open_time == "00:00" and close_time == "23:59":
+            open_time_str = "All day"
+        elif location.close_time and location.open_time and location.close_time < location.open_time:
+            open_time_str = f"{open_time} - {close_time} (The next day)"
+        else:
+            open_time_str = f"{open_time} - {close_time}"
 
         return render(request, "display_location/display.html", {
-            "code": look_up.code,
-            "location_name": look_up.location,
-            "type": look_up.type,
-            "open_time": open_time,
-            "ticket_info": look_up.ticket_info,
-            "address": look_up.address,
-            "image_path": look_up.image_path,
-            "long_description": look_up.long_description,
+            "code": location.code,
+            "location_name": location.location,
+            "type": location.type,
+            "open_time": open_time_str,
+            "ticket_info": location.ticket_info,
+            "address": location.address,
+            "image_path": location.image_path,
+            "long_description": location.long_description,
             "favourite_symbol": favourite_symbol,
             "lat": lat,
             "long": long,
             "star_html": star_html,
-            "comments": comments, 
-            "location_obj": look_up  # needed for POST form
+            "comments": comments,
+            "location_obj": location  # dùng cho form POST
         })
 
 @login_required
@@ -320,19 +324,17 @@ def favourite(request):
     # Xử lý POST request để xóa địa điểm yêu thích
     if request.method == 'POST' and 'location_code' in request.POST:
         location_code = request.POST.get('location_code')
-        location_list = Location_List.objects.filter(user=request.user).first()
-        
-        if location_code and location_list:
-            location = location_list.location_set.filter(code=location_code).first()
-            if location:
-                location_list.location_set.remove(location)
+
+        if location_code:
+            location = Location.objects.filter(code=location_code).first()
+            if location and request.user in location.favourited_by.all():
+                location.favourited_by.remove(request.user)
                 messages.success(request, "Đã xoá địa điểm khỏi danh sách yêu thích.")
                 
         return redirect('favourite')
 
     # Lấy danh sách địa điểm yêu thích của người dùng
-    location_list = Location_List.objects.filter(user=request.user).first()        
-    locations = location_list.location_set.all() if location_list else []
+    locations = Location.objects.filter(favourited_by=request.user)
 
     return render(request, "favourite/favourite.html", {
         'locations': locations
@@ -353,16 +355,13 @@ def my_trip(request):
         if not path_name:
             return redirect('my_trip')
 
-        location_list = Location_List.objects.filter(user=user).first()
-        if not location_list:
-            return redirect('favourite')
-
         selected_ids = request.POST.getlist('locations')
         if not selected_ids:
             messages.error(request, "Vui lòng chọn ít nhất một địa điểm.")
             return redirect('favourite')
 
-        locations = list(location_list.location_set.filter(id__in=selected_ids))
+        # Lấy các địa điểm được user favourite và nằm trong selected_ids
+        locations = list(Location.objects.filter(id__in=selected_ids, favourited_by=user))
         if not locations:
             messages.error(request, "Không tìm thấy các địa điểm đã chọn.")
             return redirect('favourite')
@@ -442,7 +441,10 @@ def my_trip(request):
             total_duration=total_duration
         )
 
-        location_list.location_set.remove(*locations)
+        # Xóa các địa điểm đã tạo trip khỏi danh sách yêu thích của user
+        Location.objects.filter(id__in=[loc.id for loc in locations]).update()
+        for loc in locations:
+            loc.favourited_by.remove(user)
 
         return redirect('my_trip')
 
@@ -462,7 +464,7 @@ def my_trip(request):
             'path_name': path.path_name,
             'locations': loc_ids,
             'distance': round(path.total_distance / 1000, 1),
-            'duration': round(path.total_duration/ 60, 1) if path.total_duration else None,
+            'duration': round(path.total_duration / 60, 1) if path.total_duration else None,
             'created_at': path.created_at
         })
 
@@ -538,22 +540,34 @@ def dialogflow_webhook(request):
             intent_name = data['queryResult']['intent']['displayName']
             parameters = data['queryResult'].get('parameters', {})
 
-            # Bỏ qua check user.is_authenticated để test
-            user = None  # Hoặc có thể lấy user nếu muốn
+            # Giả sử bạn đã gửi user_id trong payload theo cách nào đó:
+            user_id = None
+            # Cách lấy user_id phổ biến: nằm trong originalDetectIntentRequest.payload hoặc trong parameters
+            if 'originalDetectIntentRequest' in data:
+                user_id = data['originalDetectIntentRequest']['payload'].get('userId')
+            if not user_id:
+                user_id = parameters.get('user_id')
+
+            user = None
+            if user_id:
+                User = get_user_model()
+                try:
+                    user = User.objects.get(id=user_id)
+                except User.DoesNotExist:
+                    user = None
 
             result = handle_intent(request, intent_name, parameters, user)
 
             if result is True:
-                # Trả lại fulfillmentText gốc từ Dialogflow
                 fulfillment_text = data['queryResult'].get('fulfillmentText', "")
                 return JsonResponse({"fulfillmentText": fulfillment_text})
             elif isinstance(result, str):
-                # Trả lại message tùy chỉnh
                 return JsonResponse({"fulfillmentText": result})
             else:
                 return JsonResponse({"fulfillmentText": "Unhandled case."})
 
         except Exception as e:
+            traceback.print_exc()
             return JsonResponse({
                 "fulfillmentText": "An error occurred while processing your request.",
                 "debug": str(e)
@@ -570,23 +584,15 @@ def handle_intent(request, intent_name, parameters, user):
     })
 
     def normalize_locations(loc):
-        # Chuyển param locations thành list, nếu là string thì đóng vào list
         if loc is None:
             return []
         if isinstance(loc, str):
             return [loc]
         if isinstance(loc, list):
             return loc
-        # Nếu kiểu khác, ép kiểu str rồi thành list
         return [str(loc)]
 
-    if intent_name == "Default Welcome Intent":
-        return True
-
-    elif intent_name == "Default Fallback Intent":
-        return True
-
-    elif intent_name == "discovering.ability":
+    if intent_name in ["Default Welcome Intent", "Default Fallback Intent", "discovering.ability"]:
         return True
 
     elif intent_name == "favourite.add.location":
@@ -595,10 +601,12 @@ def handle_intent(request, intent_name, parameters, user):
             return "Please specify a location to add."
 
         for loc in locations:
-            exists = Location_List.objects.filter(user=user, name__iexact=loc).exists()
-            if exists:
-                return f"The location '{loc}' is already in your favourite list."
-            Location_List.objects.create(user=user, name=loc)
+            try:
+                location_obj = Location.objects.get(location__iexact=loc)
+                location_obj.favourited_by.add(user)
+            except Location.DoesNotExist:
+                return f"Location '{loc}' does not exist."
+
         return True
 
     elif intent_name == "favourite.remove.location":
@@ -607,10 +615,12 @@ def handle_intent(request, intent_name, parameters, user):
             return "Please specify a location to remove."
 
         for loc in locations:
-            exists = Location_List.objects.filter(user=user, name__iexact=loc).exists()
-            if not exists:
-                return f"The location '{loc}' is not in your favourite list."
-            Location_List.objects.filter(user=user, name__iexact=loc).delete()
+            try:
+                location_obj = Location.objects.get(location__iexact=loc)
+                location_obj.favourited_by.remove(user)
+            except Location.DoesNotExist:
+                return f"Location '{loc}' does not exist."
+
         return True
 
     elif intent_name == "find.location.particular":
@@ -620,7 +630,7 @@ def handle_intent(request, intent_name, parameters, user):
 
         for loc in locations:
             try:
-                location_obj = Location.objects.get(name__iexact=loc)
+                location_obj = Location.objects.get(location__iexact=loc)
                 location_url = reverse('display_location', args=[location_obj.code])
                 return f"Here is the path: {location_url}"
             except Location.DoesNotExist:
@@ -630,15 +640,11 @@ def handle_intent(request, intent_name, parameters, user):
         tag = parameters.get("tags")
         if not tag:
             return "Please provide a tag to search for."
-
         if isinstance(tag, list):
             tag = tag[0]
-
         base_url = reverse('locations')
         query_string = urlencode({'search': tag})
-        full_url = f"{base_url}?{query_string}"
-
-        return f"Here's a location search result for tag '{tag}': {full_url}"
+        return f"Here's a location search result for tag '{tag}': {base_url}?{query_string}"
 
     elif intent_name == "start.trip":
         trip_cart = {"locations": [], "start_location": None, "end_location": None}
@@ -649,7 +655,6 @@ def handle_intent(request, intent_name, parameters, user):
     elif intent_name == "set.start.location":
         locations = normalize_locations(parameters.get("locations"))
         if locations:
-            # Chỉ lấy location đầu tiên làm start
             trip_cart["start_location"] = locations[0]
             session["trip_cart"] = trip_cart
             request.session.modified = True
@@ -668,7 +673,6 @@ def handle_intent(request, intent_name, parameters, user):
     elif intent_name == "trip.create.add.location":
         locations = normalize_locations(parameters.get("locations"))
         if locations:
-            # Có thể thêm nhiều locations cùng lúc
             for loc in locations:
                 if loc not in trip_cart["locations"]:
                     trip_cart["locations"].append(loc)
@@ -708,28 +712,19 @@ def handle_intent(request, intent_name, parameters, user):
 
         all_location_names = list(set(locations + ([start_name] if start_name else []) + ([end_name] if end_name else [])))
 
-        # Lấy objects location, dùng iexact để tránh sai hoa thường
         location_objs = list(Location.objects.filter(name__in=all_location_names))
         if len(location_objs) < len(all_location_names):
-            # Kiểm tra chính xác location nào không tìm thấy
             found_names = set(loc.name for loc in location_objs)
             missing = [name for name in all_location_names if name not in found_names]
-            return f"Some locations could not be found in the database: {', '.join(missing)}."
+            return f"Some locations could not be found: {', '.join(missing)}."
 
         name_to_obj = {loc.name: loc for loc in location_objs}
 
         location_list = []
         if start_name:
-            if start_name not in name_to_obj:
-                return f"Start location '{start_name}' not found in database."
             location_list.append(name_to_obj[start_name])
-
-        # Thêm locations, bỏ qua start và end đã thêm
         location_list += [name_to_obj[name] for name in locations if name != start_name and name != end_name]
-
         if end_name:
-            if end_name not in name_to_obj:
-                return f"End location '{end_name}' not found in database."
             location_list.append(name_to_obj[end_name])
 
         coordinates = [loc.coordinate for loc in location_list]
@@ -737,8 +732,6 @@ def handle_intent(request, intent_name, parameters, user):
 
         distances = []
         durations_map = {}
-
-        # Tính ma trận khoảng cách + thời gian
         for i in range(len(coordinates)):
             for j in range(len(coordinates)):
                 if i != j:
@@ -750,30 +743,20 @@ def handle_intent(request, intent_name, parameters, user):
         for u, v, w in distances:
             graph.add_edge(u, v, w)
 
-        # Với TSP, start và end phải là chỉ số, lấy index của start/end trong location_list
-        start_idx = None
-        end_idx = None
-        if start_name:
-            start_idx = location_list.index(name_to_obj[start_name])
-        if end_name:
-            end_idx = location_list.index(name_to_obj[end_name])
+        start_idx = location_list.index(name_to_obj[start_name]) if start_name else None
+        end_idx = location_list.index(name_to_obj[end_name]) if end_name else None
 
         path, total_distance = graph.find_hamiltonian_cycle(start=start_idx, end=end_idx)
         if not path:
             return "Could not generate an optimal path. Try modifying locations."
 
         ordered_location_ids = [id_map[i] for i in path]
-
-        total_duration = 0
-        for i in range(len(path) - 1):
-            u, v = path[i], path[i + 1]
-            duration = durations_map.get((u, v), 0)
-            total_duration += duration
+        total_duration = sum(durations_map.get((path[i], path[i+1]), 0) for i in range(len(path) - 1))
 
         trip_list_id = f"{user.username}-favourite"
         trip_list, _ = TripList.objects.get_or_create(
             id=trip_list_id,
-            defaults={"user": user, "name": f"{user.username}'s Trip", "user": user}
+            defaults={"user": user, "name": f"{user.username}'s Trip"}
         )
 
         TripPath.objects.create(
@@ -784,14 +767,9 @@ def handle_intent(request, intent_name, parameters, user):
             total_duration=total_duration
         )
 
-        session["trip_cart"] = {
-            "locations": [],
-            "start_location": None,
-            "end_location": None
-        }
+        session["trip_cart"] = {"locations": [], "start_location": None, "end_location": None}
         request.session.modified = True
 
         return f"Trip created successfully with {len(path)} stops. Estimated duration: {round(total_duration, 2)} minutes."
 
-    else:
-        return "This intent is not currently handled."
+    return "This intent is not currently handled."

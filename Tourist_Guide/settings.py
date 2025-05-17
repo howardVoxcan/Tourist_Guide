@@ -87,8 +87,12 @@ WSGI_APPLICATION = 'Tourist_Guide.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tourist_guide',
+        'USER': 'hoangvo',
+        'PASSWORD': 'caybattu12',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -159,5 +163,7 @@ EMAIL_HOST_USER = 'touristguide.company@gmail.com'
 EMAIL_HOST_PASSWORD = 'qayg qrxm yywt vscp' 
 
 CSRF_TRUSTED_ORIGINS = [
-    '',
+    'https://d233-104-28-237-72.ngrok-free.app',
+    'https://86a9-104-28-205-70.ngrok-free.app',
+    'https://cd00-104-28-205-70.ngrok-free.app'
 ]

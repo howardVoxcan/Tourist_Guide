@@ -22,10 +22,10 @@ class Location_List(models.Model):
         return self.name
 
 class Location(models.Model):
-    loc = models.ForeignKey(Location_List, on_delete = models.CASCADE, null = True, blank = True)
+    favourited_by = models.ManyToManyField(User, related_name="favourite_locations", blank=True)
     code = models.CharField(max_length=10, unique=True)
     location = models.CharField(max_length = 64)
-    type = models.CharField(max_length=13, default = "")
+    type = models.CharField(max_length=18, default = "")
     tags = models.TextField(default = "")
     rating = models.FloatField(default = 5)
     open_time = models.TimeField(default = time(0,0))
