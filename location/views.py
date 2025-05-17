@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from location.coordinate import coordinate_dict
-from location.models import Location, Location_List, TripPath, TripList, Comment
+from location.models import Location, Location_List, TripPath, TripList, Comment, TemporaryTripCart, TemporaryUser
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.decorators.http import require_POST
@@ -540,13 +540,17 @@ def dialogflow_webhook(request):
             intent_name = data['queryResult']['intent']['displayName']
             parameters = data['queryResult'].get('parameters', {})
 
-            # Giả sử bạn đã gửi user_id trong payload theo cách nào đó:
             user_id = None
-            # Cách lấy user_id phổ biến: nằm trong originalDetectIntentRequest.payload hoặc trong parameters
+            session_id = None
+
             if 'originalDetectIntentRequest' in data:
-                user_id = data['originalDetectIntentRequest']['payload'].get('userId')
+                payload = data['originalDetectIntentRequest'].get('payload', {})
+                user_id = payload.get('userId')
+                session_id = payload.get('sessionId')
             if not user_id:
                 user_id = parameters.get('user_id')
+            if not session_id:
+                session_id = parameters.get('session_id')
 
             user = None
             if user_id:
@@ -556,7 +560,7 @@ def dialogflow_webhook(request):
                 except User.DoesNotExist:
                     user = None
 
-            result = handle_intent(request, intent_name, parameters, user)
+            result = handle_intent(request, intent_name, parameters, user, session_id)
 
             if result is True:
                 fulfillment_text = data['queryResult'].get('fulfillmentText', "")
@@ -575,13 +579,38 @@ def dialogflow_webhook(request):
 
     return JsonResponse({"error": "Only POST requests are allowed."}, status=405)
 
-def handle_intent(request, intent_name, parameters, user):
-    session = request.session
-    trip_cart = session.get("trip_cart", {
-        "locations": [],
-        "start_location": None,
-        "end_location": None
-    })
+
+def handle_intent(request, intent_name, parameters, user=None, session_id=None):
+    # Ưu tiên lấy session_id từ payload hoặc parameters nếu chưa có
+    if not session_id:
+        if request.method == "POST":
+            try:
+                data = json.loads(request.body.decode("utf-8"))
+                if 'originalDetectIntentRequest' in data:
+                    payload = data['originalDetectIntentRequest'].get('payload', {})
+                    session_id = payload.get('sessionId')
+                if not session_id:
+                    session_id = data.get('session', '').split('/')[-1]  # fallback
+            except:
+                pass
+    if not session_id:
+        session_id = parameters.get("session_id")
+    if not session_id:
+        return "Missing session ID."
+
+    # Nếu không có user nhưng có session_id, tạo hoặc lấy TemporaryUser
+    if user is None and session_id:
+        user, _ = TemporaryUser.objects.get_or_create(session_id=session_id)
+
+    # Lấy hoặc tạo TemporaryTripCart liên quan đến session_id và user
+    try:
+        trip_cart_obj, _ = TemporaryTripCart.objects.get_or_create(session_id=session_id, defaults={"user": user})
+        # Nếu trip_cart_obj đã tồn tại nhưng user chưa được set, set user
+        if trip_cart_obj.user is None and user is not None:
+            trip_cart_obj.user = user
+            trip_cart_obj.save()
+    except:
+        return "Could not create or access your trip session."
 
     def normalize_locations(loc):
         if loc is None:
@@ -592,43 +621,41 @@ def handle_intent(request, intent_name, parameters, user):
             return loc
         return [str(loc)]
 
+    locations_list = normalize_locations(parameters.get("locations"))
+
     if intent_name in ["Default Welcome Intent", "Default Fallback Intent", "discovering.ability"]:
         return True
 
     elif intent_name == "favourite.add.location":
-        locations = normalize_locations(parameters.get("locations"))
-        if not locations:
+        if not user or isinstance(user, TemporaryUser):
+            return "Please log in to add favourites."
+        if not locations_list:
             return "Please specify a location to add."
-
-        for loc in locations:
+        for loc in locations_list:
             try:
                 location_obj = Location.objects.get(location__iexact=loc)
                 location_obj.favourited_by.add(user)
             except Location.DoesNotExist:
                 return f"Location '{loc}' does not exist."
-
         return True
 
     elif intent_name == "favourite.remove.location":
-        locations = normalize_locations(parameters.get("locations"))
-        if not locations:
+        if not user or isinstance(user, TemporaryUser):
+            return "Please log in to remove favourites."
+        if not locations_list:
             return "Please specify a location to remove."
-
-        for loc in locations:
+        for loc in locations_list:
             try:
                 location_obj = Location.objects.get(location__iexact=loc)
                 location_obj.favourited_by.remove(user)
             except Location.DoesNotExist:
                 return f"Location '{loc}' does not exist."
-
         return True
 
     elif intent_name == "find.location.particular":
-        locations = normalize_locations(parameters.get("locations"))
-        if not locations:
+        if not locations_list:
             return "Please specify the location you're looking for."
-
-        for loc in locations:
+        for loc in locations_list:
             try:
                 location_obj = Location.objects.get(location__iexact=loc)
                 location_url = reverse('display_location', args=[location_obj.code])
@@ -647,54 +674,47 @@ def handle_intent(request, intent_name, parameters, user):
         return f"Here's a location search result for tag '{tag}': {base_url}?{query_string}"
 
     elif intent_name == "start.trip":
-        trip_cart = {"locations": [], "start_location": None, "end_location": None}
-        session["trip_cart"] = trip_cart
-        request.session.modified = True
-        return "Great! Let's start planning your trip. You can now add locations."
+        trip_cart_obj.locations = []
+        trip_cart_obj.start_location = None
+        trip_cart_obj.end_location = None
+        trip_cart_obj.save()
+        return True
 
     elif intent_name == "set.start.location":
-        locations = normalize_locations(parameters.get("locations"))
-        if locations:
-            trip_cart["start_location"] = locations[0]
-            session["trip_cart"] = trip_cart
-            request.session.modified = True
-            return f"Start location set to {locations[0]}."
+        if locations_list:
+            trip_cart_obj.start_location = locations_list[0]
+            trip_cart_obj.save()
+            return f"Start location set to {locations_list[0]}."
         return "Please tell me which location to set as the starting point."
 
     elif intent_name == "set.end.location":
-        locations = normalize_locations(parameters.get("locations"))
-        if locations:
-            trip_cart["end_location"] = locations[0]
-            session["trip_cart"] = trip_cart
-            request.session.modified = True
-            return f"End location set to {locations[0]}."
+        if locations_list:
+            trip_cart_obj.end_location = locations_list[0]
+            trip_cart_obj.save()
+            return f"End location set to {locations_list[0]}."
         return "Please tell me which location to set as the ending point."
 
     elif intent_name == "trip.create.add.location":
-        locations = normalize_locations(parameters.get("locations"))
-        if locations:
-            for loc in locations:
-                if loc not in trip_cart["locations"]:
-                    trip_cart["locations"].append(loc)
-            session["trip_cart"] = trip_cart
-            request.session.modified = True
-            return f"Added {', '.join(locations)} to your trip."
-        return "Please specify a location to add."
+        updated = False
+        for loc in locations_list:
+            if loc not in trip_cart_obj.locations:
+                trip_cart_obj.locations.append(loc)
+                updated = True
+        if updated:
+            trip_cart_obj.save()
+            return f"Added {', '.join(locations_list)} to your trip."
+        return "Those locations are already in your trip."
 
     elif intent_name == "trip.create.remove.location":
-        locations = normalize_locations(parameters.get("locations"))
-        if not locations:
-            return "Please specify a location to remove."
         removed = []
         not_found = []
-        for loc in locations:
-            if loc in trip_cart["locations"]:
-                trip_cart["locations"].remove(loc)
+        for loc in locations_list:
+            if loc in trip_cart_obj.locations:
+                trip_cart_obj.locations.remove(loc)
                 removed.append(loc)
             else:
                 not_found.append(loc)
-        session["trip_cart"] = trip_cart
-        request.session.modified = True
+        trip_cart_obj.save()
         if removed and not not_found:
             return f"Removed {', '.join(removed)} from your trip."
         elif removed and not_found:
@@ -703,9 +723,9 @@ def handle_intent(request, intent_name, parameters, user):
             return f"{', '.join(not_found)} is/are not in your trip list."
 
     elif intent_name == "trip.create.complete":
-        locations = trip_cart.get("locations", [])
-        start_name = trip_cart.get("start_location")
-        end_name = trip_cart.get("end_location")
+        locations = trip_cart_obj.locations or []
+        start_name = trip_cart_obj.start_location
+        end_name = trip_cart_obj.end_location
 
         if not locations:
             return "Your trip has no locations. Please add some before finishing."
@@ -753,11 +773,19 @@ def handle_intent(request, intent_name, parameters, user):
         ordered_location_ids = [id_map[i] for i in path]
         total_duration = sum(durations_map.get((path[i], path[i+1]), 0) for i in range(len(path) - 1))
 
-        trip_list_id = f"{user.username}-favourite"
-        trip_list, _ = TripList.objects.get_or_create(
-            id=trip_list_id,
-            defaults={"user": user, "name": f"{user.username}'s Trip"}
-        )
+        # Tạo TripList khác nhau nếu user tạm thời hoặc user thật
+        if isinstance(user, TemporaryUser):
+            trip_list_id = f"temp-{user.session_id}-favourite"
+            trip_list, _ = TripList.objects.get_or_create(
+                id=trip_list_id,
+                defaults={"name": f"Temporary Trip {user.session_id}"}
+            )
+        else:
+            trip_list_id = f"{user.username}-favourite"
+            trip_list, _ = TripList.objects.get_or_create(
+                id=trip_list_id,
+                defaults={"user": user, "name": f"{user.username}'s Trip"}
+            )
 
         TripPath.objects.create(
             trip_list=trip_list,
@@ -767,8 +795,11 @@ def handle_intent(request, intent_name, parameters, user):
             total_duration=total_duration
         )
 
-        session["trip_cart"] = {"locations": [], "start_location": None, "end_location": None}
-        request.session.modified = True
+        # Reset cart
+        trip_cart_obj.locations = []
+        trip_cart_obj.start_location = None
+        trip_cart_obj.end_location = None
+        trip_cart_obj.save()
 
         return f"Trip created successfully with {len(path)} stops. Estimated duration: {round(total_duration, 2)} minutes."
 

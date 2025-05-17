@@ -66,9 +66,9 @@ def create_intent(name, user_says, reply):
                 ],
                 "parameters": [
                     {
-                        "name": "location",
+                        "name": "locations",
                         "dataType": "@locations",
-                        "value": "$location",
+                        "value": "$locations",
                         "isList": False
                     }
                 ]
