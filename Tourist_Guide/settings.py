@@ -163,7 +163,5 @@ EMAIL_HOST_USER = 'touristguide.company@gmail.com'
 EMAIL_HOST_PASSWORD = 'qayg qrxm yywt vscp' 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://d233-104-28-237-72.ngrok-free.app',
-    'https://86a9-104-28-205-70.ngrok-free.app',
-    'https://cd00-104-28-205-70.ngrok-free.app'
+    'https://*.ngrok-free.app'
 ]
