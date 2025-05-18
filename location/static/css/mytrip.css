@@ -1,0 +1,117 @@
+/* Base container */
+.trip-container {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+.trip-header {
+  font-size: 32px;
+  color: #00796b;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Card container */
+.trip-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+.trip-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Summary now split into left/right */
+.trip-card-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  list-style: none;
+  background-color: #e0f2f1;
+}
+.summary-left {
+  width: 60%;
+}
+.summary-right {
+  width: 40%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+/* Font sizes increased */
+.trip-name {
+  font-size: 22px;
+  font-weight: 700;
+}
+.summary-right .icon {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.trip-toggle-icon {
+  font-size: 18px;
+  margin-left: 10px;
+  transition: transform 0.2s ease;
+}
+.trip-card[open] .trip-toggle-icon {
+  transform: rotate(90deg);
+}
+
+/* Body content */
+.trip-card-body {
+  padding: 20px;
+  background: #fafafa;
+  position: relative;
+}
+.trip-locations {
+  margin: 0;
+  padding-left: 18px;
+}
+.trip-locations li {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+/* Delete button styling */
+.delete-form {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+.delete-btn {
+  background-color: #e57373;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  font-size: 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Hidden when collapsed */
+.trip-card:not([open]) .delete-form {
+  display: none;
+}
+
+/* Empty state */
+.no-trips {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  font-size: 18px;
+}

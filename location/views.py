@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -451,7 +451,6 @@ def my_trip(request):
 
         return redirect('my_trip')
 
-    # GET: Display trips
     trip_paths = TripPath.objects.filter(trip_list=trip_list).order_by('-created_at')
     all_ids = []
     parsed_trip_paths = []
@@ -463,14 +462,16 @@ def my_trip(request):
             loc_ids = []
 
         all_ids.extend(loc_ids)
+
         parsed_trip_paths.append({
+            'id': path.id,
             'path_name': path.path_name,
             'locations': loc_ids,
-            'start': path.start_point.location if path.start_point else None,
-            'end': path.end_point.location if path.end_point else None,
-            'distance': round(path.total_distance / 1000, 1),
-            'duration': round(path.total_duration / 60, 1) if path.total_duration else None,
-            'created_at': path.created_at
+            'start_point': path.start_point.location if path.start_point else None,
+            'end_point': path.end_point.location if path.end_point else None,
+            'total_distance': round(path.total_distance / 1000, 1) if path.total_distance is not None else None,
+            'total_duration': round(path.total_duration / 60, 1) if path.total_duration is not None else None,
+            'created_at': path.created_at,
         })
 
     location_qs = Location.objects.filter(id__in=all_ids)
@@ -480,6 +481,17 @@ def my_trip(request):
         'trip_paths': parsed_trip_paths,
         'location_map': location_map
     })
+
+@require_POST
+@login_required
+def delete_tripPath(request, path_id):
+    if request.method != 'POST' or request.headers.get('x-requested-with') != 'XMLHttpRequest':
+        return HttpResponseForbidden()
+    trip_path = get_object_or_404(TripPath, pk=path_id)
+    if trip_path.trip_list.user != request.user:
+        return HttpResponseForbidden()
+    trip_path.delete()
+    return JsonResponse({'status': 'deleted'})
 
 @require_POST
 @login_required
