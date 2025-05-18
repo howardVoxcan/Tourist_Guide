@@ -72,6 +72,8 @@ class TripList(models.Model):
         return self.name
 
 class TripPath(models.Model):
+    start_point = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True, related_name="start_paths")
+    end_point = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True, related_name="end_paths")
     trip_list = models.ForeignKey(TripList, on_delete=models.CASCADE, related_name="trip_paths")
     path_name = models.CharField(max_length=255, default = "")
     locations_ordered = models.CharField(max_length = 255)

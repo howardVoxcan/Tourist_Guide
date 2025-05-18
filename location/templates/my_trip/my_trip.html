@@ -6,18 +6,33 @@
 {% block body %}
   <h2>Danh sách các chuyến đi đã tạo</h2>
 
-    {% if trip_paths %}
-        {% for path in trip_paths %}
-            <h3>{{ path.path_name }}</h3>
-            <p>Total distance: {{ path.distance }} km</p>
-            <p>Total duration: {{ path.duration }} minutes</p>
-            <ul>
-                {% for loc_id in path.locations %}
-                <li>{{ location_map|get_item:loc_id }}</li>
-                {% endfor %}
-            </ul>
+  {% if trip_paths %}
+    {% for path in trip_paths %}
+      <h3>{{ path.path_name }}</h3>
+      <p>Total distance: {{ path.distance }} km</p>
+      <p>Total duration: {{ path.duration }} minutes</p>
+      <ul>
+        {# Start point #}
+        {% if path.start %}
+          <li><strong>Start:</strong> {{ path.start }}</li>
+        {% endif %}
+
+        {# Intermediate locations (excluding start and end) #}
+        {% for loc_id in path.locations %}
+          {% with location_map|get_item:loc_id as loc_name %}
+            {% if loc_name != path.start and loc_name != path.end %}
+              <li>{{ loc_name }}</li>
+            {% endif %}
+          {% endwith %}
         {% endfor %}
-    {% else %}
-        <p>Chưa có lịch trình nào được tạo.</p>
-    {% endif %}
+
+        {# End point #}
+        {% if path.end %}
+          <li><strong>End:</strong> {{ path.end }}</li>
+        {% endif %}
+      </ul>
+    {% endfor %}
+  {% else %}
+    <p>Chưa có lịch trình nào được tạo.</p>
+  {% endif %}
 {% endblock %}

@@ -8,7 +8,7 @@ class Graph:
     def add_edge(self, u, v, weight):
         self.edges[u][v] = weight
 
-    def find_hamiltonian_cycle(self, fixed_position=None, precedence_constraints=None, start=None, end=None):
+    def find_hamiltonian_path(self, fixed_position=None, precedence_constraints=None, start=None, end=None):
         import itertools
         vertices = list(range(self.num_vertices))
         min_path = None
