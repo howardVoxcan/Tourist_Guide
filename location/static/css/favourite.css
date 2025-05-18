@@ -1,15 +1,82 @@
-.content-section {
+.favourite-container {
     background: white;
     height: auto;
     max-width: 1200px;
-    margin: 0 auto;
-    border-radius: 10px;
-    padding: 10px 20px;
+    margin: 20px auto;
+    padding: 20px;
 }
 
-.location-block {}
+.favourite-header {
+	font-size: 32px;
+	color: #00796b;
+	margin-bottom: 20px;
+	text-align: left;
+}
+
+/* Location block */
+.location-summary {
+    display: flex;
+    padding: 10px;
+    font-weight: bold;
+    color: black;
+    align-items: center;
+}
+
+#toggle-checkbox {
+    align-items: center;
+    margin-left: auto;
+}
+
+.details {
+    margin-top: 10px;
+    padding-left: 15px;
+}
+
+.accordion {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.accordion-header {
+    background-color: #00aa6c;
+    color: white;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.accordion-header:hover {
+    background-color: #00aa6c;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    padding: 0 15px;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+}
+
+.accordion-content.open {
+    padding: 15px;
+    max-height: 300px;
+}
+
+.accordion-content ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.accordion-content li {
+    margin-bottom: 8px;
+}
 
 .dashed-line {
-    border-top: 2px dashed #00aa6c;
-    margin: 20px 0;
+    border: 1px dashed #00aa6c;
 }

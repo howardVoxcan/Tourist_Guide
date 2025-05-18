@@ -7,25 +7,32 @@
 {% endblock %}
 
 {% block body %}
-<div class="content-section">
+<div class="favourite-container">
+	<h3 class="favourite-header">List of favourite locations</h3>
 	{% if locations %}
 	<form method="POST" action="{% url 'my_trip' %}">
 		{% csrf_token %}
-		<h3>Chọn địa điểm:</h3>
 		{% for location in locations %}
-		<div class="location-block">
-			<input type="checkbox" name="locations" value="{{ location.id }}">
-			<label>{{ location.location }} ({{ location.coordinate }})</label><br>
+		<summary class="location-summary">
+			<div class="left-summary">
+				<label>{{ location.location }} ({{ location.coordinate }})</label>
+			</div>
 
-			<!-- Check để chọn điểm bắt đầu và kết thúc -->
+			<div class="right-summary">
+				<input type="checkbox" name="locations" id="toggle-checkbox" value="{{ location.id }}">
+			</div>
+		</summary>
+
+		<div class="details" id="details-section">
 			<label>
-				<input type="radio" name="start_point" value="{{ location.id }}" onchange="toggleInputs()">Chọn làm điểm bắt đầu
-			</label><br>
+				<input type="radio" name="start_point" value="{{ location.id }}" onchange="toggleInputs()">
+				Chọn làm điểm bắt đầu
+			</label>
 
 			<label>
-				<input type="radio" name="end_point" value="{{ location.id }}" onchange="toggleInputs()"> Chọn làm điểm
-				kết thúc
-			</label><br>
+				<input type="radio" name="end_point" value="{{ location.id }}" onchange="toggleInputs()">
+				Chọn làm điểm kết thúc
+			</label>
 
 			<div id="extra-inputs-{{ location.id }}" class="extra-inputs">
 				<label>Ghim vào vị trí:</label>
@@ -35,10 +42,11 @@
 				<input type="number" name="precedence_after_{{ location.id }}"
 					placeholder="ID của địa điểm phải đi sau (optional)">
 			</div>
-
-			<hr class="dashed-line">
 		</div>
+
 		{% endfor %}
+
+		<hr class="dashed-line">
 
 		<h3>Tên chuyến đi:</h3>
 		<input type="text" name="path_name" placeholder="Nhập tên chuyến đi" required>
@@ -47,17 +55,6 @@
 
 		<button type="submit">Tạo lịch trình</button>
 	</form>
-</div>
-
-<div class="toggle-container" onclick="this.classList.toggle('active')">
-  <div class="summary">📄 Thông tin tổng quát (nhấp để mở rộng)</div>
-  <div class="details">
-    <ul>
-      <li>Chi tiết 1: Mô tả đầu tiên</li>
-      <li>Chi tiết 2: Thông tin tiếp theo</li>
-      <li>Chi tiết 3: Ghi chú thêm</li>
-    </ul>
-  </div>
 </div>
 
 <script>
@@ -91,6 +88,21 @@
 		document.querySelectorAll('input[name="start_point"], input[name="end_point"]').forEach(radio => {
 			radio.addEventListener('change', updateExtraInputsVisibility);
 		});
+	});
+
+	function toggleAccordion() {
+		const content = document.getElementById('accordionContent');
+		content.classList.toggle('open');
+	}
+
+	const checkbox = document.getElementById('toggle-checkbox');
+	const details = document.getElementById('details-section');
+	checkbox.addEventListener('change', () => {
+		if (checkbox.checked) {
+			details.style.display = 'block';
+		} else {
+			details.style.display = 'none';
+		}
 	});
 </script>
 

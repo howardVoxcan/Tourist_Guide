@@ -4,96 +4,100 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/mytrip.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pVUHzR3GxgjYdjE8GQyx7Z6FZW2Gh3PzUMOcVvH23k9C0JzQwV4qCVnSdQYjr6q3Jf86KXIEwaldO1aY73yg2Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+	integrity="sha512-pVUHzR3GxgjYdjE8GQyx7Z6FZW2Gh3PzUMOcVvH23k9C0JzQwV4qCVnSdQYjr6q3Jf86KXIEwaldO1aY73yg2Q=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
 {% endblock %}
 
 {% block title %}My Trip{% endblock %}
 
 {% block body %}
 <div class="trip-container">
-  <h2 class="trip-header">List of created trips.</h2>
+	<h2 class="trip-header">List of created trips</h2>
 
-  {% if trip_paths %}
-    {% for path in trip_paths %}
-      <details class="trip-card">
-        <summary class="trip-card-summary">
-          <div class="summary-left">
-            <span class="trip-name">{{ path.path_name }}</span>
-          </div>
-          <div class="summary-right">
-            <span class="icon"><i class="fas fa-road"></i> {{ path.total_distance }} km</span>
-            <span class="icon"><i class="fas fa-clock"></i> {{ path.total_duration }} min</span>
-            <span class="trip-toggle-icon">▸</span>
-          </div>
-        </summary>
-        <div class="trip-card-body">
-          <ul class="trip-locations">
-            {% if path.start %}
-              <li><strong>Start:</strong> {{ path.start }}</li>
-            {% endif %}
+	{% if trip_paths %}
+	{% for path in trip_paths %}
+	<details class="trip-card">
+		<summary class="trip-card-summary">
+			<div class="summary-left">
+				<span class="trip-name">{{ path.path_name }}</span>
+			</div>
+			<div class="summary-right">
+				<span class="icon"><i class="fas fa-road"></i> {{ path.total_distance }} km</span>
+				<span class="icon"><i class="fas fa-clock"></i> {{ path.total_duration }} min</span>
+				<span class="icon" id="trip-toggle-icon"><i class="fas fa-play"></i></span>
+			</div>
+		</summary>
 
-            {% for loc_id in path.locations %}
-              {% with location_map|get_item:loc_id as loc_name %}
-                {% if loc_name != path.start and loc_name != path.end %}
-                  <li>{{ loc_name }}</li>
-                {% endif %}
-              {% endwith %}
-            {% endfor %}
+		<div class="trip-card-body">
+			<ul class="trip-locations">
+				{% if path.start %}
+				<li><strong>Start:</strong> {{ path.start }}</li>
+				{% endif %}
 
-            {% if path.end %}
-              <li><strong>End:</strong> {{ path.end }}</li>
-            {% endif %}
-          </ul>
-          <!-- Delete Button -->
-          <button type="button"
-                  class="delete-btn"
-                  data-url="{% url 'delete_tripPath' path.id %}">
-              <i class="fas fa-trash-alt"></i> Delete
-          </button>
-        </div>
-      </details>
-    {% endfor %}
-  {% else %}
-    <p class="no-trips">No trips have been created.</p>
-  {% endif %}
+				{% for loc_id in path.locations %}
+				{% with location_map|get_item:loc_id as loc_name %}
+				{% if loc_name != path.start and loc_name != path.end %}
+				<li>{{ loc_name }}</li>
+				{% endif %}
+				{% endwith %}
+				{% endfor %}
+
+				{% if path.end %}
+				<li><strong>End:</strong> {{ path.end }}</li>
+				{% endif %}
+			</ul>
+
+			<hr class="dashed-line">
+
+			<!-- Delete Button -->
+			<button type="button" class="delete-btn" data-url="{% url 'delete_tripPath' path.id %}">
+				<i class="fas fa-trash-alt"></i> Delete
+			</button>
+		</div>
+	</details>
+	{% endfor %}
+	{% else %}
+	<p class="no-trips">No trips have been created.</p>
+	{% endif %}
 </div>
 
 <script>
-  // CSRF setup
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      document.cookie.split(';').forEach(function(c) {
-        let cookie = c.trim();
-        if (cookie.startsWith(name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        }
-      });
-    }
-    return cookieValue;
-  }
-  const csrftoken = getCookie('csrftoken');
+	// CSRF setup
+	function getCookie(name) {
+		let cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			document.cookie.split(';').forEach(function (c) {
+				let cookie = c.trim();
+				if (cookie.startsWith(name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+				}
+			});
+		}
+		return cookieValue;
+	}
+	const csrftoken = getCookie('csrftoken');
 
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      if (!confirm('Bạn có chắc muốn xóa lịch trình này?')) return;
-      const url = this.dataset.url;
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'X-CSRFToken': csrftoken,
-          'X-Requested-With': 'XMLHttpRequest'
-        }
-      })
-      .then(resp => {
-        if (!resp.ok) throw new Error('Network response was not ok');
-        // Remove the card from DOM
-        const card = this.closest('details');
-        card.parentNode.removeChild(card);
-      })
-      .catch(err => console.error('Delete failed:', err));
-    });
-  });
+	document.querySelectorAll('.delete-btn').forEach(btn => {
+		btn.addEventListener('click', function () {
+			if (!confirm('Bạn có chắc muốn xóa lịch trình này?')) return;
+			const url = this.dataset.url;
+			fetch(url, {
+				method: 'POST',
+				headers: {
+					'X-CSRFToken': csrftoken,
+					'X-Requested-With': 'XMLHttpRequest'
+				}
+			})
+				.then(resp => {
+					if (!resp.ok) throw new Error('Network response was not ok');
+					// Remove the card from DOM
+					const card = this.closest('details');
+					card.parentNode.removeChild(card);
+				})
+				.catch(err => console.error('Delete failed:', err));
+		});
+	});
 </script>
 
 {% endblock %}
