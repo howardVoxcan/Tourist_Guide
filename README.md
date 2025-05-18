@@ -45,7 +45,7 @@ We wanted to build something that:
 | Frontend     | HTML5, CSS3, JavaScript (vanilla)|
 | Database     | PostgreSQL                       |
 | AI/NLP       | scikit-learn, joblib, Dialogflow |
-| External API | WeatherAPI                       |
+| External API | WeatherAPI, DistanceMatrixAPI    |
 | Hosting      | Localhost / deploy-ready         |
 
 ---
