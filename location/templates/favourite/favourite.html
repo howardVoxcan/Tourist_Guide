@@ -8,39 +8,34 @@
 
 {% block body %}
 <div class="favourite-container">
-	<h3 class="favourite-header">List of favourite locations</h3>
+	<h2 class="favourite-header">List of favourite locations</h2>
 	{% if locations %}
-	<form method="POST" action="{% url 'my_trip' %}">
+	<form class="" method="POST" action="{% url 'my_trip' %}">
 		{% csrf_token %}
 		{% for location in locations %}
-		<summary class="location-summary">
-			<div class="left-summary">
-				<label>{{ location.location }} ({{ location.coordinate }})</label>
-			</div>
-
-			<div class="right-summary">
+		<div class="favourite-location-card">
+			<summary class="location-summary">
+				<label>{{ location.location }}</label>
 				<input type="checkbox" name="locations" id="toggle-checkbox" value="{{ location.id }}">
-			</div>
-		</summary>
+			</summary>
 
-		<div class="details" id="details-section">
-			<label>
-				<input type="radio" name="start_point" value="{{ location.id }}" onchange="toggleInputs()">
-				Chọn làm điểm bắt đầu
-			</label>
-
-			<label>
-				<input type="radio" name="end_point" value="{{ location.id }}" onchange="toggleInputs()">
-				Chọn làm điểm kết thúc
-			</label>
-
-			<div id="extra-inputs-{{ location.id }}" class="extra-inputs">
-				<label>Ghim vào vị trí:</label>
-				<input type="number" name="pinned_order_{{ location.id }}" min="1" placeholder="Vị trí (1,2,3...)"><br>
-
-				<label>Phải đi sau địa điểm ID:</label>
-				<input type="number" name="precedence_after_{{ location.id }}"
-					placeholder="ID của địa điểm phải đi sau (optional)">
+			<div id="details-section">
+				<label>
+					<input type="radio" name="start_point" value="{{ location.id }}" onchange="toggleInputs()">
+					Chọn làm điểm bắt đầu
+				</label>
+				<label>
+					<input type="radio" name="end_point" value="{{ location.id }}" onchange="toggleInputs()">
+					Chọn làm điểm kết thúc
+				</label>
+				<div id="extra-inputs-{{ location.id }}" class="extra-inputs">
+					<label>Pin at location</label>
+					<input type="number" name="pinned_order_{{ location.id }}" min="1"
+						placeholder="Vị trí (1,2,3...)"><br>
+					<label>Phải đi sau địa điểm ID:</label>
+					<input type="number" name="precedence_after_{{ location.id }}"
+						placeholder="ID của địa điểm phải đi sau (optional)">
+				</div>
 			</div>
 		</div>
 
@@ -48,12 +43,12 @@
 
 		<hr class="dashed-line">
 
-		<h3>Tên chuyến đi:</h3>
-		<input type="text" name="path_name" placeholder="Nhập tên chuyến đi" required>
-
-		<input type="hidden" name="trip_list_id" value="{{ trip_list.id }}">
-
-		<button type="submit">Tạo lịch trình</button>
+		<div class="trip">
+			<h3 class="trip-name">Trip's name</h3>
+			<input id="type-name" type="text" name="path_name" placeholder="Enter trip's name" required>
+			<input type="hidden" name="trip_list_id" value="{{ trip_list.id }}">
+			<button type="submit">Create journey</button>
+		</div>
 	</form>
 </div>
 
@@ -102,6 +97,76 @@
 			details.style.display = 'block';
 		} else {
 			details.style.display = 'none';
+		}
+	});
+
+	document.addEventListener("DOMContentLoaded", function () {
+		const checkboxes = document.querySelectorAll('input[type="checkbox"][name="locations"]');
+
+		checkboxes.forEach(checkbox => {
+			const locationId = checkbox.value;
+			const detailsSection = checkbox.closest('summary').nextElementSibling;
+
+			// Ẩn chi tiết ban đầu nếu chưa được chọn
+			if (!checkbox.checked) {
+				detailsSection.style.display = 'none';
+				toggleInputsDisabled(detailsSection, true);
+			}
+
+			checkbox.addEventListener('change', function () {
+				if (this.checked) {
+					detailsSection.style.display = 'block';
+					toggleInputsDisabled(detailsSection, false);
+				} else {
+					detailsSection.style.display = 'none';
+					toggleInputsDisabled(detailsSection, true);
+				}
+			});
+		});
+
+		function toggleInputsDisabled(section, disable) {
+			const inputs = section.querySelectorAll('input');
+			inputs.forEach(input => {
+				input.disabled = disable;
+			});
+		}
+	});
+
+	// Đổi trạng thái border của summary
+	document.addEventListener("DOMContentLoaded", function () {
+		const checkboxes = document.querySelectorAll('.toggle-checkbox');
+
+		checkboxes.forEach(checkbox => {
+			const summary = checkbox.closest('.location-summary');
+			const detailsSection = summary.nextElementSibling;
+
+			// Mặc định: ẩn chi tiết nếu checkbox chưa chọn
+			if (!checkbox.checked) {
+				detailsSection.style.display = 'none';
+				toggleInputsDisabled(detailsSection, true);
+				summary.classList.remove('active');
+			} else {
+				summary.classList.add('active');
+			}
+
+			checkbox.addEventListener('change', function () {
+				if (this.checked) {
+					detailsSection.style.display = 'block';
+					toggleInputsDisabled(detailsSection, false);
+					summary.classList.add('active');
+				} else {
+					detailsSection.style.display = 'none';
+					toggleInputsDisabled(detailsSection, true);
+					summary.classList.remove('active');
+				}
+			});
+		});
+
+		function toggleInputsDisabled(section, disable) {
+			const inputs = section.querySelectorAll('input');
+			inputs.forEach(input => {
+				input.disabled = disable;
+			});
 		}
 	});
 </script>

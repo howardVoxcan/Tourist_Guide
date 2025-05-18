@@ -5,8 +5,8 @@
 }
 
 .trip-header {
-	font-size: 32px;
-	color: #00796b;
+	font-size: 28px;
+	color: #05915d;
 	margin-bottom: 20px;
 	text-align: left;
 }
@@ -22,7 +22,7 @@
 }
 
 .trip-card:hover {
-	background-color: #00aa6c;
+	background-color: #05915d;
 }
 
 /* Summary now split into left/right */
