@@ -29,7 +29,7 @@
                 <a href = "{% url 'display_location' loc.code %}">
                     <div class="card-image" style="background-image: url('{% static loc.image_path %}');"></div>
                     <div class="card-content">
-                        <h3>{{ loc.location }}</h3>
+                        <h2>{{ loc.location }}</h2>
                         <p>{{ loc.description }}</p>
                         <div class="rating" >
                             {{ loc.star_html|safe }}

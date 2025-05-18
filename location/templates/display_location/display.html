@@ -5,11 +5,6 @@
 <link rel="stylesheet" href="{% static 'css/display_location.css' %}">
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
-    #map {
-        height: 500px;
-        width: 100%;
-    }
-
     .comment-box,
     .reply-box {
         background-color: #f9f9f9;
@@ -53,82 +48,94 @@
         {{ location_name }}
     </div>
 
-    <div class="location-rating">
-        <strong>Rating:</strong> {{ star_html|safe }}
+    <div class="text">
+        <div class="location-rating">
+            <strong>Rating:</strong> {{ star_html|safe }}
+        </div>
     </div>
 
-    <div class="location-address">
-        <strong>Address:</strong>{{ address }}
+    <div class="text">
+        <div class="location-address">
+            <strong>Address:</strong>{{ address }}
+        </div>
     </div>
 
     <div class="location-img">
         <img src="{% static image_path %}" alt="{{ location.name }}">
     </div>
 
-    <div class="time-block">
-        <strong>Open hour: </strong> {{ open_time }}
+    <div class="text">
+        <div class="time-info">
+            <strong>Open hour: </strong> {{ open_time }}
+        </div>
     </div>
 
-    <div class="location-ticket-info">
-        <strong>Price:</strong>{{ ticket_info }}
+    <div class="text">
+        <div class="location-ticket-info">
+            <strong>Price:</strong>{{ ticket_info }}
+        </div>
     </div>
 
-    <div class="location-description">
-        <strong>Description:</strong>{{ long_description }}
+    <div class="text">
+        <div class="location-description">
+            <strong>Description:</strong>{{ long_description }}
+        </div>
     </div>
 
-    <div id="map"></div>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js">
-    </script>
+    <div id="map">
+        <!-- Leaflet JS -->
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js">
+        </script>
 
-    <script>
-        const latitude = {{ lat }};
-        const longitude = {{ long }};
+        <script>
+            const latitude = {{ lat }};
+            const longitude = {{ long }};
 
-        const map = L.map('map').setView([latitude, longitude], 40);
+            const map = L.map('map').setView([latitude, longitude], 40);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
 
-        L.marker([latitude, longitude]).addTo(map)
-            .bindPopup('{{ location_name }}')
-            .openPopup();
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup('{{ location_name }}')
+                .openPopup();
 
-        document.querySelectorAll('.fav-btn').forEach(function (button) {
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                const code = this.dataset.code;
-                const icon = this.querySelector('i');
+            document.querySelectorAll('.fav-btn').forEach(function (button) {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const code = this.dataset.code;
+                    const icon = this.querySelector('i');
 
-                fetch("{% url 'locations' %}", {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                    body: `value=${code}`
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            if (icon.classList.contains('fa-regular')) {
-                                icon.classList.remove('fa-regular');
-                                icon.classList.add('fa-solid');
+                    fetch("{% url 'locations' %}", {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                        body: `value=${code}`
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                if (icon.classList.contains('fa-regular')) {
+                                    icon.classList.remove('fa-regular');
+                                    icon.classList.add('fa-solid');
+                                } else {
+                                    icon.classList.remove('fa-solid');
+                                    icon.classList.add('fa-regular');
+                                }
                             } else {
-                                icon.classList.remove('fa-solid');
-                                icon.classList.add('fa-regular');
+                                alert("Có lỗi xảy ra khi cập nhật favourite.");
                             }
-                        } else {
-                            alert("Có lỗi xảy ra khi cập nhật favourite.");
-                        }
-                    });
+                        });
+                });
             });
-        });
-    </script>
+        </script>
+    </div>
+
 
     <div class="favourite-block">
         <div class="favourite-location">
@@ -143,21 +150,24 @@
     </div>
 
     <!-- Comment Form -->
+    <hr>
     <h3>Post a comment</h3>
     <form id="comment-form">
         {% csrf_token %}
-        <textarea name="content" placeholder="Write your comment..." required></textarea>
-        <label for="rating">Rate this location:</label>
-        <select name="rating" id="rating">
-            <option value="">-- Optional --</option>
-            <option value="5">5 - Excellent</option>
-            <option value="4">4 - Very Good</option>
-            <option value="3">3 - Average</option>
-            <option value="2">2 - Poor</option>
-            <option value="1">1 - Terrible</option>
-        </select>
-        <br><br>
-        <button type="submit">Submit Comment</button>
+        <textarea type="text" name="content" placeholder="Write your comment..." required></textarea>
+        <div class="bla">
+            <label for="rating">Rate this location:</label>
+            <select name="rating" id="rating">
+                <option value="">-- Optional --</option>
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Very Good</option>
+                <option value="3">3 - Average</option>
+                <option value="2">2 - Poor</option>
+                <option value="1">1 - Terrible</option>
+            </select>
+            <button id="submit" type="submit">Submit Comment <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
     </form>
 
     <!-- 🔽 Comment Section Start -->

@@ -12,9 +12,6 @@ html {
 
 body {
     overflow-x: hidden;
-}
-
-body {
     background-color: #f4faff;
     color: #333;
     min-height: 100vh;
@@ -26,19 +23,12 @@ body {
     flex-direction: column;
 }
 
-.container {
-    width: 100%;
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
 /* Header styles */
 header {
     background-color: #f4faff;
     padding: 15px 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 100;
     width: 100%;
@@ -60,17 +50,21 @@ header {
     vertical-align: middle;
 }
 
-picture {
-    display: block;
-}
-
-.logo a,
-.logo picture {
-    width: 200px;
-    height: auto;
+.logo a {
     padding: 50px auto;
     display: flex;
-    align-items: center;
+}
+
+.logo picture {
+    width: 250px;
+    height: auto;
+}
+
+.logo img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
 }
 
 .search-bar {
@@ -222,7 +216,7 @@ picture {
 
 .nav-tabs i {
     margin-right: 8px;
-    font-size: 18px;
+    font-size: 28px;
 }
 
 /* Main */

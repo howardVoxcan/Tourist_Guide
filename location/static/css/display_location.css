@@ -1,3 +1,23 @@
+/* Chatbot */
+.chat-bot {
+    position: relative;
+    z-index: 9999;
+}
+
+#map {
+    margin: 10px auto;
+    height: 400px;
+    width: 60%;
+    border-radius: 10px;
+    border: #00aa6c solid 1px;
+    position: relative;
+    z-index: 1;
+}
+
+.text {
+    font-size: 18px;
+}
+
 .location-container {
     display: flex;
     flex-direction: column;
@@ -16,10 +36,9 @@
 
 .location-name {
     text-align: left;
-    flex: 9;
     color: #00aa6c;
     font-size: 28px;
-    font-weight: bold;
+    font-weight: 500;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -30,19 +49,27 @@
     text-align: left;
 }
 
-.locaction-rating strong {
+.text strong {
     margin-right: 10px;
 }
 
 .location-rating i {
     color: #fbb002;
+    margin-right: 7px;
+}
+
+.location-address {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    list-style: none;
 }
 
 .location-img {
-    width: 1120px;
-    height: 450px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    width: 800px;
+    height: 500px;
+    text-align: center;
+    margin: 20px auto;
     border-radius: 10px;
     background-size: cover;
     background-position: center;
@@ -56,12 +83,9 @@
     display: block;
 }
 
-.location-address {
-    display: flex;
+.time-info {
     margin-top: 10px;
     margin-bottom: 10px;
-    align-items: center;
-    list-style: none;
 }
 
 .location-ticket-info {
@@ -74,9 +98,10 @@
 }
 
 .location-description {
-    margin: 0 auto;
+    text-align: justify;
     margin-top: 10px;
     margin-bottom: 10px;
+    font-size: 18px;
 }
 
 .location-description strong {
@@ -89,7 +114,8 @@
 
 .favourite-block {
     display: block;
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .favourite-location {
@@ -100,4 +126,55 @@
 
 .favourite-location i {
     color: red;
+}
+
+hr {
+    width: 70%;
+    margin: 0 auto;
+}
+
+h3 {
+    text-align: left;
+    color: #00aa6c;
+    font-size: 28px;
+    font-weight: 500;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#comment-form textarea {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#comment-form textarea:focus {
+    border: 1px solid #00aa6c;
+}
+
+#comment-form option {
+    padding: 5px 20px;
+}
+
+.bla {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.bla label {
+    font-weight: 500;
+}
+
+.bla i {
+    margin-left: 5px;
+}
+
+#submit {
+    background-color: #00aa6c;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 500;
+    float: right;
 }

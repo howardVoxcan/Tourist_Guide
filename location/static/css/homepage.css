@@ -43,20 +43,6 @@
     padding: 0 20px;
 }
 
-.section-header {
-    margin-bottom: 20px;
-}
-
-.section-header h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-.section-header p {
-    color: #666;
-    font-size: 16px;
-}
-
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -93,7 +79,7 @@
     padding: 16px;
 }
 
-.card h3 {
+.card h2 {
     margin-bottom: 8px;
     font-size: 18px;
 }
