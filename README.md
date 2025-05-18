@@ -14,11 +14,6 @@ This isn’t your average travel app. It combines real-world practicality with a
   - [Basic Features](#basic-features)
   - [Advanced Features](#advanced-features)
 - [🚀 Run the App Locally](#-run-the-app-locally)
-- [📹 Demo Video](#-demo-video)
-- [🔁 Reusability & Customization](#-reusability--customization)
-- [📂 Folder Structure](#-folder-structure)
-- [📄 License](#-license)
-- [🌟 Support This Project](#-support-this-project)
 
 ---
 
@@ -87,7 +82,7 @@ All chatbot intents/entities/knowledge bases are:
 - **Script-generated from Python**.
 - Uploadable via JSON/CSV.
 - Easy to adapt to **any new city**, just swap the database.
-
+A Python script named `importing.py` lets you generate the entire database automatically from a CSV file. You just need to prepare the CSV — it handles the rest.
 ---
 
 ## 🚀 Run the App Locally
@@ -107,3 +102,4 @@ pip install -r requirements.txt
 # Migrate DB & run
 python manage.py migrate
 python manage.py runserver
+```
