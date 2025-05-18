@@ -2,37 +2,38 @@
 
 {% load static %}
 
-{% block title%} Locations {% endblock %}
+{% block title %} Locations {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/homepage.css' %}?v={{ timestamp }}">
-<link rel="stylesheet" href="{% static 'css/locations.css' %}?v={{ timestamp }}">
+<link rel="stylesheet" href="{% static 'css/locations.css' %}">
 {% endblock %}
 
 {% block body %}
 <section class="filter-section">
-    <form method="get" action="{% url 'locations' %}" style="margin-bottom: 20px;">
-        <!-- Lọc theo loại địa điểm -->
-        <label for="type">Type:</label>
-        <select name="type" id="type">
-            <option value="">All</option>
-            <option value="Accomodation" {% if current_filters.type == "Accomodation" %}selected{% endif %}>Accomodation</option>
-            <option value="Entertainment" {% if current_filters.type == "Entertainment" %}selected{% endif %}>Entertainment</option>
-            <option value="F&B" {% if current_filters.type == "F&B" %}selected{% endif %}>F&B</option>
-            <option value="Local" {% if current_filters.type == "Local" %}selected{% endif %}>Local</option>
-            <option value="Market" {% if current_filters.type == "Market" %}selected{% endif %}>Market</option>
-            <option value="Transportation" {% if current_filters.type == "Transportation" %}selected{% endif %}>Transportation</option>
-        </select>
-
-        <!-- Lọc theo đánh giá -->
-        <label for="rating">Min Rating:</label>
-        <input type="number" name="rating" id="rating" value="{{ current_filters.rating }}" min="1" max="5" step="0.1">
-
-        <!-- Lọc theo thời gian mở cửa -->
-        <label for="desired_time">Show places open at:</label>
-        <input type="time" id="desired_time" name="desired_time" value="{{ current_filters.desired_time }}">
-
-        <button type="submit">Apply Filters</button>
+    <form method="get" action="{% url 'locations' %}" style="display: flex; flex-wrap: wrap; gap: 16px; width: 100%; align-items: center;">
+        <div>
+            <label for="type">Type:</label>
+            <select name="type" id="type">
+                <option value="">All</option>
+                <option value="Accomodation" {% if current_filters.type == "Accomodation" %}selected{% endif %}>Accomodation</option>
+                <option value="Entertainment" {% if current_filters.type == "Entertainment" %}selected{% endif %}>Entertainment</option>
+                <option value="F&B" {% if current_filters.type == "F&B" %}selected{% endif %}>F&B</option>
+                <option value="Local" {% if current_filters.type == "Local" %}selected{% endif %}>Local</option>
+                <option value="Market" {% if current_filters.type == "Market" %}selected{% endif %}>Market</option>
+                <option value="Transportation" {% if current_filters.type == "Transportation" %}selected{% endif %}>Transportation</option>
+            </select>
+        </div>
+        <div>
+            <label for="rating">Min Rating:</label>
+            <input type="number" name="rating" id="rating" value="{{ current_filters.rating }}" min="1" max="5" step="0.1">
+        </div>
+        <div>
+            <label for="desired_time">Open at:</label>
+            <input type="time" id="desired_time" name="desired_time" value="{{ current_filters.desired_time }}">
+        </div>
+        <div>
+            <button type="submit">Apply Filters</button>
+        </div>
     </form>
 </section>
 
@@ -40,54 +41,39 @@
     <div class="card-grid">
         {% for loc in locations %}
         <div class="card">
-            <a href="{% url 'display_location' loc.code %}">
+            <a href="{% url 'display_location' loc.code %}" style="display: flex; width: 100%; text-decoration: none; color: inherit;">
                 <div class="card-image" style="background-image: url('{% static loc.image_path %}');"></div>
                 <div class="card-content">
-                    <h3>{{ loc.location }}</h3>
-                    <p>{{ loc.description }}</p>
                     <div>
-                        <!-- Trái tim toggle -->
-                    <div class="favourite">
-                        <button class="fav-btn" data-code="{{ loc.code }}" style="background: none; border: none; padding: 0; cursor: pointer;">
-                        {% if loc.favourite_symbol == '<i class="fa-solid fa-heart"></i>' %}
-                            <i class="fa-solid fa-heart"></i>
-                        {% else %}
-                            <i class="fa-regular fa-heart"></i>
-                        {% endif %}
-                        </button>
+                        <div style="display: flex;">
+                          <h3>{{ loc.location }}</h3>
+                          <div class="favourite">
+                              <button class="fav-btn" data-code="{{ loc.code }}">
+                                  {% if loc.favourite_symbol == '<i class="fa-solid fa-heart"></i>' %}
+                                      <i class="fa-solid fa-heart"></i>
+                                  {% else %}
+                                      <i class="fa-regular fa-heart"></i>
+                                  {% endif %}
+                              </button>
+                          </div>
+                        </div>
+                        <p>{{ loc.description }}</p>
                     </div>
-  
-                    </div>
-                    <div class="rating">
-                        {{ loc.star_html|safe }}
-                        <span>Rating: {{ loc.rating }}</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div class="rating">
+                            {{ loc.star_html|safe }}
+                            <span>{{ loc.rating }} / 5</span>
+                        </div>
+                        <div class="open-hour">Open: {{ loc.open_time }}</div>
                     </div>
                 </div>
             </a>
         </div>
         {% endfor %}
     </div>
-</section>    
+</section>
 
-<!-- JavaScript để lưu và khôi phục scroll -->
 <script>
-  // Lưu vị trí scroll khi submit form
-  document.querySelectorAll('.fav-form').forEach(function(form) {
-    form.addEventListener('submit', function () {
-      sessionStorage.setItem('scrollPos', window.scrollY);
-    });
-  });
-
-  // Sau khi load lại trang (sau redirect), khôi phục vị trí scroll
-  window.addEventListener('load', function () {
-    const scrollPos = sessionStorage.getItem('scrollPos');
-    if (scrollPos !== null) {
-      window.scrollTo(0, parseInt(scrollPos));
-      sessionStorage.removeItem('scrollPos');
-    }
-  });
-
-  // Bắt sự kiện click vào trái tim
   document.querySelectorAll('.fav-btn').forEach(function(button) {
     button.addEventListener('click', function (e) {
       e.preventDefault();
@@ -108,14 +94,8 @@
           alert("Bạn cần đăng nhập để thêm vào danh sách yêu thích.");
           window.location.href = "{% url 'login' %}";
         } else if (response.ok) {
-          // Toggle icon class
-          if (icon.classList.contains('fa-regular')) {
-            icon.classList.remove('fa-regular');
-            icon.classList.add('fa-solid');
-          } else {
-            icon.classList.remove('fa-solid');
-            icon.classList.add('fa-regular');
-          }
+          icon.classList.toggle('fa-solid');
+          icon.classList.toggle('fa-regular');
         } else {
           alert("Có lỗi xảy ra khi cập nhật favourite.");
         }

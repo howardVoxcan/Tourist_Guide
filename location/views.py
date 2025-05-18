@@ -193,6 +193,15 @@ def locations(request):
                 if user and loc.favourited_by.filter(id=user.id).exists()
                 else '<i class="fa-regular fa-heart"></i>'
             )
+            open_time = loc.open_time.strftime("%H:%M") if loc.open_time else "N/A"
+            close_time = loc.close_time.strftime("%H:%M") if loc.close_time else "N/A"
+
+            if open_time == "00:00" and close_time == "23:59":
+                open_time_str = "All day"
+            elif loc.close_time and loc.open_time and loc.close_time < loc.open_time:
+                open_time_str = f"{open_time} - {close_time} (The next day)"
+            else:
+                open_time_str = f"{open_time} - {close_time}"
 
             processed_locations.append({
                 'code': loc.code,
@@ -200,8 +209,7 @@ def locations(request):
                 'description': loc.description,
                 'image_path': loc.image_path,
                 'rating': loc.rating,
-                'open_time': loc.open_time,
-                'close_time': loc.close_time,
+                'open_time': open_time_str,
                 'star_html': star_html,
                 'favourite_symbol': favourite_symbol,
             })
