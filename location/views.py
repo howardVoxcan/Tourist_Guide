@@ -535,8 +535,6 @@ def submit_comment_ajax(request, location_code):
 
 logger = logging.getLogger(__name__)
 
-# ----- Utility Functions -----
-
 def extract_session_id(data, parameters):
     session_full = data.get('session', '')
     session_id = session_full.split('/')[-1] if session_full else None
@@ -568,8 +566,6 @@ def get_or_create_temp_cart(session_id, user=None):
         cart.user = user
         cart.save()
     return cart
-
-# ----- Webhook Entry -----
 
 @csrf_exempt
 def dialogflow_webhook(request):
@@ -611,8 +607,6 @@ def dialogflow_webhook(request):
             "fulfillmentText": "An error occurred while processing your request.",
             "debug": str(e)
         })
-
-# ----- Intent Handler -----
 
 def handle_intent(request, intent_name, parameters, user=None, session_id=None):
     if not session_id:
@@ -761,7 +755,6 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
             trip_cart_obj.locations = locations
             trip_cart_obj.save()
 
-        # Construct ordered list again from updated locations
         locations = trip_cart_obj.locations
 
         middles = [loc for loc in locations if loc not in (start_name, end_name)]
