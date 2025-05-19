@@ -31,20 +31,20 @@
 
 		<div class="trip-card-body">
 			<ul class="trip-locations">
-				{% if path.start %}
-				<li><strong>Start:</strong> {{ path.start }}</li>
+				{% if path.start_point %}
+					<li><strong>Start:</strong> {{ path.start_point }}</li>
 				{% endif %}
 
 				{% for loc_id in path.locations %}
 				{% with location_map|get_item:loc_id as loc_name %}
-				{% if loc_name != path.start and loc_name != path.end %}
-				<li>{{ loc_name }}</li>
+				{% if loc_name != path.start_point and loc_name != path.end_point %}
+					<li>{{ loc_name }}</li>
 				{% endif %}
 				{% endwith %}
 				{% endfor %}
 
-				{% if path.end %}
-				<li><strong>End:</strong> {{ path.end }}</li>
+				{% if path.end_point %}
+					<li><strong>End:</strong> {{ path.end_point }}</li>
 				{% endif %}
 			</ul>
 

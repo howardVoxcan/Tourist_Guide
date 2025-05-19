@@ -3,7 +3,7 @@
 {% block title %}Favourite{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/favourite.css' %}?v={{ timestamp }}">
+<link rel="stylesheet" href="{% static 'css/favourite.css' %}">
 {% endblock %}
 
 {% block body %}
@@ -22,19 +22,20 @@
 			<div id="details-section">
 				<label>
 					<input type="radio" name="start_point" value="{{ location.id }}" onchange="toggleInputs()">
-					Chọn làm điểm bắt đầu
+					Select as start point
 				</label>
+				<br>
 				<label>
 					<input type="radio" name="end_point" value="{{ location.id }}" onchange="toggleInputs()">
-					Chọn làm điểm kết thúc
+					Select as end point
 				</label>
 				<div id="extra-inputs-{{ location.id }}" class="extra-inputs">
 					<label>Pin at location</label>
 					<input type="number" name="pinned_order_{{ location.id }}" min="1"
-						placeholder="Vị trí (1,2,3...)"><br>
-					<label>Phải đi sau địa điểm ID:</label>
+						placeholder="Order (1, 2, 3...)"><br>
+					<label>Must go after location ID:</label>
 					<input type="number" name="precedence_after_{{ location.id }}"
-						placeholder="ID của địa điểm phải đi sau (optional)">
+						placeholder="ID of the location that must be visited before (optional)">
 				</div>
 			</div>
 		</div>
@@ -54,16 +55,13 @@
 
 <script>
 	function updateExtraInputsVisibility() {
-		// Lấy tất cả radio đang được chọn
 		const selectedStart = document.querySelector('input[name="start_point"]:checked');
 		const selectedEnd = document.querySelector('input[name="end_point"]:checked');
 
-		// Lấy ID của địa điểm được chọn làm start hoặc end (có thể giống nhau hoặc khác)
 		const hiddenIds = new Set();
 		if (selectedStart) hiddenIds.add(selectedStart.value);
 		if (selectedEnd) hiddenIds.add(selectedEnd.value);
 
-		// Lặp qua tất cả các div extra inputs và xử lý hiển thị
 		document.querySelectorAll('.extra-inputs').forEach(div => {
 			const locationId = div.id.replace('extra-inputs-', '');
 			if (hiddenIds.has(locationId)) {
@@ -74,12 +72,9 @@
 		});
 	}
 
-	// Gắn sự kiện onchange cho radio sau khi DOM đã load
 	window.addEventListener('DOMContentLoaded', () => {
-		// Gọi lần đầu để xử lý các radio đã chọn sẵn
 		updateExtraInputsVisibility();
 
-		// Gắn sự kiện cho tất cả các radio
 		document.querySelectorAll('input[name="start_point"], input[name="end_point"]').forEach(radio => {
 			radio.addEventListener('change', updateExtraInputsVisibility);
 		});
@@ -107,7 +102,6 @@
 			const locationId = checkbox.value;
 			const detailsSection = checkbox.closest('summary').nextElementSibling;
 
-			// Ẩn chi tiết ban đầu nếu chưa được chọn
 			if (!checkbox.checked) {
 				detailsSection.style.display = 'none';
 				toggleInputsDisabled(detailsSection, true);
@@ -132,7 +126,6 @@
 		}
 	});
 
-	// Đổi trạng thái border của summary
 	document.addEventListener("DOMContentLoaded", function () {
 		const checkboxes = document.querySelectorAll('.toggle-checkbox');
 
@@ -140,7 +133,6 @@
 			const summary = checkbox.closest('.location-summary');
 			const detailsSection = summary.nextElementSibling;
 
-			// Mặc định: ẩn chi tiết nếu checkbox chưa chọn
 			if (!checkbox.checked) {
 				detailsSection.style.display = 'none';
 				toggleInputsDisabled(detailsSection, true);
@@ -171,8 +163,7 @@
 	});
 </script>
 
-
 {% else %}
-<p>Chưa có địa điểm nào trong danh sách.</p>
+<p>No locations in the list yet.</p>
 {% endif %}
 {% endblock %}
