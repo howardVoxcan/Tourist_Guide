@@ -122,16 +122,14 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "location" / "static",  # Đường dẫn tới thư mục static của location
-    BASE_DIR / "register" / "static",  # Đường dẫn tới thư mục static của register
-    BASE_DIR / "static"
+    BASE_DIR / "location" / "static",
+    BASE_DIR / "register" / "static", 
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
