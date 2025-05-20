@@ -1,88 +1,123 @@
 # 🗺️ Smart Tourist Guide — Django x Dialogflow Web App
 
-Welcome to **Smart Tourist Guide**, a full-stack AI-powered web application built with Django and integrated with Dialogflow to help users discover and plan trips like never before.
+Welcome to **Smart Tourist Guide**, a full-stack AI-powered web application built with Django and integrated with Dialogflow — designed to help users discover, plan, and optimize trips like never before.
 
-This isn’t your average travel app. It combines real-world practicality with algorithmic intelligence, sentiment-aware recommendations, and voice/chat interfaces — designed for users who expect more than just static pages.
-
----
-
-## 📌 Table of Contents
-
-- [🔍 Why This Project?](#-why-this-project)
-- [⚙️ Tech Stack](#-tech-stack)
-- [✨ Features](#-features)
-  - [Basic Features](#basic-features)
-  - [Advanced Features](#advanced-features)
-- [🚀 Run the App Locally](#-run-the-app-locally)
+This isn’t your average travel app. It blends real-world usefulness with intelligent automation, sentiment-aware recommendations, and natural conversation interfaces. The goal: a truly **smart** tourist assistant that feels personal, responsive, and actually helpful.
 
 ---
 
 ## 🔍 Why This Project?
 
-Most web apps in this space stop at CRUD: manage hotels, view restaurants, store reviews. That’s fine — but let’s be honest, it gets boring.
+Most travel apps today are just interactive catalogs — static listings of places, reviews, and maps. We wanted to go further by building something that:
 
-We wanted to build something that:
-- Pushes **beyond the database**.
-- Is **scalable** and **modular**.
-- Solves **real tourist needs** (trip planning, route optimization, Q&A).
-- Integrates **AI + NLP** meaningfully.
-- Offers a **smart voice/chat interface** — not just forms and clicks.
+- Goes beyond CRUD and static pages  
+- Helps tourists **plan optimized routes**  
+- Understands places through **tags and sentiment**, even without existing user input  
+- Supports **voice and chat interaction** using Dialogflow  
 
-> Because if your travel guide doesn’t talk back to you in 2025… is it even smart?
+Because in 2025, a tourist guide should do more than just show pins on a map.
 
 ---
 
-## ⚙️ Tech Stack
+## 🧠 Data Processing & NLP Intelligence
 
-| Layer        | Technology                       |
-|--------------|----------------------------------|
-| Backend      | Django, Python                   |
-| Frontend     | HTML5, CSS3, JavaScript (vanilla)|
-| Database     | PostgreSQL                       |
-| AI/NLP       | scikit-learn, joblib, Dialogflow |
-| External API | WeatherAPI, DistanceMatrixAPI    |
-| Hosting      | Localhost / deploy-ready         |
+To build a truly smart system, we collected and processed **two separate datasets**, each serving a distinct NLP role:
 
 ---
 
-## ✨ Features
+### 📍 1. Place Data — Crawled + Tagged
 
-### ✅ Basic Features
+We scraped detailed information for tourist locations (e.g., **name, address, category, coordinates, rating, description**) from sources like TripAdvisor and Google.
 
-- **Homepage**: Clean, responsive landing page.
-- **Location Explorer**: Browse tourist locations and view full details.
-- **Weather Forecast**: Get 3-day forecasts from WeatherAPI for any city.
+#### 🏷️ Tag Extraction (TF-IDF + SpaCy)
 
-### 🚀 Advanced Features
+To enrich the description of each location:
 
-#### 🧠 Smart Trip Planner
+- Applied **TfidfVectorizer** to extract **keywords** from the description field.  
+- Used **SpaCy** (`en_core_web_sm`) for POS tagging and noun phrase extraction to identify relevant **semantic tags** like `"food"`, `"cafe"`, or `"metro"`.  
+- Tags were stored in the database and made available for search, chatbot suggestions, and filtering.
 
-Plan a trip by selecting multiple locations, with:
-- **Custom start/end points** (e.g., Hotel → Airport).
-- **Shortest path optimization** using a simplified **Hamiltonian Path** algorithm.
-- **Persisted trip path data** per user.
+This tagging approach simulates user-generated content for places that lack community input.
 
-#### 💬 Auto Reply via Sentiment Analysis
+---
 
-If a location lacks user reviews, no problem:
-- We use a trained **sentiment analysis model** (from `.ipynb → .pkl`) to auto-generate experience summaries.
-- Real reviews override AI-generated ones — obviously.
+### 😊 2. Sentiment Analysis — Independent Review Dataset
 
-#### 🤖 Chatbot Assistant
+In parallel, we developed a sentiment analysis module to generate experience summaries for each location.
 
-Powered by **Dialogflow**, our chatbot can:
-- Answer FAQs about the system.
-- Add/remove favorite locations.
-- Trigger **trip creation** purely by chat or voice.
-- Talk to you — because UX > UI.
+#### 📦 Dataset
 
-#### 🛠 High Reusability
+- Used an **review dataset** labeled as **positive**, **neutral**, or **negative**.
+- This dataset is separate from crawled place data to maintain generalization.
+- Text was preprocessed (lowercased, cleaned, etc.) and class imbalance was handled explicitly.
 
-All chatbot intents/entities/knowledge bases are:
-- **Script-generated from Python**.
-- Uploadable via JSON/CSV.
-- Easy to adapt to **any new city**, just swap the database.
-A Python script named `importing.py` lets you generate the entire database automatically from a CSV file. You just need to prepare the CSV — it handles the rest.
+#### ⚙️ Model Training Pipeline
+
+- Encoded labels using `LabelEncoder`.
+- Transformed text using **TfidfVectorizer**.
+- Calculated class weights using `compute_class_weight` to balance uneven class distribution.
+- Trained a **XGBoost classifier** (`XGBClassifier`) with 5-fold cross-validation (`KFold`) to ensure robust evaluation.
+- Saved the trained model using `joblib` and deployed it into the Django backend for live predictions.
+
+#### 🧠 Use in the App
+
+- When a location lacks real user reviews, the app auto-generates a short experience summary using the sentiment classifier.
+- As user reviews accumulate, these AI-generated texts are replaced with real feedback.
+
+---
+
+## ✨ Key Features
+
+### ✅ Basic
+
+- Clean, mobile-friendly homepage and UI  
+- Explore locations with full detail view and live 3-day weather forecast  
+- Save favorite locations and manage personalized trip lists  
+
+---
+
+### 🚀 Advanced
+
+#### 🗺 Smart Trip Planner
+
+- Plan multi-stop trips with custom **start and end points**
+- Route optimized via a simplified **Hamiltonian Path algorithm**
+- Trip paths are saved to user history
+
+#### 💬 Sentiment-Aware Review Generator
+
+- Auto-generates experience summaries for places with no reviews  
+- Replaced by real reviews when available  
+
+#### 🤖 Dialogflow Chatbot Assistant
+
+- Natural voice/chat interface for:
+  - Answering FAQs
+  - Adding/removing favorite locations
+  - Creating entire trips via chat
+- Intents and entities managed via Python scripts and importable JSON
+
+---
+
+## ⚙️ Smart Automation
+
+### 📥 Auto Data Import
+
+- `importing.py`: A one-command script that takes a formatted CSV and:
+  - Parses each entry (e.g., name, rating, coordinates)
+  - Applies TF-IDF and NLP to extract semantic tags
+  - Automatically inserts all enriched data into SQLite
+
+---
+
+## 🧩 Designed for Extensibility
+
+The system is highly modular:
+
+- Want to expand to another city? Just update the CSV and re-run `importing.py`.
+- Want to switch languages or retrain the sentiment model? Plug in a new dataset.
+- Dialogflow agent can be updated by uploading new `intents.json` and `entities.json`.
+
 ---
 
 ## 🚀 Run the App Locally
