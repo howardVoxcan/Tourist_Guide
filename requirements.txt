@@ -17,3 +17,4 @@ urllib3==2.2.2
 charset-normalizer==3.3.2
 idna==3.8
 django-widget-tweaks
+sympy>=1.7.1
