@@ -1,0 +1,105 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    color: #333;
+    min-height: 100vh;
+}
+
+/* Full height layout after navbar */
+.weather-fullscreen {
+    display: flex;
+    overflow: hidden;
+    background-color: #f4faff;
+}
+
+/* Left: Day selection panel - Fixed position */
+.day-tabs {
+    width: 220px; /* Fixed width for the day selection panel */
+    background-color: #f4faff; /* Matching your theme color */
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    height: 600px; /* Ensure the panel fills the remaining height below navbar */
+    box-sizing: border-box;
+    justify-content: space-between; /* Distribute buttons evenly */
+    z-index: 10; /* Ensure it stays on top of the content */
+}
+
+/* Button for each day - stretch evenly */
+.tab-btn {
+    background-color: #00aa6c; /* Primary green color */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    flex-grow: 1; /* Make each button stretch evenly */
+    width: 100%; /* Buttons span the full width of the panel */
+}
+
+/* Day tabs hover effect */
+.tab-btn:hover {
+    background-color: #f4faff;
+}
+
+.tab-btn:hover strong {
+    color: #00aa6c; /* Lighter green on hover */
+}
+
+/* Remove the last bottom border for cleanliness */
+.tab-btn:last-child {
+    border-bottom: none;
+}
+
+/* Right: Forecast area */
+.forecast-days {
+    margin-left: 220px; /* Create space for the fixed left panel */
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    align-items: start;
+ /* Ensure the forecast section takes full height minus navbar */
+}
+
+/* Forecast day display */
+.forecast-day {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    width: 100%; /* Make sure it takes full available width */
+}
+
+/* Individual forecast blocks */
+.forecast-period {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 200px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Icon style for forecast periods */
+.forecast-period img {
+    width: 60px;
+    height: 60px;
+}
+
+/* Header styles */
+header {
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+}

@@ -1,0 +1,117 @@
+.right-side {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.welcome-text {
+    margin-bottom: 20px;
+}
+
+.welcome-text h2 {
+    font-size: 28px;
+    color: #00aa6c;
+    margin-bottom: 10px;
+}
+
+.welcome-text p {
+    color: #00aa6c;
+    font-size: 16px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #334155;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 16px 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #009760;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input {
+    margin-right: 8px;
+}
+
+.forgot-password {
+    color: blue;
+    text-decoration: none;
+}
+
+.submit-button {
+    background-color: #00aa6c;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #029e65;
+}
+
+.register-request {
+    display: flex;
+}
+
+.question-register {
+    flex: 1;
+    font-size: 16px;
+}
+
+.register-link {
+    flex: 1;
+    color: blue;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        flex-direction: column;
+        height: auto;
+    }
+
+    .left-side {
+        display: none;
+    }
+}

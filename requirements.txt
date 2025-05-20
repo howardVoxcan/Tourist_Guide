@@ -264,3 +264,4 @@ wrapt==1.17.2
 xgboost==3.0.0
 zipp==1.0.0
 zope.interface==7.2
+gunicorn
