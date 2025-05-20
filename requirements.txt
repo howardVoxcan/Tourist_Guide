@@ -2,6 +2,7 @@ Django==5.1.4
 asgiref==3.8.1
 psycopg2-binary==2.9.10
 django-crispy-forms==2.4
+django-crispy-bootstrap5
 django-import-export==4.3.7
 osmnx==1.9.4
 scikit-learn==1.6.1
