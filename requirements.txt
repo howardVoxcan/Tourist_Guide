@@ -1,6 +1,5 @@
 Django==5.1.4
 asgiref==3.8.1
-crispy-forms==2.4
 psycopg2-binary==2.9.10
 django-crispy-forms==2.4
 crispy-bootstrap5
