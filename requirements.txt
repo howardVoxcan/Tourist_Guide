@@ -27,7 +27,6 @@ cligj==0.7.2
 cloudpathlib==0.21.0
 coloredlogs==15.0.1
 comm==0.2.2
-command-not-found==0.3
 confection==0.1.5
 contourpy==1.2.1
 cookiecutter==2.6.0
