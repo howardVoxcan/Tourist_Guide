@@ -1,8 +1,9 @@
 Django==5.1.4
 asgiref==3.8.1
+crispy-forms==2.4
 psycopg2-binary==2.9.10
 django-crispy-forms==2.4
-crispy-bootstrap5==2025.4
+crispy-bootstrap5
 django-import-export==4.3.7
 osmnx==1.9.4
 scikit-learn==1.6.1
@@ -16,3 +17,4 @@ certifi==2024.7.4
 urllib3==2.2.2
 charset-normalizer==3.3.2
 idna==3.8
+django-widget-tweaks
