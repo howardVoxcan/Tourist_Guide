@@ -1,5 +1,5 @@
 anaconda==0.0.1.1
-annotated-types==0.7.0
+annotated-types
 anyio==4.4.0
 argon2-cffi==23.1.0
 argon2-cffi-bindings==21.2.0
@@ -67,7 +67,6 @@ geopandas==0.14.4
 geopy==2.4.1
 googlemaps==4.10.0
 greenlet==3.2.1
-gyp==0.1
 h11==0.14.0
 httpcore==1.0.5
 httplib2==0.20.2
