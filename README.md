@@ -126,8 +126,8 @@ The system is highly modular:
 
 ```bash
 # Clone the repo
-git clone https://github.com/howardVoxcan/smart-tourist-guide.git
-cd smart-tourist-guide
+git clone https://github.com/howardVoxcan/Tourist_Guide.git
+cd Tourist_Guide
 
 # Create virtual environment
 python -m venv venv
