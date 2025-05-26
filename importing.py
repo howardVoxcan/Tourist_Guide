@@ -5,7 +5,6 @@ from datetime import datetime
 import re
 import spacy
 
-# Set up Django environment
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Tourist_Guide.settings")
 django.setup()
 
@@ -13,35 +12,29 @@ from location.models import Location
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 
-# === Load spaCy English model ===
 nlp = spacy.load("en_core_web_sm")
 
-# === Preprocessing function ===
 def preprocessing(text):
     doc = nlp(text.lower())
     lemmatized = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
     return ' '.join(lemmatized)
 
-# === File paths ===
 csv_path = 'location_db.csv'
 output_csv_path = 'location_db_with_tags.csv'  # Change to overwrite original if needed
 
 rows = []
 tags_long_descriptions = []
 
-# === Step 1: Read CSV and preprocess text ===
 with open(csv_path, newline='', encoding='utf-8') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
         rows.append(row)
         tags_long_descriptions.append(preprocessing(row['Tags_Creation_Description'].strip()))
 
-# === Step 2: Generate TF-IDF matrix ===
 vectorizer = TfidfVectorizer(stop_words='english', max_features=1000)
 tfidf_matrix = vectorizer.fit_transform(tags_long_descriptions)
 feature_names = vectorizer.get_feature_names_out()
 
-# === Helper: Parse time strings into Python time objects ===
 def parse_time_field(time_str):
     if not time_str:
         return None
@@ -55,7 +48,6 @@ def parse_time_field(time_str):
     print(f"[CẢNH BÁO] Không thể parse thời gian: '{time_str}'")
     return None
 
-# === Step 3: Update Django DB and attach tags to each row ===
 for idx, row in enumerate(rows):
     tfidf_scores = tfidf_matrix[idx].toarray().flatten()
     top_indices = tfidf_scores.argsort()[::-1][:6]
@@ -92,7 +84,6 @@ for idx, row in enumerate(rows):
 
     row['tags'] = ', '.join(tags)
 
-# === Step 4: Write updated rows to new CSV ===
 fieldnames = rows[0].keys()
 
 with open(output_csv_path, mode='w', newline='', encoding='utf-8') as csvfile:
