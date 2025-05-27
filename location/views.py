@@ -57,10 +57,9 @@ def weather(request):
         date = day['date']
         periods = []
 
-        # Get 8 parts of the day (every 3 hours)
-        for hour_data in day['hour'][::2]:  # Picks 0:00, 3:00, 6:00, ..., 21:00
+        for hour_data in day['hour'][::2]: 
             periods.append({
-                'time': hour_data['time'][11:],  # Only show HH:MM
+                'time': hour_data['time'][11:], 
                 'temp_c': hour_data['temp_c'],
                 'condition': hour_data['condition']['text'],
                 'icon': hour_data['condition']['icon']
@@ -107,7 +106,7 @@ def overall_homepage(request):
         })
 
     return render(request, "homepage/homepage.html", {
-        "all_of_locations": processed_locations,  # Đã xử lý sao
+        "all_of_locations": processed_locations, 
     })
 
 def locations(request):
@@ -847,12 +846,16 @@ def handle_intent(request, intent_name, parameters, user=None, session_id=None):
         reply = "\n".join(header + itinerary_names)
 
         trip_list, _ = TripList.objects.get_or_create(user=user)
+        middle_ids = [index_to_id[i] for i in best_path[1:-1]]
+
         trip_path = TripPath.objects.create(
             trip_list=trip_list,
             total_duration=total_time,
             total_distance=total_dist,
-            locations_ordered=json.dumps([index_to_id[i] for i in best_path]),
-            path_name=f"{user.username} chatbot TripPath"
+            locations_ordered=json.dumps(middle_ids),
+            path_name=f"{user.username} chatbot TripPath",
+            start_point=location_list[best_path[0]],
+            end_point=location_list[best_path[-1]]
         )
         trip_path.locations.add(*[location_list[i] for i in best_path])
         trip_path.save()

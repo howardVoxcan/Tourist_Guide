@@ -20,7 +20,7 @@ def preprocessing(text):
     return ' '.join(lemmatized)
 
 csv_path = 'location_db.csv'
-output_csv_path = 'location_db_with_tags.csv'  # Change to overwrite original if needed
+output_csv_path = 'location_db_with_tags.csv' 
 
 rows = []
 tags_long_descriptions = []
@@ -45,7 +45,7 @@ def parse_time_field(time_str):
             return datetime.strptime(time_str, fmt).time()
         except ValueError:
             continue
-    print(f"[CẢNH BÁO] Không thể parse thời gian: '{time_str}'")
+    print(f"Warning: Không thể parse thời gian: '{time_str}'")
     return None
 
 for idx, row in enumerate(rows):
