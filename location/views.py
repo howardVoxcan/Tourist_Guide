@@ -22,23 +22,26 @@ from urllib.parse import urlencode
 # Create your views here.
 nlp = spacy.load("en_core_web_sm")
 
+pipeline_path = os.path.join(settings.BASE_DIR, 'location', 'svm_tfidf_pipeline.pkl')
 label_encoder_path = os.path.join(settings.BASE_DIR, 'location', 'label_encoder.pkl')
-vectorizer_path = os.path.join(settings.BASE_DIR, 'location', 'tfidf_vectorizer.pkl')
-model_path = os.path.join(settings.BASE_DIR, 'location', 'xgboost_model.pkl')
 
+pipeline = joblib.load(pipeline_path)
 label_encoder = joblib.load(label_encoder_path)
-vectorizer = joblib.load(vectorizer_path)
-model = joblib.load(model_path)
 
 def predict_sentiment(text):
-    # Preprocessing
+    if not text or not isinstance(text, str):
+        return "Invalid input"
+
+    # Preprocess: lowercase + lemmatize + remove stop words
     doc = nlp(text.lower())
     tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
     cleaned_text = ' '.join(tokens)
 
-    # Predictions
-    X = vectorizer.transform([cleaned_text])
-    pred_label = model.predict(X)[0]
+    if not cleaned_text:
+        return "Text too short or meaningless"
+
+    # Predict using full pipeline
+    pred_label = pipeline.predict([cleaned_text])[0]
     sentiment = label_encoder.inverse_transform([pred_label])[0]
     return sentiment
 
