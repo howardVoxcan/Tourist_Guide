@@ -11,16 +11,25 @@
 {% block content %}
 <div class="right-side">
     <div class="welcome-text">
-        <h2>Đăng ký tài khoản</h2>
+        <h2>Create an account</h2>
         <p>Vui lòng đăng nhập để tiếp tục sử dụng dịch vụ</p>
     </div>
 
     <div>
         <form method="POST" class="form-group">
             {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit" class="btn btn-success"> Register </button>
+            <input type="text" name="username" placeholder="Username" value="{{ form.username.value }}">
+            <input type="email" name="email" placeholder="Email" value="{{ form.email.value }}">
+            <input type="password" name="password1" placeholder="Password">
+            <input type="password" name="password2" placeholder="Confirm Password">
+
+            <button type="submit" class="submit-button"> Sign up </button>
         </form>
+
+        <div class="login-request">
+            <p class="question-login">Already have an account?</p>
+            <a class="login-link" href="{% url 'login' %}">Login</a>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -27,13 +27,12 @@
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
+    font-size: 16px;
     color: #334155;
     font-weight: 500;
 }
@@ -41,8 +40,9 @@
 .form-group input {
     width: 100%;
     padding: 16px 15px;
+    margin-bottom: 20px;
     border: 1px solid #cbd5e1;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 14px;
     transition: border-color 0.3s;
 }
@@ -52,34 +52,13 @@
     border-color: #009760;
 }
 
-.remember-forgot {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-
-.remember-me {
-    display: flex;
-    align-items: center;
-}
-
-.remember-me input {
-    margin-right: 8px;
-}
-
-.forgot-password {
-    color: blue;
-    text-decoration: none;
-}
-
 .submit-button {
     background-color: #00aa6c;
     color: white;
     border: none;
     border-radius: 10px;
     padding: 12px 30px;
+    margin-left: auto;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
@@ -88,6 +67,11 @@
 
 .submit-button:hover {
     background-color: #029e65;
+}
+
+.forgot-password {
+    color: blue;
+    text-decoration: none;
 }
 
 .register-request {
