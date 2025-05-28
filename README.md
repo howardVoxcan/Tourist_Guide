@@ -4,7 +4,11 @@ Welcome to **Smart Tourist Guide**, a full-stack AI-powered web application buil
 
 This isn’t your average travel app. It blends real-world usefulness with intelligent automation, sentiment-aware recommendations, and natural conversation interfaces. The goal: a truly **smart** tourist assistant that feels personal, responsive, and actually helpful.
 
-[Demo slide](https://www.canva.com/design/DAGn_lNNm68/ASkbIUWbP8sLs-ZrlQXTtw/edit?utm_content=DAGn_lNNm68&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+<p align="center">
+  <a href="https://www.canva.com/design/DAGn_lNNm68/ASkbIUWbP8sLs-ZrlQXTtw/edit?utm_content=DAGn_lNNm68&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank" style="text-decoration: none;">
+    <span style="font-size: 24px;"><strong>👉 Demo slide 👈</strong></span>
+  </a>
+</p>
 
 ---
 
