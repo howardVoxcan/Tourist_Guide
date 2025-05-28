@@ -91,9 +91,6 @@ In parallel, we developed a sentiment analysis module to generate experience sum
   <img src="https://github.com/user-attachments/assets/9353b708-e83d-4fea-ba75-e98ba6514413" alt="image">
 </p>
 
-  ![image]()
-
-
 #### 💬 Sentiment-Aware Review Generator
 
 - Auto-generates experience summaries for places with no reviews  
