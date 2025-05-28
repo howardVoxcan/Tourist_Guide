@@ -53,13 +53,14 @@ In parallel, we developed a sentiment analysis module to generate experience sum
 - This dataset is separate from crawled place data to maintain generalization.
 - Text was preprocessed (lowercased, cleaned, etc.) and class imbalance was handled explicitly.
 
-#### ⚙️ Model Training Pipeline
+#### ⚙️ Model Training Pipeline (Updated)
 
-- Encoded labels using `LabelEncoder`.
-- Transformed text using **TfidfVectorizer**.
-- Calculated class weights using `compute_class_weight` to balance uneven class distribution.
-- Trained a **XGBoost classifier** (`XGBClassifier`) with 5-fold cross-validation (`KFold`) to ensure robust evaluation.
-- Saved the trained model using `joblib` and deployed it into the Django backend for live predictions.
+- Encoded sentiment labels using `LabelEncoder` and saved the encoder with `joblib` for consistent decoding during inference.
+- Transformed review texts into numerical features using **TF-IDF Vectorizer**, with `ngram_range` and `max_features` tuned via grid search.
+- Balanced imbalanced sentiment classes using `compute_class_weight` and passed the resulting weights into the classifier.
+- Trained a **Linear Support Vector Machine (LinearSVC)** model within a **Pipeline**, combined with **GridSearchCV** for hyperparameter tuning.
+- Performed 4-fold cross-validation (`StratifiedKFold`) for more stable evaluation across class distributions.
+- Saved the final trained model using `joblib` (`svm_tfidf_pipeline.pkl`) and deployed it into the Django backend for live predictions.
 
 #### 🧠 Use in the App
 
