@@ -80,7 +80,7 @@
 }
 
 .trip-locations {
-	padding-left: 18px;
+	padding-left: 10px;
 }
 
 .trip-locations li {
@@ -88,8 +88,18 @@
 	font-size: 16px;
 }
 
+.trip-locations li strong {
+	color: #00aa6c;
+}
+
+.start .end {
+	color: #00aa6c;
+}
+
 .dashed-line {
     border: 1px dashed #00aa6c;
+	margin: 0 auto;
+	width: 98%;
 }
 
 /* Delete button styling */
@@ -102,7 +112,7 @@
 	margin-top: 10px;
 	margin-left: auto;
 	font-size: 16px;
-	border-radius: 20px;
+	border-radius: 15px;
 	display: flex;
 	align-items: center;
 	cursor: pointer;
