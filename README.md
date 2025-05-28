@@ -103,6 +103,7 @@ In parallel, we developed a sentiment analysis module to generate experience sum
   - Adding/removing favorite locations
   - Creating entire trips via chat
 - Intents and entities managed via Python scripts and importable JSON
+  
   ![image](https://github.com/user-attachments/assets/28d4e4aa-2fcd-4303-99a8-14fa714fb37d)
 
 
