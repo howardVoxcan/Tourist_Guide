@@ -83,58 +83,9 @@
     </div>
 
 
-    <div id="map">
-        <!-- Leaflet JS -->
-        <script src="https://unpkg.com/leaflet/dist/leaflet.js">
-        </script>
-
-        <script>
-            const latitude = {{ lat }};
-            const longitude = {{ long }};
-
-            const map = L.map('map').setView([latitude, longitude], 40);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            L.marker([latitude, longitude]).addTo(map)
-                .bindPopup('{{ location_name }}')
-                .openPopup();
-
-            document.querySelectorAll('.fav-btn').forEach(function (button) {
-                button.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const code = this.dataset.code;
-                    const icon = this.querySelector('i');
-
-                    fetch("{% url 'locations' %}", {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}',
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'X-Requested-With': 'XMLHttpRequest',
-                        },
-                        body: `value=${code}`
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                if (icon.classList.contains('fa-regular')) {
-                                    icon.classList.remove('fa-regular');
-                                    icon.classList.add('fa-solid');
-                                } else {
-                                    icon.classList.remove('fa-solid');
-                                    icon.classList.add('fa-regular');
-                                }
-                            } else {
-                                alert("Có lỗi xảy ra khi cập nhật favourite.");
-                            }
-                        });
-                });
-            });
-        </script>
-    </div>
+    <iframe id="map" loading="lazy" allowfullscreen
+        src="https://maps.google.com/maps?q={{ lat }},{{ long }}&z=15&output=embed">
+    </iframe>
 
 
     <div class="favourite-block">

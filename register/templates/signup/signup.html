@@ -18,6 +18,7 @@
     <div>
         <form method="POST" class="form-group">
             {% csrf_token %}
+            <label for="id_ "></label>
             <input type="text" name="username" placeholder="Username" value="{{ form.username.value }}">
             <input type="email" name="email" placeholder="Email" value="{{ form.email.value }}">
             <input type="password" name="password1" placeholder="Password">
