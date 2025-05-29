@@ -60,7 +60,6 @@ class Comment(models.Model):
     def __str__(self):
         return f"Comment by {self.user.username} on {self.location.location}"
 
-
 class TripList(models.Model):
     id = models.CharField(
         primary_key=True, max_length=255, editable=False
@@ -103,3 +102,35 @@ class TemporaryUser(models.Model):
 
     def __str__(self):
         return self.session_id
+    
+class BusStop(models.Model):
+    osm_id = models.BigIntegerField(unique=True)
+    name = models.CharField(max_length=200)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+
+    def __str__(self):
+        return f"{self.name} ({self.latitude}, {self.longitude})"
+
+class BusRoute(models.Model):
+    osm_id = models.BigIntegerField(unique=True)
+    ref = models.CharField(max_length=50)      # e.g. "01"
+    name = models.CharField(max_length=200, blank=True)
+    operator = models.CharField(max_length=200, blank=True)
+    stops = models.ManyToManyField(
+        BusStop,
+        through='RouteStop',
+        related_name='routes'
+    )
+
+    def __str__(self):
+        return f"Route {self.ref}"
+
+class RouteStop(models.Model):
+    route = models.ForeignKey(BusRoute, on_delete=models.CASCADE)
+    stop = models.ForeignKey(BusStop, on_delete=models.CASCADE)
+    sequence = models.PositiveIntegerField()     # order in route
+
+    class Meta:
+        unique_together = (('route', 'stop', 'sequence'),)
+        ordering = ['route', 'sequence']
