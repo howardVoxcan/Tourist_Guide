@@ -45,7 +45,7 @@ def parse_time_field(time_str):
             return datetime.strptime(time_str, fmt).time()
         except ValueError:
             continue
-    print(f"Warning: Không thể parse thời gian: '{time_str}'")
+    print(f"Warning: Cannot parse [time] '{time_str}'")
     return None
 
 for idx, row in enumerate(rows):
@@ -78,9 +78,9 @@ for idx, row in enumerate(rows):
     )
 
     if created:
-        print(f"✅ Đã tạo mới Location: {code}")
+        print(f"✅ Create new Location: {code}")
     else:
-        print(f"🔄 Đã cập nhật Location: {code}")
+        print(f"🔄 Update Location: {code}")
 
     row['tags'] = ', '.join(tags)
 
@@ -91,4 +91,4 @@ with open(output_csv_path, mode='w', newline='', encoding='utf-8') as csvfile:
     writer.writeheader()
     writer.writerows(rows)
 
-print(f"📝 CSV đã được cập nhật với tags tại: {output_csv_path}")
+print(f"📝 CSV updated with tags at: {output_csv_path}")
