@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = ['tourist-guide-app.onrender.com', '127.0.0.1']
+ALLOWED_HOSTS = ['tourist-guide-ec40.onrender.com', '127.0.0.1']
 
 
 CORS_ORIGIN_ALLOW_ALL = True  # or set allowed origins more securely
@@ -131,10 +131,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "location" / "static",
-    BASE_DIR / "register" / "static", 
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# STATICFILES_DIRS = [
+#     BASE_DIR / "location" / "static",
+#     BASE_DIR / "register" / "static", 
+# ]
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 LOGGING = {
