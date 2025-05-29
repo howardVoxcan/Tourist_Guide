@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: tourist-guide-app
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn Tourist_Guide.wsgi:application"
+    plan: free
+    envVars:
+      - key: SECRET_KEY
+        value: 2su%rf+ywh1=f=l=gubcfl1eq-nex=5aphus^3l04xf_i^pk!x
+      - key: DEBUG
+        value: False

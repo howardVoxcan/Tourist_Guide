@@ -21,12 +21,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-##glyl0o&4*)7b)=v7wq&iae0liuoyt2nofq-8zt^m)og)h=se'
+
+# SECRET_KEY = 'django-insecure-##glyl0o&4*)7b)=v7wq&iae0liuoyt2nofq-8zt^m)og)h=se'
+# DEBUG = True
+# ALLOWED_HOSTS = ['tourist-guide-kfel.onrender.com', '127.0.0.1', '583b-104-28-205-72.ngrok-free.app']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = ['tourist-guide-app.onrender.com', '127.0.0.1']
 
-ALLOWED_HOSTS = ['tourist-guide-kfel.onrender.com', '127.0.0.1', '583b-104-28-205-72.ngrok-free.app']
 
 CORS_ORIGIN_ALLOW_ALL = True  # or set allowed origins more securely
 
@@ -132,7 +136,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "register" / "static", 
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 LOGGING = {
     'version': 1,
@@ -174,3 +177,5 @@ EMAIL_HOST_PASSWORD = 'qayg qrxm yywt vscp'
 CSRF_TRUSTED_ORIGINS = [
     'https://*.ngrok-free.app'
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

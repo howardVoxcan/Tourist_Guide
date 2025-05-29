@@ -25,13 +25,12 @@
 
 /* Location block */
 .location-summary {
-    background-color: white;
+    background-color: #00aa6c;
     border: 1px #00aa6c solid;
-    border-radius: 10px;
     display: flex;
     padding: 10px;
     font-weight: bold;
-    color: #00aa6c;
+    color: white;
     align-items: center;
 }
 
@@ -41,7 +40,7 @@
 }
 
 #toggle-checkbox {
-    background-color: #05915d;
+    color: #05915d;
     width: 1.5rem;
     height: 1.5rem;
     align-items: center;
@@ -56,6 +55,12 @@
 #details-section {
     padding: 15px;
 }
+
+.details-section .line {
+    margin: 10px 0;
+}
+
+
 
 .dashed-line {
     width: 70%;
@@ -80,6 +85,11 @@ h3 {
     cursor: pointer;
 }
 
+.trip button:hover {
+    background-color: #05915d;
+    border: 1px solid #05915d;
+}
+
 #type-name {
     margin-right: 10px;
     padding: 10px 14px;
@@ -87,4 +97,8 @@ h3 {
     border-radius: 4px;
     font-size: 15px;
     min-width: 150px;
+}
+
+.trip-card:not([open]) .delete-form {
+	display: none;
 }

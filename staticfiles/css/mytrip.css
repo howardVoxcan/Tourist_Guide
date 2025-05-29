@@ -74,13 +74,14 @@
 
 /* Body content */
 .trip-card-body {
-	padding: 10px 20px;
+	padding: 20px 20px;
 	background-color: white;
 	position: relative;
 }
 
 .trip-locations {
-	padding-left: 18px;
+	list-style: none;
+	padding-left: 10px;
 }
 
 .trip-locations li {
@@ -88,8 +89,18 @@
 	font-size: 16px;
 }
 
+.trip-locations li strong {
+	color: #00aa6c;
+}
+
+.start .end {
+	color: #00aa6c;
+}
+
 .dashed-line {
     border: 1px dashed #00aa6c;
+	margin: 0 auto;
+	width: 100%;
 }
 
 /* Delete button styling */
@@ -102,7 +113,7 @@
 	margin-top: 10px;
 	margin-left: auto;
 	font-size: 16px;
-	border-radius: 20px;
+	border-radius: 15px;
 	display: flex;
 	align-items: center;
 	cursor: pointer;

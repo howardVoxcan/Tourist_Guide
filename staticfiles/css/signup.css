@@ -20,3 +20,30 @@
     color: #00aa6c;
     font-size: 16px;
 }
+
+.submit-button {
+    background-color: #00aa6c;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 30px;
+    margin-left: auto;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-request {
+    display: flex;
+}
+
+.question-login {
+    flex: 1;
+    font-size: 16px;
+}
+
+.login-link {
+    flex: 1;
+    color: blue;
+}

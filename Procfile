@@ -1,0 +1,1 @@
+web: gunicorn Tourist_Guide.wsgi:application

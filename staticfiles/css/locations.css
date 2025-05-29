@@ -1,8 +1,8 @@
 /* Filter section */
 .filter-section {
-  max-width: 900px;             /* Giới hạn chiều rộng tối đa */
+  max-width: 1100px;             /* Giới hạn chiều rộng tối đa */
   margin: 20px auto 24px auto;     /* Canh giữa và tạo khoảng cách dưới */
-  padding: 24px;
+  padding: 20px;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -11,6 +11,10 @@
   gap: 20px;
   align-items: center;
   justify-content: center;      /* Canh giữa các phần tử con */
+}
+
+.filter-element {
+  flex: 1;
 }
 
 .filter-section label {
@@ -29,9 +33,11 @@
 }
 
 .filter-section button {
+  flex: 1;
   padding: 10px 18px;
   background-color:#00aa6c;
   color: #fff;
+  margin-left: auto;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -59,7 +65,7 @@
 /* Card */
 .card {
   display: flex;
-  background: #fff;
+  background-color: white;
   border-radius: 8px;
   height: 250px;
   width: 1100px;
