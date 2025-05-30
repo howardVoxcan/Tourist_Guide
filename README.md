@@ -5,7 +5,7 @@ Welcome to **Smart Tourist Guide**, a full-stack AI-powered web application buil
 This isn’t your average travel app. It blends real-world usefulness with intelligent automation, sentiment-aware recommendations, and natural conversation interfaces. The goal: a truly **smart** tourist assistant that feels personal, responsive, and actually helpful.
 
 <h1 align="center">
-  🌏🌏 Click on the link below to for more information 👐👋
+  🌏🌏 Click on the link below to for more information 👋👋
 </h1>
 
 <h2 align="center"> 
