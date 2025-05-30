@@ -9,7 +9,7 @@ This isn’t your average travel app. It blends real-world usefulness with intel
 </h1>
 
 <div align="center">
-  <h2> <a href="https://tourist-guide-ec40.onrender.com/" target="_blank" style="text-decoration: none; color: inherit;"> 🌏 Tourist Guide - Live Demo 🔥 </a> or <a href="https://www.canva.com/design/DAGn_lNNm68/ASkbIUWbP8sLs-ZrlQXTtw/edit?utm_content=DAGn_lNNm68&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank" style="text-decoration: none; color: inherit;"> 👉 Demo slide 👈 </a>
+  <h2> <a href="https://tourist-guide-ec40.onrender.com/" target="_blank" style="text-decoration: none; color: inherit;"> 🌏 Tourist Guide - Live Demo 🌏 </a> or <a href="https://www.canva.com/design/DAGn_lNNm68/ASkbIUWbP8sLs-ZrlQXTtw/edit?utm_content=DAGn_lNNm68&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank" style="text-decoration: none; color: inherit;"> 👉 Demo slide 👈 </a>
   </h2>
 </div>
 
