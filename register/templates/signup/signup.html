@@ -12,19 +12,13 @@
 <div class="right-side">
     <div class="welcome-text">
         <h2>Create an account</h2>
-        <p>Vui lòng đăng nhập để tiếp tục sử dụng dịch vụ</p>
     </div>
 
     <div>
         <form method="POST" class="form-group">
             {% csrf_token %}
-            <label for="id_ "></label>
-            <input type="text" name="username" placeholder="Username" value="{{ form.username.value }}">
-            <input type="email" name="email" placeholder="Email" value="{{ form.email.value }}">
-            <input type="password" name="password1" placeholder="Password">
-            <input type="password" name="password2" placeholder="Confirm Password">
-
-            <button type="submit" class="submit-button"> Sign up </button>
+            {{form|crispy}}
+            <button type="submit" class="submit-button">Login</button>
         </form>
 
         <div class="login-request">
