@@ -24,6 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', v.register, name = "register"),
     path('login/', v.custom_login, name='login'),
+    path('weather/', include('weather.urls')),
+    path('trip/', include('trip.urls')),
     path('', include('django.contrib.auth.urls')),
     path('', include('location.urls')),
 ]

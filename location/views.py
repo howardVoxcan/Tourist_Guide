@@ -2,20 +2,15 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpRe
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from location.coordinate import coordinate_dict
-from location.models import Location, Location_List, TripPath, TripList, Comment, TemporaryTripCart, TemporaryUser
-from django.contrib.auth.models import User
-from django.contrib import messages
+from location.models import Location, Comment, TemporaryTripCart, TemporaryUser
+from trip.models import TripPath, TripList
 from django.views.decorators.http import require_POST
-from urllib import request
 from datetime import datetime
-from annotated_types import Len
-from shapely import length
 from .TSP import Graph, distance
-import requests, joblib, os, spacy, json, traceback, logging
+import joblib, os, spacy, json, traceback, logging
 from django.conf import settings
 from urllib.parse import urlencode
 
@@ -44,41 +39,6 @@ def predict_sentiment(text):
     pred_label = pipeline.predict([cleaned_text])[0]
     sentiment = label_encoder.inverse_transform([pred_label])[0]
     return sentiment
-
-def weather(request):
-    location = "10.762,106.6601"
-    api_key = "5f170779de5e4c22b5542528252504"
-    url = f"http://api.weatherapi.com/v1/forecast.json?key={api_key}&q={location}&days=3"
-
-    response = requests.get(url)
-    data = response.json()
-
-    location_name = data['location']['name']
-    forecast_data = []
-
-    for day in data['forecast']['forecastday']:
-        date = day['date']
-        periods = []
-
-        for hour_data in day['hour'][::2]: 
-            periods.append({
-                'time': hour_data['time'][11:], 
-                'temp_c': hour_data['temp_c'],
-                'condition': hour_data['condition']['text'],
-                'icon': hour_data['condition']['icon']
-            })
-
-        forecast_data.append({
-            'date': date,
-            'periods': periods
-        })
-
-    context = {
-        'location_name': location_name,
-        'forecast': forecast_data
-    }
-
-    return render(request, 'weather/weather.html', context)
 
 def overall_homepage(request):
     all_of_locations = Location.objects.all()
@@ -328,180 +288,6 @@ def display_location(request, location_code):
             "comments": comments,
             "location_obj": location  # dùng cho form POST
         })
-
-@login_required
-def favourite(request):
-    # Xử lý POST request để xóa địa điểm yêu thích
-    if request.method == 'POST' and 'location_code' in request.POST:
-        location_code = request.POST.get('location_code')
-
-        if location_code:
-            location = Location.objects.filter(code=location_code).first()
-            if location and request.user in location.favourited_by.all():
-                location.favourited_by.remove(request.user)
-                messages.success(request, "Đã xoá địa điểm khỏi danh sách yêu thích.")
-                
-        return redirect('favourite')
-
-    # Lấy danh sách địa điểm yêu thích của người dùng
-    locations = Location.objects.filter(favourited_by=request.user)
-
-    return render(request, "favourite/favourite.html", {
-        'locations': locations
-    })
-
-@login_required
-def my_trip(request):
-    user = request.user
-    trip_list_id = f"{user.username}-favourite"
-
-    trip_list, _ = TripList.objects.get_or_create(id=trip_list_id, defaults={
-        'user': user,
-        'name': f"{user.username}'s Favourite Trip"
-    })
-
-    if request.method == 'POST':
-        path_name = request.POST.get('path_name')
-        if not path_name:
-            return redirect('my_trip')
-
-        selected_ids = request.POST.getlist('locations')
-        if not selected_ids:
-            messages.error(request, "Vui lòng chọn ít nhất một địa điểm.")
-            return redirect('favourite')
-
-        locations = list(Location.objects.filter(id__in=selected_ids, favourited_by=user))
-        if not locations:
-            messages.error(request, "Không tìm thấy các địa điểm đã chọn.")
-            return redirect('favourite')
-
-        id_to_index = {loc.id: idx for idx, loc in enumerate(locations)}
-        index_to_id = {idx: loc.id for idx, loc in enumerate(locations)}
-        coordinates = [loc.coordinate for loc in locations]
-
-        pinned_positions = [None] * len(locations)
-        fixed_position_flags = [False] * len(locations)
-        precedence_constraints = []
-
-        start_id_str = request.POST.get('start_point')
-        end_id_str = request.POST.get('end_point')
-        start_id = int(start_id_str) if start_id_str and start_id_str.isdigit() else None
-        end_id = int(end_id_str) if end_id_str and end_id_str.isdigit() else None
-
-        for loc in locations:
-            loc_id = loc.id
-            loc_id_str = str(loc_id)
-            index = id_to_index[loc_id]
-
-            pinned_str = request.POST.get(f'pinned_order_{loc_id_str}')
-            if pinned_str and pinned_str.isdigit():
-                pinned_index = int(pinned_str) - 1
-                if 0 <= pinned_index < len(locations):
-                    pinned_positions[pinned_index] = index
-                    fixed_position_flags[pinned_index] = True
-
-            after_id_str = request.POST.get(f'precedence_after_{loc_id_str}')
-            if after_id_str and after_id_str.isdigit():
-                after_id = int(after_id_str)
-                if after_id in id_to_index:
-                    precedence_constraints.append((id_to_index[after_id], index))
-
-        # Calculate distances and durations
-        distances = []
-        durations_map = {}
-
-        for i in range(len(coordinates)):
-            for j in range(len(coordinates)):
-                if i != j:
-                    dist, duration = distance(coordinates[i], coordinates[j])
-                    distances.append((i, j, dist))
-                    durations_map[(i, j)] = duration
-
-        graph = Graph(len(locations))
-        for u, v, w in distances:
-            graph.add_edge(u, v, w)
-
-        start_index = id_to_index.get(start_id) if start_id in id_to_index else None
-        end_index = id_to_index.get(end_id) if end_id in id_to_index else None
-
-        path, cost = graph.find_hamiltonian_path(
-            fixed_position=fixed_position_flags,
-            precedence_constraints=precedence_constraints,
-            start=start_index,
-            end=end_index
-        )
-
-        if path is None:
-            messages.error(request, "Không thể tạo lịch trình hợp lệ với các ràng buộc đã chọn.")
-            return redirect('favourite')
-
-        total_duration = sum(
-            durations_map.get((path[i], path[i+1]), 0) for i in range(len(path) - 1)
-        )
-
-        ordered_location_ids = [index_to_id[i] for i in path]
-
-        # Determine actual start and end Location objects
-        start_point_obj = next((loc for loc in locations if loc.id == start_id), None)
-        end_point_obj = next((loc for loc in locations if loc.id == end_id), None)
-
-        TripPath.objects.create(
-            trip_list=trip_list,
-            path_name=path_name,
-            locations_ordered=json.dumps(ordered_location_ids),
-            total_distance=cost,
-            total_duration=total_duration,
-            start_point=start_point_obj,
-            end_point=end_point_obj
-        )
-
-        # Unfavorite the locations that were just used
-        for loc in locations:
-            loc.favourited_by.remove(user)
-
-        return redirect('my_trip')
-
-    trip_paths = TripPath.objects.filter(trip_list=trip_list).order_by('-created_at')
-    all_ids = []
-    parsed_trip_paths = []
-
-    for path in trip_paths:
-        try:
-            loc_ids = json.loads(path.locations_ordered)
-        except json.JSONDecodeError:
-            loc_ids = []
-
-        all_ids.extend(loc_ids)
-
-        parsed_trip_paths.append({
-            'id': path.id,
-            'path_name': path.path_name,
-            'locations': loc_ids,
-            'start_point': path.start_point.location if path.start_point else None,
-            'end_point': path.end_point.location if path.end_point else None,
-            'total_distance': round(path.total_distance / 1000, 1) if path.total_distance is not None else None,
-            'total_duration': round(path.total_duration / 60, 1) if path.total_duration is not None else None,
-            'created_at': path.created_at,
-        })
-
-    location_qs = Location.objects.filter(id__in=all_ids)
-    location_map = {loc.id: loc.location for loc in location_qs}
-
-    return render(request, 'my_trip/my_trip.html', {
-        'trip_paths': parsed_trip_paths,
-        'location_map': location_map
-    })
-
-@require_POST
-@login_required
-def delete_tripPath(request, path_id):
-    if request.method != 'POST' or request.headers.get('x-requested-with') != 'XMLHttpRequest':
-        return HttpResponseForbidden()
-    trip_path = get_object_or_404(TripPath, pk=path_id)
-    if trip_path.trip_list.user != request.user:
-        return HttpResponseForbidden()
-    trip_path.delete()
-    return JsonResponse({'status': 'deleted'})
 
 @require_POST
 @login_required

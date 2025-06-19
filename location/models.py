@@ -59,30 +59,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.user.username} on {self.location.location}"
-
-class TripList(models.Model):
-    id = models.CharField(
-        primary_key=True, max_length=255, editable=False
-    )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="trip_lists")
-    name = models.CharField(max_length=255, default="My trip list")
-
-    def __str__(self):
-        return self.name
-
-class TripPath(models.Model):
-    start_point = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True, related_name="start_paths")
-    end_point = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True, related_name="end_paths")
-    trip_list = models.ForeignKey(TripList, on_delete=models.CASCADE, related_name="trip_paths")
-    path_name = models.CharField(max_length=255, default = "")
-    locations_ordered = models.CharField(max_length = 255)
-    total_distance = models.FloatField(null=True, blank=True)
-    total_duration = models.FloatField(null=True, blank = True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    locations = models.ManyToManyField(Location, related_name="trip_paths")
-
-    def __str__(self):
-        return self.path_name
     
 class TemporaryTripCart(models.Model):
     session_id = models.CharField(max_length=255, unique=True)
@@ -102,35 +78,3 @@ class TemporaryUser(models.Model):
 
     def __str__(self):
         return self.session_id
-    
-class BusStop(models.Model):
-    osm_id = models.BigIntegerField(unique=True)
-    name = models.CharField(max_length=200)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6)
-
-    def __str__(self):
-        return f"{self.name} ({self.latitude}, {self.longitude})"
-
-class BusRoute(models.Model):
-    osm_id = models.BigIntegerField(unique=True)
-    ref = models.CharField(max_length=50)      # e.g. "01"
-    name = models.CharField(max_length=200, blank=True)
-    operator = models.CharField(max_length=200, blank=True)
-    stops = models.ManyToManyField(
-        BusStop,
-        through='RouteStop',
-        related_name='routes'
-    )
-
-    def __str__(self):
-        return f"Route {self.ref}"
-
-class RouteStop(models.Model):
-    route = models.ForeignKey(BusRoute, on_delete=models.CASCADE)
-    stop = models.ForeignKey(BusStop, on_delete=models.CASCADE)
-    sequence = models.PositiveIntegerField()     # order in route
-
-    class Meta:
-        unique_together = (('route', 'stop', 'sequence'),)
-        ordering = ['route', 'sequence']
