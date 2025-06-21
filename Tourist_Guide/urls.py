@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 from register import views as v
 from django.conf import settings
 from django.conf.urls.static import static
@@ -26,6 +27,7 @@ urlpatterns = [
     path('login/', v.custom_login, name='login'),
     path('weather/', include('weather.urls')),
     path('trip/', include('trip.urls')),
+    path('dialogflow/', include('dialogflow.urls')),
     path('', include('django.contrib.auth.urls')),
     path('', include('location.urls')),
 ]

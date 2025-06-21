@@ -51,8 +51,7 @@ INSTALLED_APPS = [
     'weather',
     'payment',
     'trip',
-    # 'tailwind',
-    # 'theme',
+    'dialogflow',
 ]
 
 MIDDLEWARE = [
