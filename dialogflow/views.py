@@ -2,7 +2,8 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
-from location.models import Location, TemporaryTripCart, TemporaryUser
+from location.models import Location
+from .models import TemporaryTripCart, TemporaryUser
 from trip.models import TripPath, TripList
 from .TSP import Graph, distance
 import json, traceback, logging

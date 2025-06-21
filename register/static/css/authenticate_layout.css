@@ -11,13 +11,14 @@ body {
     align-items: center;
     background-image: url('');  
     background-position: center;
+    background-color: #f5fffe;
 }
 
 .container {
     display: flex;
     padding: 0;
-    width: 900px;
-    height: 600px;
+    width: 1050px;
+    height: 750px;
     background-color: white;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -25,7 +26,7 @@ body {
 
 .left-side {
     flex: 1; /* Làm cho phần này chiếm 50% chiều rộng của container */
-    background-color: #eeffdd;  /* Màu nền */
+    background-color: #caffbf;  /* Màu nền */
     display: flex;
     flex-direction: column;
     justify-content: center;
