@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.http import JsonResponse
 from django.urls import reverse
 from django.contrib.auth import get_user_model

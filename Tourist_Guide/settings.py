@@ -191,7 +191,7 @@ EMAIL_HOST_PASSWORD = 'qayg qrxm yywt vscp'
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.ngrok-free.app',
-    'https://tourist-guide-ec40.onrender.com/'
+    'https://tourist-guide-ec40.onrender.com'
 ]
 
 # STATIC_ROOT = BASE_DIR / "staticfiles"
