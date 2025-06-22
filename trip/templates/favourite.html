@@ -10,23 +10,23 @@
 <div class="favourite-container">
 	<h2 class="favourite-header">List of favourite locations</h2>
 	{% if locations %}
-	<form class="" method="POST" action="{% url 'my_trip' %}">
+	<form method="POST" action="{% url 'my_trip' %}">
 		{% csrf_token %}
 		{% for location in locations %}
 		<div class="favourite-location-card">
 			<summary class="location-summary">
 				<label>{{ location.location }}</label>
-				<input type="checkbox" name="locations" id="toggle-checkbox" value="{{ location.id }}">
+				<input type="checkbox" name="locations" value="{{ location.id }}">
 			</summary>
 
 			<div id="details-section">
 				<label class="line">
-					<input type="radio" name="start_point" value="{{ location.id }}" onchange="toggleInputs()">
+					<input type="radio" name="start_point" value="{{ location.id }}">
 					Select as start point
 				</label>
 				<br>
 				<label class="line">
-					<input type="radio" name="end_point" value="{{ location.id }}" onchange="toggleInputs()">
+					<input type="radio" name="end_point" value="{{ location.id }}">
 					Select as end point
 				</label>
 				<div id="extra-inputs-{{ location.id }}" class="extra-inputs">
@@ -43,7 +43,6 @@
 				</div>
 			</div>
 		</div>
-
 		{% endfor %}
 
 		<hr class="dashed-line">
@@ -55,6 +54,9 @@
 			<button type="submit">Create journey</button>
 		</div>
 	</form>
+	{% else %}
+	<p>No locations in the list yet.</p>
+	{% endif %}
 </div>
 
 <script>
@@ -84,8 +86,7 @@
 		if (selectedStart) hiddenIds.add(selectedStart.value);
 		if (selectedEnd) hiddenIds.add(selectedEnd.value);
 
-		// Get IDs of all checked locations
-		const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"][name="locations"]:checked');
+		const selectedCheckboxes = document.querySelectorAll('input[name="locations"]:checked');
 		const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value);
 
 		document.querySelectorAll('.precedence-dropdown').forEach(dropdown => {
@@ -93,8 +94,6 @@
 
 			Array.from(dropdown.options).forEach(option => {
 				const optVal = option.value;
-
-				// Điều kiện để ẩn:
 				const shouldHide =
 					optVal === "" ||
 					optVal === currentId ||
@@ -103,7 +102,6 @@
 
 				option.hidden = shouldHide;
 
-				// Nếu option đang được chọn mà bị ẩn, reset lại dropdown
 				if (shouldHide && dropdown.value === optVal) {
 					dropdown.value = "";
 				}
@@ -118,11 +116,45 @@
 		});
 	}
 
+	function detectCycle(constraints) {
+		const graph = {};
+		const indegree = {};
+
+		const nodes = new Set();
+		constraints.forEach(([from, to]) => {
+			if (!graph[from]) graph[from] = [];
+			graph[from].push(to);
+			nodes.add(from);
+			nodes.add(to);
+			indegree[to] = (indegree[to] || 0) + 1;
+			if (!(from in indegree)) indegree[from] = 0;
+		});
+
+		const queue = [];
+		nodes.forEach(node => {
+			if (indegree[node] === 0) queue.push(node);
+		});
+
+		let visited = 0;
+		while (queue.length > 0) {
+			const node = queue.shift();
+			visited++;
+			if (graph[node]) {
+				graph[node].forEach(nei => {
+					indegree[nei]--;
+					if (indegree[nei] === 0) {
+						queue.push(nei);
+					}
+				});
+			}
+		}
+		return visited < nodes.size;
+	}
+
 	document.addEventListener("DOMContentLoaded", function () {
-		const checkboxes = document.querySelectorAll('input[type="checkbox"][name="locations"]');
+		const checkboxes = document.querySelectorAll('input[name="locations"]');
 
 		checkboxes.forEach(checkbox => {
-			const locationId = checkbox.value;
 			const detailsSection = checkbox.closest('summary').nextElementSibling;
 
 			if (!checkbox.checked) {
@@ -142,7 +174,6 @@
 			});
 		});
 
-		// Handle dropdown reset on start/end change
 		document.querySelectorAll('input[name="start_point"], input[name="end_point"]').forEach(radio => {
 			radio.addEventListener('change', () => {
 				updateExtraInputsVisibility();
@@ -150,12 +181,28 @@
 			});
 		});
 
+		const form = document.querySelector('form');
+		form.addEventListener('submit', function (e) {
+			const constraints = [];
+
+			const dropdowns = document.querySelectorAll('.precedence-dropdown');
+			dropdowns.forEach(dropdown => {
+				const afterId = dropdown.value;
+				const currentId = dropdown.getAttribute('data-current-id');
+
+				if (afterId && !dropdown.disabled) {
+					constraints.push([afterId, currentId]);
+				}
+			});
+
+			if (detectCycle(constraints)) {
+				e.preventDefault();
+				alert("Lỗi: Có vòng lặp trong ràng buộc thứ tự giữa các địa điểm.\nHãy kiểm tra lại các lựa chọn.");
+			}
+		});
+
 		updateExtraInputsVisibility();
 		updateDropdownOptions();
 	});
 </script>
-
-{% else %}
-<p>No locations in the list yet.</p>
-{% endif %}
 {% endblock %}
