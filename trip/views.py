@@ -1,10 +1,8 @@
 from django.http import JsonResponse, HttpResponseForbidden
-from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from location.models import Location
 from .models import TripList, TripPath
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from .TSP import Graph, distance
@@ -13,7 +11,6 @@ import json
 # Create your views here.
 @login_required
 def favourite(request):
-    # Xử lý POST request để xóa địa điểm yêu thích
     if request.method == 'POST' and 'location_code' in request.POST:
         location_code = request.POST.get('location_code')
 
@@ -25,7 +22,6 @@ def favourite(request):
                 
         return redirect('favourite')
 
-    # Lấy danh sách địa điểm yêu thích của người dùng
     locations = Location.objects.filter(favourited_by=request.user)
 
     return render(request, "favourite.html", {

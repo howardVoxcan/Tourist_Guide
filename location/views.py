@@ -62,7 +62,7 @@ def overall_homepage(request):
             'star_html': star_html,
         })
 
-    return render(request, "homepage/homepage.html", {
+    return render(request, "homepage.html", {
         "all_of_locations": processed_locations, 
     })
 
@@ -170,7 +170,7 @@ def locations(request):
                 'favourite_symbol': favourite_symbol,
             })
 
-        return render(request, "locations/locations.html", {
+        return render(request, "locations.html", {
             'locations': processed_locations,
             'current_filters': {
                 'type': type_filter or '',
@@ -266,7 +266,7 @@ def display_location(request, location_code):
         else:
             open_time_str = f"{open_time} - {close_time}"
 
-        return render(request, "display_location/display.html", {
+        return render(request, "display.html", {
             "code": location.code,
             "location_name": location.location,
             "type": location.type,
