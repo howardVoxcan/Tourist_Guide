@@ -34,8 +34,12 @@
 					<input type="number" name="pinned_order_{{ location.id }}" min="1"
 						placeholder="Order (1, 2, 3...)"><br>
 					<label>Must go after location ID:</label>
-					<input type="number" name="precedence_after_{{ location.id }}"
-						placeholder="ID of the location that must be visited before (optional)">
+					<select name="precedence_after_{{ location.id }}" class="precedence-dropdown" data-current-id="{{ location.id }}">
+						<option value="">-- Select location to visit after --</option>
+						{% for loc in locations %}
+							<option value="{{ loc.id }}">{{ loc.location }}</option>
+						{% endfor %}
+					</select>
 				</div>
 			</div>
 		</div>
@@ -72,28 +76,47 @@
 		});
 	}
 
-	window.addEventListener('DOMContentLoaded', () => {
-		updateExtraInputsVisibility();
+	function updateDropdownOptions() {
+		const selectedStart = document.querySelector('input[name="start_point"]:checked');
+		const selectedEnd = document.querySelector('input[name="end_point"]:checked');
 
-		document.querySelectorAll('input[name="start_point"], input[name="end_point"]').forEach(radio => {
-			radio.addEventListener('change', updateExtraInputsVisibility);
+		const hiddenIds = new Set();
+		if (selectedStart) hiddenIds.add(selectedStart.value);
+		if (selectedEnd) hiddenIds.add(selectedEnd.value);
+
+		// Get IDs of all checked locations
+		const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"][name="locations"]:checked');
+		const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+
+		document.querySelectorAll('.precedence-dropdown').forEach(dropdown => {
+			const currentId = dropdown.getAttribute('data-current-id');
+
+			Array.from(dropdown.options).forEach(option => {
+				const optVal = option.value;
+
+				// Điều kiện để ẩn:
+				const shouldHide =
+					optVal === "" ||
+					optVal === currentId ||
+					!selectedIds.includes(optVal) ||
+					hiddenIds.has(optVal);
+
+				option.hidden = shouldHide;
+
+				// Nếu option đang được chọn mà bị ẩn, reset lại dropdown
+				if (shouldHide && dropdown.value === optVal) {
+					dropdown.value = "";
+				}
+			});
 		});
-	});
-
-	function toggleAccordion() {
-		const content = document.getElementById('accordionContent');
-		content.classList.toggle('open');
 	}
 
-	const checkbox = document.getElementById('toggle-checkbox');
-	const details = document.getElementById('details-section');
-	checkbox.addEventListener('change', () => {
-		if (checkbox.checked) {
-			details.style.display = 'block';
-		} else {
-			details.style.display = 'none';
-		}
-	});
+	function toggleInputsDisabled(section, disable) {
+		const inputs = section.querySelectorAll('input, select');
+		inputs.forEach(input => {
+			input.disabled = disable;
+		});
+	}
 
 	document.addEventListener("DOMContentLoaded", function () {
 		const checkboxes = document.querySelectorAll('input[type="checkbox"][name="locations"]');
@@ -115,51 +138,20 @@
 					detailsSection.style.display = 'none';
 					toggleInputsDisabled(detailsSection, true);
 				}
+				updateDropdownOptions();
 			});
 		});
 
-		function toggleInputsDisabled(section, disable) {
-			const inputs = section.querySelectorAll('input');
-			inputs.forEach(input => {
-				input.disabled = disable;
-			});
-		}
-	});
-
-	document.addEventListener("DOMContentLoaded", function () {
-		const checkboxes = document.querySelectorAll('.toggle-checkbox');
-
-		checkboxes.forEach(checkbox => {
-			const summary = checkbox.closest('.location-summary');
-			const detailsSection = summary.nextElementSibling;
-
-			if (!checkbox.checked) {
-				detailsSection.style.display = 'none';
-				toggleInputsDisabled(detailsSection, true);
-				summary.classList.remove('active');
-			} else {
-				summary.classList.add('active');
-			}
-
-			checkbox.addEventListener('change', function () {
-				if (this.checked) {
-					detailsSection.style.display = 'block';
-					toggleInputsDisabled(detailsSection, false);
-					summary.classList.add('active');
-				} else {
-					detailsSection.style.display = 'none';
-					toggleInputsDisabled(detailsSection, true);
-					summary.classList.remove('active');
-				}
+		// Handle dropdown reset on start/end change
+		document.querySelectorAll('input[name="start_point"], input[name="end_point"]').forEach(radio => {
+			radio.addEventListener('change', () => {
+				updateExtraInputsVisibility();
+				updateDropdownOptions();
 			});
 		});
 
-		function toggleInputsDisabled(section, disable) {
-			const inputs = section.querySelectorAll('input');
-			inputs.forEach(input => {
-				input.disabled = disable;
-			});
-		}
+		updateExtraInputsVisibility();
+		updateDropdownOptions();
 	});
 </script>
 
