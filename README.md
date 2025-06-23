@@ -15,7 +15,9 @@ This isn’t your average travel app. It blends real-world usefulness with intel
 </h2>
 
 <h3 align="center">
-  The Render server may sleep occasionally (1 ~ 2 minutes) 😴 
+  The Render server may sleep occasionally 😴 
+  <br>
+  Wait for 1 to 2 minutes because the AI used was built myself
   <br>
   feel free to view the 
   <a href="https://www.canva.com/design/DAGn_lNNm68/ASkbIUWbP8sLs-ZrlQXTtw/edit?utm_content=DAGn_lNNm68&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank" style="text-decoration: none; color: inherit;">
