@@ -28,16 +28,26 @@
     background-color: #00aa6c;
     border: 1px #00aa6c solid;
     display: flex;
-    padding: 10px;
+    justify-content: space-between; /* Cách label và checkbox */
+    align-items: center;
+    padding: 10px 16px;
     font-weight: bold;
     color: white;
-    align-items: center;
 }
 
-.location-summary.active {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+.location-summary label {
+    margin: 0;
+    font-size: 16px;
+    flex-grow: 1;
 }
+
+.location-summary input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-left: 12px;
+    cursor: pointer;
+}
+
 
 #toggle-checkbox {
     color: #05915d;

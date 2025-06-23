@@ -1,3 +1,13 @@
+:root {
+    --main-green: #3a9d7a;         /* Màu xanh lá trầm */
+    --hover-green: #2c8a68;        /* Màu xanh lá hover */
+    --light-green-bg: #e8f5f1;     /* Nền dịu */
+    --text-dark: #3a3a3a;
+    --text-light: #fff;
+    --border-color: #e0e0e0;
+    --shadow-light: rgba(0, 0, 0, 0.05);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +22,7 @@ html {
 
 body {
     background-color: #f4faff;
-    color: #333;
+    color: var(--text-dark);
 }
 
 .wrapper {
@@ -21,11 +31,10 @@ body {
     flex-direction: column;
 }
 
-/* Header styles */
 header {
-    background-color: white;
+    background-color: #f8faf9; /* nhẹ hơn màu trắng thuần */
     padding: 15px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px var(--shadow-light);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -34,34 +43,23 @@ header {
 
 .header-container {
     max-width: 1200px;
-    height: auto;
-    margin: 0 auto;
-    margin-bottom: 20px;
+    margin: 0 auto 20px auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 10px;
 }
 
-.logo .search-bar .nav-buttons {
-    display: inline-block;
-    vertical-align: middle;
-}
-
 .logo a {
-    padding: 50px auto;
     display: flex;
 }
 
 .logo picture {
-    width: 250px;
-    height: auto;
+    width: 200px;
 }
 
 .logo img {
     width: 100%;
-    height: 100%;
-    display: block;
     object-fit: cover;
 }
 
@@ -69,160 +67,163 @@ header {
     flex: 1;
     max-width: 600px;
     position: relative;
+}
+
+.search-bar form {
+    position: relative;
+    display: flex;
     align-items: center;
 }
 
 .search-bar input {
     width: 100%;
     padding: 10px 20px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
     border-radius: 24px;
     font-size: 16px;
     outline: none;
-}
-
-.search-bar input:focus {
-    border-color: #00aa6c;
+    transition: border-color 0.3s;
+    padding-right: 40px; /* để icon không đè lên chữ */
 }
 
 .search-button {
     position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-button:hover {
+    background-color: var(--light-green-bg);
 }
 
 .search-button i {
-    position: absolute;
-    padding: 15px 20px;
-    right: 5px;
-    align-items: center;
     color: #666;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.search-button:hover i {
+    color: var(--main-green);
 }
 
 .nav-buttons {
     display: flex;
-    align-items: right;
-    justify-content: center;
-    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .nav-button {
-    padding: 15px 30px;
-    margin-left: 10px;
-    border: none;
+    padding: 10px 20px;
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
-    background-color: white;
     white-space: nowrap;
+    font-size: 14px;
+    border: 1px solid var(--main-green);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .nav-button.primary {
-    border: 1px solid #00aa6c;
-    background-color: #00aa6c;
-    color: white;
+    background-color: var(--main-green);
+    color: var(--text-light);
+}
+
+.nav-button.primary:hover {
+    background-color: var(--hover-green);
 }
 
 .nav-button.secondary {
-    border: 1px solid #00aa6c;
-    color: #00aa6c;
+    background-color: white;
+    color: var(--main-green);
 }
 
-/* Logout */
-.logout {
+.nav-button.secondary:hover {
+    background-color: var(--light-green-bg);
+}
+
+
+.user-block {
     display: flex;
-    align-items: right;
-    justify-content: center;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.dropbtn {
+    background-color: white;
+    color: var(--main-green);
+    padding: 10px 14px;
+    font-size: 16px;
+    border: 2px solid var(--main-green);
+    border-radius: 20px;
 }
 
 .logout-button {
-    position: relative;
-    padding: 15px 30px;
-    margin-left: 30px;
-    border: 0.25px solid #00aa6c;
+    padding: 10px 20px;
     border-radius: 20px;
-    background-color: #00aa6c;
+    border: 1px solid var(--main-green);
+    background-color: var(--main-green);
     color: white;
-    font-weight: bolder;
+    font-weight: bold;
     cursor: pointer;
 }
 
 .logout-button:hover {
-    border: 1px solid #05915d;
-    background-color: #05915d;
+    background-color: var(--hover-green);
 }
 
-/* User display */
-.user-block {
-    position: relative;
-    display: flex;
-}
-
-/* Button to open the dropdown */
-.dropbtn {
-    background-color: white;
-    color: #00aa6c;
-    padding: 12px 16px;
-    font-size: 16px;
-    border: 2px solid #00aa6c;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    display: block;
-    text-decoration: none;
-}
-
-/* Navigation tabs */
 .nav-tabs {
     display: flex;
-    flex: 1;
-    list-style: none;
     justify-content: center;
-}
-
-.nav-tabs ul {
-    align-items: center;
+    list-style: none;
+    background-color: transparent;
+    padding: 8px 0;
+    gap: 20px;
 }
 
 .nav-tabs li {
-    margin-right: 20px;
-    white-space: nowrap;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .nav-tabs a {
     display: flex;
     align-items: center;
-    color: #333;
+    padding: 10px 16px;
+    color: var(--text-dark);
     text-decoration: none;
-    font-weight: 500;
-    padding: 10px 0;
-    border-bottom: 2px solid transparent;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-tabs a i {
+    margin-right: 8px;
+    font-size: 22px;
 }
 
 .nav-tabs a:hover {
-    color: #00aa6c;
-    border-bottom: 2px solid #00aa6c;
+    color: var(--hover-green);
+    background-color: var(--light-green-bg);
 }
 
 .nav-tabs a.active {
-    color: #00aa6c;
-    border-bottom: 2px solid #00aa6c;
+    background-color: var(--light-green-bg);
+    color: var(--main-green);
+    font-weight: bold;
 }
 
-.nav-tabs i {
-    margin-right: 8px;
-    font-size: 28px;
-}
-
-/* Main */
 main {
     flex: 1;
+    padding: 20px;
 }
 
-/* Footer */
 footer {
     background-color: #333;
     color: white;
@@ -249,14 +250,6 @@ footer {
     color: #ccc;
 }
 
-.footer-links {
-    list-style: none;
-}
-
-.footer-links li {
-    margin-bottom: 10px;
-}
-
 .footer-links a {
     color: #aaa;
     text-decoration: none;
@@ -270,33 +263,30 @@ footer {
 .footer-bottom {
     border-top: 1px solid #444;
     padding-top: 20px;
-    text-align: center;
-    color: #aaa;
     font-size: 12px;
+    color: #aaa;
 }
 
 .social-links {
     display: flex;
     justify-content: center;
-    margin-bottom: 15px;
+    gap: 10px;
 }
 
 .social-links a {
-    display: inline-block;
     width: 36px;
     height: 36px;
-    margin: 0 5px;
     border-radius: 50%;
     background-color: #555;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
+    transition: background-color 0.3s;
 }
 
 .social-links a:hover {
-    background-color: #00aa6c;
+    background-color: var(--main-green);
 }
 
 @media (max-width: 768px) {
@@ -307,7 +297,6 @@ footer {
 
     .search-bar {
         width: 100%;
-        max-width: none;
         margin: 15px 0;
     }
 
@@ -315,26 +304,4 @@ footer {
         width: 100%;
         justify-content: flex-end;
     }
-
-    .hero {
-        height: 400px;
-    }
-
-    .hero h1 {
-        font-size: 36px;
-    }
-
-    .tab-content {
-        flex-direction: column;
-    }
-
-    .search-field {
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
-}
-
-footer {
-    padding: 1rem;
-    text-align: center;
 }

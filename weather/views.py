@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import requests
+import datetime
 
-# Create your views here.
 def weather(request):
     location = "10.762,106.6601"
     api_key = "5f170779de5e4c22b5542528252504"
@@ -14,9 +14,11 @@ def weather(request):
     forecast_data = []
 
     for day in data['forecast']['forecastday']:
-        date = day['date']
-        periods = []
+        raw_date = day['date']
+        date_obj = datetime.datetime.strptime(raw_date, '%Y-%m-%d')
+        formatted_date = date_obj.strftime('%a, %d %b')  # → Mon, 23 Jun
 
+        periods = []
         for hour_data in day['hour'][::2]: 
             periods.append({
                 'time': hour_data['time'][11:], 
@@ -26,7 +28,7 @@ def weather(request):
             })
 
         forecast_data.append({
-            'date': date,
+            'date': formatted_date,
             'periods': periods
         })
 

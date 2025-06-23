@@ -13,7 +13,7 @@
     <!-- Vertical Day Tabs -->
     <div class="day-tabs">
         {% for day in forecast %}
-            <div class="tab-btn" data-day="{{ forloop.counter0 }}">
+            <div class="tab-btn {% if forloop.first %}active{% endif %}" data-day="{{ forloop.counter0 }}">
                 <strong>{{ day.date }}</strong>
             </div>
         {% endfor %}
@@ -37,13 +37,20 @@
 </div>
 
 <script>
-    document.querySelectorAll('.tab-btn').forEach(btn => {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const forecastDays = document.querySelectorAll('.forecast-day');
+
+    tabButtons.forEach((btn, index) => {
         btn.addEventListener('click', () => {
-            const index = btn.getAttribute('data-day');
-            const days = document.querySelectorAll('.forecast-day');
-            days.forEach((d, i) => {
-                d.style.display = (i == index) ? 'flex' : 'none';
-            });
+            // Hide all forecast days
+            forecastDays.forEach(day => day.style.display = 'none');
+            // Show selected day
+            forecastDays[index].style.display = 'flex';
+
+            // Remove active from all buttons
+            tabButtons.forEach(b => b.classList.remove('active'));
+            // Add active to clicked one
+            btn.classList.add('active');
         });
     });
 </script>
