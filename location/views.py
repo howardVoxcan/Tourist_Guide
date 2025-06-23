@@ -180,7 +180,6 @@ def locations(request):
             }
         })
 
-@login_required
 def display_location(request, location_code): 
     location = get_object_or_404(Location, code=location_code)
 

@@ -99,10 +99,12 @@
             </form>
         </div>
     </div>
+   <hr>
 
-    <!-- Comment Form -->
-    <hr>
-    <h3>Post a comment</h3>
+<hr>
+<h3>Post a comment</h3>
+
+    {% if user.is_authenticated %}
     <form id="comment-form">
         {% csrf_token %}
         <textarea type="text" name="content" placeholder="Write your comment..." required></textarea>
@@ -120,8 +122,12 @@
             </button>
         </div>
     </form>
+    {% else %}
+    <p style="font-style: italic; color: gray;">
+        You must <a href="{% url 'login' %}" style="color: #05915d; text-decoration: underline;">log in</a> to post a comment.
+    </p>
+    {% endif %}
 
-    <!-- 🔽 Comment Section Start -->
     <div id="new-comment-result"></div>
 
     {% for comment in comments %}
@@ -135,7 +141,7 @@
             {% for reply in comment.replies.all %}
             <div class="reply">
                 <p><strong>{{ reply.user.username }}</strong>: {{ reply.content }}</p>
-                <p><em>{{location_name}}'s manager reply:</em> {{ reply.bot_reply }}</p>
+                <p><em>{{ location_name }}'s manager reply:</em> {{ reply.bot_reply }}</p>
             </div>
             {% endfor %}
         </div>
