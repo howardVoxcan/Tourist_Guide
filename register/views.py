@@ -1,4 +1,5 @@
 from .forms import RegisterForm
+from payment.models import UserProfile
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
@@ -8,7 +9,9 @@ def register(response):
     if response.method == "POST":
         form = RegisterForm(response.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            UserProfile.objects.create(user = user)
+            return redirect('login')
     else: 
         form = RegisterForm()
 
