@@ -1,13 +1,30 @@
-node_modules/
+# Python virtual environment
+venv/
+ENV/
+env/
+.venv/
 
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite and other databases
+*.sqlite3
+*.db
+*.csv
+
+# Django static & media files
+staticfiles/
+media/
+
+# Node.js (if using npm/yarn for frontend)
+node_modules/
 dist/
 
+# VSCode settings
 .vscode/
 
-staticfiles/
-
-*.sqlite3
-
-*.db
-
-*.csv
+# OS junk files
+.DS_Store
+Thumbs.db
