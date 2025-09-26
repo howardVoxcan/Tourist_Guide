@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'location',
     'weather',
-    'payment',
     'trip',
     'dialogflow',
 ]

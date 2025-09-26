@@ -5,6 +5,7 @@ env/
 .venv/
 
 # Byte-compiled / cache
+*.pyc
 __pycache__/
 *.py[cod]
 *$py.class
@@ -28,3 +29,31 @@ dist/
 # OS junk files
 .DS_Store
 Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+media/
+
+# If you use Django migrations cache
+*.mo
+*.pot
+
+# VSCode / PyCharm / IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+venv/
+env/
+ENV/
